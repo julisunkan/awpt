@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 230px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: scroll;
+  padding-top: 20px;
+}
+
+.main {
+        height: 100%;
+        width: 1015px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        overflow-x: fixed;
+        overflow-y: scroll;
+        padding-top: 0px;
+	float: center;
+    }
+
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 15px;
+  color: white;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: red;
+}
+
+.main {
+  margin-left: 240px; /* Same as the width of the sidenav */
+  font-size: 30px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+<div class="sidenav">
+<a href="1.html">🌐【WordPress Penetration Testing】🖧</a>
+  <a href="2.html">🌐【PenTesting Lab Setup: Squid Proxy &  Burpsuite Payloads】🖧</a>
+  <a href="3.html">🌐【Beginner Guide to Google Dorks】🖧</a>
+  <a href="4.html">🌐【Introduction to Command Injection】🖧</a>
+ <a href="5.html">🌐【WebServer Shell-ing through PhpMyAdmin】🖧</a>
+  <a href="6.html">🌐【Comprehensive Guide on FFUF & HTTPX】🖧</a>
+  <a href="7.html">🌐【Comprehensive Guide on HTML & XXE Injection】🖧</a>
+<a href="8.html">🌐【NetCat for PenTesting & Web Framework Reverse Shell】🖧</a>
+  <a href="9.html">🌐【Web Shells Penetration Testing】🖧</a>
+  <a href="10.html">🌐【Database Penetration Testing】🖧</a>
+ <p align="center"><img src="https://pwa-audio-player.digitalskeleton.com.ng/p.jpg" height="90" width="200"></p>
+</div>
+<div class="main">
+<div class="markdown-heading" dir="auto">
+<h2 class="heading-element" dir="auto" tabindex="-1"><p align="left">🌐Database Penetration Testing🖧</p></h2>
+<p>sqlmap is an open source penetration testing tool that automates the process of detecting and exploiting SQL injection flaws and taking over of database servers. It comes with a powerful detection engine, many niche features for the ultimate penetration tester and a broad range of switches lasting from database fingerprinting, over data fetching from the database, to accessing the underlying file system and executing commands on the operating system via out-of-band connections.</p>
+<p><strong>Features</strong></p>
+<ul>
+<li>Full support for MySQL, Oracle, PostgreSQL, Microsoft SQL Server, Microsoft Access, IBM DB2, SQLite, Firebird, Sybase, SAP MaxDB, HSQLDB and Informix database management systems.</li>
+<li>Full support for six SQL injection techniques: boolean-based blind, time-based blind, error-based, UNION query-based, stacked queries and out-of-band.</li>
+<li>Support to directly connect to the database without passing via a SQL injection, by providing DBMS credentials, IP address, port, and database name.</li>
+<li>Support to enumerate users, password hashes, privileges, roles, databases, tables, and columns.</li>
+<li>Automatic recognition of password hash formats and support for cracking them using a dictionary-based attack.</li>
+<li>Support to dump database tables entirely, a range of entries or specific columns as per user&rsquo;s choice. The user can also choose to dump only a range of characters from each column&rsquo;s entry.</li>
+<li>Support to search for specific database names, specific tables across all databases or specific columns across all databases&rsquo; tables. This is useful, for instance, to identify tables containing custom application credentials where relevant columns&rsquo; names contain a string like a name and pass.</li>
+<li>Support to download and upload any file from the database server underlying file system when the database software is MySQL, PostgreSQL or Microsoft SQL Server.</li>
+<li>Support to execute arbitrary commands and retrieve their standard output on the database server underlying operating system when the database software is MySQL, PostgreSQL or Microsoft SQL Server.</li>
+<li>Support to establish an out-of-band stateful TCP connection between the attacker machine and the database server underlying operating system. This channel can be an interactive command prompt, a Meterpreter session or a graphical user interface (VNC) session as per user&rsquo;s choice.</li>
+<li>Support for database process&rsquo; user privilege escalation via Metasploit&rsquo;sMeterpreter getsystem command.</li>
+</ul>
+<p><img src="https://1.bp.blogspot.com/-9HtUEJZSLpM/WVSm8efMwGI/AAAAAAAAQUg/ZOs-ZUDUZBwcU8Oj92buUrvP0ahv9GFZgCLcBGAs/s1600/1.png" alt="" /></p>
+<p>These options can be used to enumerate the back-end database management system information, structure, and data contained in the tables.</p>
+<p><img src="https://1.bp.blogspot.com/-ApSI58k2AJE/WVSm_F4bhjI/AAAAAAAAQUw/4iwJ8dhSzf8WlKpl2wQeGvn0xfnoABgeQCLcBGAs/s1600/2.png" alt="" /></p>
+<p>Sometimes you visit such websites that let you select product item through their picture gallery if you observer its URL you will notice that product item is called through its product-ID numbers.</p>
+<p>Let&rsquo;s take an example</p>
+<pre class="lang:default decode:true ">http://testphp.vulnweb.com/artists.php?artist=1</pre>
+<p>So when attacker visits such kind of website he always checks for SQL vulnerability inside web server for lunching SQL attack.</p>
+<p><img src="https://4.bp.blogspot.com/-uz3Eu3vN9ME/WVSm--FqHFI/AAAAAAAAQUo/7WVGYJhJrrM6BXRaiRJzBEdlwzQKPVOdQCEwYBhgL/s1600/3.png" alt="" /></p>
+<p>Let&rsquo;s check how attacker verifies SQL vulnerability.</p>
+<p>The attacker will try to break the query in order to order to get the error message, if he successfully received an error message then it confirms that web server is SQL injection affected.</p>
+<pre class="lang:default decode:true ">http://testphp.vulnweb.com/artists.php?artist=1'
+</pre>
+<p><strong>&nbsp;</strong>From the screenshot you can see we have received error message successfully now we have made SQL attack on a web server so that we can fetch database information.</p>
+<p><img src="https://4.bp.blogspot.com/-HZ6UYF8iG_w/WVSm_sFrDdI/AAAAAAAAQU0/pja2aw136O0Naj3vj4_NRk_0lw5hEQUrQCEwYBhgL/s1600/4.1.png" alt="" /></p>
+<h3><strong>Databases</strong></h3>
+<p><strong>&nbsp;</strong>For database penetration testing we always choose SQLMAP, this tool is very helpful for beginners who are unable to retrieve database information manually or unaware of SQL injection techniques.</p>
+<p>Open the terminal in your Kali Linux and type following command which start SQL injection attack on the targeted website. &nbsp;</p>
+<pre class="lang:default decode:true">sqlmap -u "http://testphp.vulnweb.com/artists.php?artist=1" --dbs --batch</pre>
+<p><strong>&nbsp;</strong><strong>-u:&nbsp;&nbsp;</strong>target URL</p>
+<p><strong>&ndash;dbs:&nbsp;</strong>fetch database name</p>
+<p><strong>&ndash;batch:</strong>&nbsp;This will leave sqlmap to go with default behavior whenever user&rsquo;s input would be required</p>
+<p><img src="https://4.bp.blogspot.com/-Gbn0wr3FuNc/WVSnB93AICI/AAAAAAAAQVA/xAZ9B5tsz-cSJ2Y9SA1Rnf0QZEiKuqVJgCEwYBhgL/s1600/4.png" alt="" /></p>
+<p>Here from the given screenshot, you can see we have successfully retrieve database name &ldquo;<strong>acuart</strong>&rdquo;</p>
+<p><img src="https://3.bp.blogspot.com/-muzoRZzdB2Y/WVSnAX3VzdI/AAAAAAAAQU4/6_EXktBeZyk-cC0zS-DxrV-Z3FiUi5rCgCEwYBhgL/s1600/5.png" alt="" /></p>
+<h3><strong>Tables</strong></h3>
+<p>As we know a database is a set of record which consist of multiple tables inside it therefore now use another command in order to fetch entire table names from inside the database system.</p>
+<pre class="lang:default decode:true ">sqlmap -u "http://testphp.vulnweb.com/artists.php?artist=1" -D acuart --table --batch
+</pre>
+<p><strong>&nbsp;</strong><strong>-D:&nbsp;</strong>DBMS database to enumerate (fetched database name)</p>
+<p><strong>&ndash;tables:&nbsp;</strong>enumerate DBMS database table</p>
+<p><img src="https://3.bp.blogspot.com/-3K7pANIaCUc/WVSnA8tzcMI/AAAAAAAAQU8/0OuGt7_-lMQgxjeLVsx7Dved7IgY5OdvQCEwYBhgL/s1600/6.png" alt="" /></p>
+<p>As a result, given in screenshot, we have enumerated entire table name of the database system. There are 8 tables inside the database &ldquo;acuart&rdquo; as following:</p>
+<p><strong>T1: artists</strong></p>
+<p><strong>T2: carts</strong></p>
+<p><strong>T3: categ</strong></p>
+<p><strong>T4: featured</strong></p>
+<p><strong>T5: guestbook</strong></p>
+<p><strong>T6: pictures</strong></p>
+<p><strong>T7: products</strong></p>
+<p><strong>T8: users</strong></p>
+<p><img src="https://1.bp.blogspot.com/-0U2Nqsb2VVY/WVSnByXoAZI/AAAAAAAAQVE/IIk5DBZhzUc_O7HD0KBV0Ey6v_5eDEOTACEwYBhgL/s1600/7.png" alt="" /></p>
+<h3><strong>Columns</strong></h3>
+<p>Now further we will try to enumerate the column name of the desired table. Since we know there is a users table inside the database acuart and we want to know all column names of users table, therefore, we will generate another command for column captions enumeration.</p>
+<pre class="lang:default decode:true">sqlmap -u "http://testphp.vulnweb.com/artists.php?artist=1" -D acuart -T users --columns --batch
+</pre>
+<p><strong>-T:&nbsp;</strong>DBMS table to enumerate (fetched table name)</p>
+<p><strong>&ndash;columns:</strong>&nbsp;enumerate DBMS database columns</p>
+<p><img src="https://4.bp.blogspot.com/-M2Hu_CWI-DE/WVSnCIwsaiI/AAAAAAAAQVI/8FWaciNSr4ETkiukBVZUQi0spRDF528uQCEwYBhgL/s1600/8.png" alt="" /></p>
+<p><img src="https://3.bp.blogspot.com/-mF7LRkA5V6c/WVSnC0HF8NI/AAAAAAAAQVM/ATKwYZ76kRIhiw90iDvwD6gWWeUtKEbnwCEwYBhgL/s1600/9.png" alt="" /></p>
+<h3><strong>Get data from a table</strong></h3>
+<p>Slowly and gradually we have penetrated many details of the database but last and most important step is to retrieve information from inside the columns of a table. Hence, at last, we will generate a command which will dump information of users table.</p>
+<pre class="lang:default decode:true">sqlmap -u "http://testphp.vulnweb.com/artists.php?artist=1" -D acuart -T users --dump --batch
+</pre>
+<p><strong>&ndash;dump:</strong>&nbsp;dump all information of DBMS database</p>
+<p><img src="https://2.bp.blogspot.com/-C-EXVS1NW8c/WVSm736cNdI/AAAAAAAAQUY/N79z2iO2LT08571Ha446gbgFFKi-WDClwCEwYBhgL/s1600/10.png" alt="" /></p>
+<p>Here from the given screenshot, you can see it has to dump entire information of table users, mainly users table contains login credential of other users. You can use these credential for login into the server on behalf of other users.</p>
+<p><img src="https://2.bp.blogspot.com/-gYMKw2iLsb4/WVSm8TjcEBI/AAAAAAAAQUc/t20gImkvMv0TzCcqk53gxzvG2ckB1_HmgCEwYBhgL/s1600/12.png" alt="" /></p>
+<h3><strong>Dump All</strong></h3>
+<p>The last command is the most powerful command in sqlmap which will save your time in database penetration testing; this command will perform all the above functions at once and dump entire database information including table names, column and etc.</p>
+<pre class="lang:default decode:true ">sqlmap -u "http://testphp.vulnweb.com/artists.php?artist=1" -D acuart --dump-all --batch</pre>
+<p><img src="https://3.bp.blogspot.com/-p1BQZl2HZMU/WVSm88fCI6I/AAAAAAAAQUk/KBvXd6QfL1INTlydOKHR6AGAa_1NeydjACEwYBhgL/s1600/13.png" alt="" /></p>
+<p>This will give you all information at once which contains database name as well as table&rsquo;s records.</p>
+<p>Try it yourself!!!</p>
+<p><img src="https://4.bp.blogspot.com/-4XCG8vhqAhI/WVSm_LWBA6I/AAAAAAAAQUs/0xmoiYXpZpgBNoN4Aj9MSViX0S3C7ak0QCEwYBhgL/s1600/14.png" alt="" /></p>
+<p>A&nbsp;Web crawler, sometimes called a&nbsp;spider, is an&nbsp;Internet bot&nbsp;that systematically browses the&nbsp;World Wide Web, typically for the purpose of&nbsp;Web indexing.</p>
+<p>A Web crawler starts with a list of&nbsp;URLs&nbsp;to visit, called the&nbsp;seeds. As the crawler visits these URLs, it identifies all the&nbsp;hyperlinks&nbsp;in the page and adds them to the list of URLs to visit. &nbsp;If the crawler is performing archiving of&nbsp;websites&nbsp;it copies and saves the information as it goes. The archive is known as the repository and is designed to store and manage the collection of&nbsp;web pages. A repository is similar to any other system that stores data, like a modern-day database.</p>
+<p><strong>Let&rsquo;s Begin!!</strong></p>
+<h3><strong>Metasploit</strong></h3>
+<p>This auxiliary module is a modular web crawler, to be used in conjunction with wmap (someday) or standalone.</p>
+<pre class="lang:default decode:true">use auxiliary/crawler/msfcrawler
+msf auxiliary(msfcrawler) &gt; set rhosts www.example.com
+msf auxiliary(msfcrawler) &gt; exploit</pre>
+<p>From, the screenshot you can see it has loaded crawler in order to exact hidden file from any website, for example, about.php, jquery contact form, html and etc which is not possible to exact manually from the website using the browser. For information gathering of any website, we can use it.</p>
+<p><img src="https://3.bp.blogspot.com/-W61G37pWeOU/WWrtO4DwpsI/AAAAAAAAQgc/hKdhpvkDwXEzmMXxzq3scNWwmz58qqlyQCLcBGAs/s1600/1.png" alt="" /></p>
+<h3><strong>Httrack</strong></h3>
+<p>HTTrack&nbsp;is a&nbsp;free&nbsp;and&nbsp;open source&nbsp;Web crawler&nbsp;and&nbsp;offline browser, developed by&nbsp;Xavier Roche</p>
+<p>It allows you to download a World Wide Web site from the Internet to a local directory, building recursively all directories, getting HTML, images, and other files from the server to your computer. HTTrack arranges the original site&rsquo;s relative link-structure.&nbsp;</p>
+<p>Type following command inside the terminal</p>
+<pre class="lang:default decode:true ">httrack http://tptl.in &ndash;O /root/Desktop/file</pre>
+<p>It will save the output inside given directory /root/Desktop/file</p>
+<p><img src="https://2.bp.blogspot.com/-u6d5hLwhEWc/WWrtPhrCoRI/AAAAAAAAQgg/yZxfaPGSHBELtqxoxs3AndDLCgGQSWcxgCLcBGAs/s1600/2.png" alt="" /></p>
+<p>From given screenshot you can observe this, it has dumb the website information inside it which consist html file as well as JavaScript and jquery.</p>
+<p><img src="https://1.bp.blogspot.com/-n1HnkdWpfb4/WWrtP7-RC6I/AAAAAAAAQgo/-bFUA73PoP4GZn00gIupvw_e5xmcy6bfACLcBGAs/s1600/3.png" alt="" /></p>
+<h3><strong>Black Widow</strong></h3>
+<p>This Web spider utility detects and displays detailed information for a user-selected Web page, and it offers other Web page tools.</p>
+<p>BlackWidow&rsquo;s clean, logically tabbed interface is simple enough for intermediate users to follow but offers just enough under the hood to satisfy advanced users. Simply enter your URL of choice and press Go. BlackWidow uses multi-threading to quickly download all files and test the links. The operation takes only a few minutes for small Web sites.</p>
+<p>You can download it from&nbsp;<strong>here</strong>.</p>
+<p>Enter your URL&nbsp;<strong>http://tptl.in</strong>&nbsp;in Address field and press&nbsp;<strong>Go.</strong></p>
+<p><img src="https://4.bp.blogspot.com/-FGDXn8kcPjA/WWrtSYLk8hI/AAAAAAAAQg0/W5KuDTkFwlE8GnDG7SJ1WIpvscUCtflEQCLcBGAs/s1600/4.png" alt="" /></p>
+<p><strong>Click</strong>&nbsp;on&nbsp;<strong>start</strong>&nbsp;button given on the left side to begin URL scanning and select a folder to save the output file.</p>
+<p>From the screenshot, you can observe that I had browse C:\Users\RAJ\Desktop\tptl in order to store output file inside it.</p>
+<p><img src="https://2.bp.blogspot.com/-hpUPlDLTdnU/WWrtRf5QJjI/AAAAAAAAQgs/sqAmXesTYU8IAftQ3Fi-h_7wpX7NG_PFQCLcBGAs/s1600/5.png" alt="" /></p>
+<p>When you will open target folder tptl you will get entire data of website either image or content, html file, php file, and JavaScript all are saved in it.</p>
+<p><img src="https://4.bp.blogspot.com/-uOVQvbFRMBw/WWrtR_PGVvI/AAAAAAAAQgw/wgzHOyXNoggmqaVITSht-yMuOdUgAGPsgCLcBGAs/s1600/6.png" alt="" /></p>
+<h3><strong>Website Ripper Copier</strong></h3>
+<p>Website Ripper Copier (WRC) is an all-purpose, high-speed&nbsp;website downloader software to save website data. WRC can&nbsp;download website&nbsp;files to a local drive for offline browsing, extract website files of a certain size and type, like the image, video, picture, movie, and music, retrieve a large number of files as a download manager with resumption support, and mirror sites. WRC is also a site link validator, explorer, and tabbed antipop-up Web / offline browser.</p>
+<p>Website Ripper&nbsp;Copier is the only website downloader tool that can&nbsp;resume broken downloads&nbsp;from&nbsp;HTTP,&nbsp;HTTPS&nbsp;and&nbsp;FTP connections,&nbsp;access password-protected sites, support Web cookies, analyze scripts, update retrieved sites or files, and launch more than fifty retrieval threads</p>
+<p>You can download it from&nbsp;<strong>here</strong>. -&nbsp;http://download.tensons.com/download/WRCsetup.exe</p>
+<p><strong>&nbsp;</strong><strong>Choose&nbsp;</strong>&ldquo;websites for offline browsing&rdquo; option.</p>
+<p><img src="https://3.bp.blogspot.com/-qjPVEP8-BU4/WWrtSyPfirI/AAAAAAAAQg4/hYA7yeRuglAJMtTVcbEicT6yzh_0p5U4ACLcBGAs/s1600/7.png" alt="" /></p>
+<p><strong>Enter&nbsp;</strong>the website URL as http://tptl.in and click on&nbsp;<strong>next.</strong></p>
+<p><img src="https://3.bp.blogspot.com/-zQPhb2RkYfs/WWrtTF3L9oI/AAAAAAAAQg8/crbKPlvlrjYj2AlNT5QbXzLrlbyqHAo0QCLcBGAs/s1600/8.png" alt="" /></p>
+<p><strong>Mention&nbsp;</strong>directory path to save the output result and click<strong>&nbsp;run now.</strong></p>
+<p><img src="https://3.bp.blogspot.com/-ytz-X_ovdmE/WWrtTqB0MqI/AAAAAAAAQhA/KZfkAjZb4tYdI2JMLdbqrB27EEtQGU3AACLcBGAs/s1600/9.png" alt="" /></p>
+<p>When you will open selected&nbsp;<strong>folder tp&nbsp;</strong>you will get fetched CSS,php,html and js file inside it.</p>
+<p><img src="https://2.bp.blogspot.com/-TOaSDEceQlE/WWrtOcmTcvI/AAAAAAAAQgY/wsEcE9vF2vo-l_jYM63y58hc-rsrlOgQQCLcBGAs/s1600/10.png" alt="" /></p>
+<h3><strong>Burp Suite Spider</strong></h3>
+<p><strong>Burp Spider</strong>&nbsp;is a tool for automatically crawling web applications. While it is generally preferable to&nbsp;map applications manually, you can use Burp Spider to partially automate this process for very large applications, or when you are short of time.</p>
+<p>From given screenshot you can observe that I had fetched the http request of http://tptl.in; now&nbsp;<strong>send to spider&nbsp;</strong>with help of action tab.</p>
+<p><img src="https://3.bp.blogspot.com/-h5tP0X1-68g/WWrtOKbACwI/AAAAAAAAQgU/obhTWVRmgRc5MiQ7dgB3iQFbYx7udw2sQCLcBGAs/s1600/11.png" alt="" /></p>
+<p>The targeted website has been added inside the&nbsp;<strong>site map</strong>&nbsp;under&nbsp;<strong>the target</strong>&nbsp;tab as a new scope for web crawling.&nbsp; From the screenshot, you can see it started web crawling of the target website where it has collected the website information in the form of php, html, and js.</p>
+<p><img src="https://2.bp.blogspot.com/-QI6xkKyCreI/WWrtPx9eeMI/AAAAAAAAQgk/5yK4Fv93THgUwjaURNDFVmX5PXz2ceRrgCLcBGAs/s1600/12.png" alt="" /></p>
+<p><strong>Burp Spider</strong>&nbsp;is a tool for automatically crawling web applications. While it is generally preferable to&nbsp;map applications manually, you can use Burp Spider to partially automate this process for very large applications, or when you are short of time.</p>
+<p><strong>Source: https://portswigger.net/burp/help/spider.html</strong></p>
+<p><strong>Let&rsquo;s begin!!</strong></p>
+<p>The first attacker needs to configure the browser and burp proxy to work properly,&nbsp;www.tetphp.vulnweb.com&nbsp;will my targeted web site for enumeration.</p>
+<p><img src="https://3.bp.blogspot.com/-fyndPXQXk3U/WVNp4-Lw48I/AAAAAAAAQT4/kNhxf-bjma8UpuChhPu-haVwLVDlVVu3gCLcBGAs/s1600/1.png" alt="" /></p>
+<p>The form is given below screenshot you can see currently there is no targeted website inside site map of burp suite. To add your targeted web site inside it you need to fetch the http request sent by the browser to the web application server, using intercept option of the proxy tab.</p>
+<p>Click on the&nbsp;<strong>Proxy</strong>&nbsp;tab and&nbsp;<strong>turn on intercept</strong>&nbsp;in order to catch http request.</p>
+<p><img src="https://4.bp.blogspot.com/-vKlNEbsDRdw/WVNp4tYYZGI/AAAAAAAAQT0/R-gq1DWgj2EPeSmZdWrxJiX4EuVzdDf-gCEwYBhgL/s1600/2.png" alt="" /></p>
+<p>Here you can observe that I had fetched the http request of&nbsp;www.tetphp.vulnweb.com; now&nbsp;<strong>send to spider&nbsp;</strong>with help of action tab.</p>
+<p><img src="https://1.bp.blogspot.com/-Rt9Mw3kqdi8/WVNp4nX3AAI/AAAAAAAAQTw/lSz9vWXtwR8NM6KG0TLy2Fircd6BCooJwCEwYBhgL/s1600/3.png" alt="" /></p>
+<p>Confirm your action by making click on&nbsp;<strong>YES;&nbsp;</strong>Burp will alter the existing target scope to include the preferred item, and all sub-items contained by the site map tree.</p>
+<p><img src="https://3.bp.blogspot.com/-036x6HzaYVc/WVNp5cNkoWI/AAAAAAAAQUM/QSGUpE1LY0g4MxTOIj0_6n3GWu3TEe4zwCEwYBhgL/s1600/5.png" alt="" /></p>
+<p>Now choose&nbsp;<strong>spider tab</strong>&nbsp;for a further step, here you will find two subcategories control tab and option.</p>
+<p><strong>Burp Spider &ndash; Control Tab</strong></p>
+<p>This tab is used to start and stop Burp Spider, monitor its progress, and define the spidering scope.</p>
+<p><strong>&nbsp;</strong><strong>Spider Status</strong></p>
+<p>Use these settings to monitor and control Burp Spider:</p>
+<ul>
+<li><strong>Spider is paused/running</strong>&ndash; This toggle button is used to start and stop the Spider. While the Spider is stopped it will not make any requests of its own, although it will continue to process responses generated via Burp Proxy (if&nbsp;passive spidering&nbsp;is enabled), and any newly-discovered items that are within the spidering scope will be queued to be requested if the Spider is restarted.</li>
+<li><strong>Clear queues</strong>&ndash; If you want to reprioritize your work, you can completely clear the currently queued items, so that other item can be added to the queue. Note that the cleared items may be re-queued if they remain in-scope and the Spider&rsquo;s parser encounters new links to the items.</li>
+</ul>
+<p><strong>&nbsp;</strong><strong>Spider Scope</strong></p>
+<p>This panel lets you define exactly what is in the scope for the Spider to request.</p>
+<p>The best way to handle spidering scope is normally using the suite-wide&nbsp;target scope, and by default, the Spider will use that scope.</p>
+<p><strong>Burp Spider Options</strong></p>
+<p>This tab contains options for the basic&nbsp;crawler settings,&nbsp;passive spidering,&nbsp;form submission,&nbsp;application login, the&nbsp;Spider engine, and HTTP&nbsp;request headers.</p>
+<p><img src="https://4.bp.blogspot.com/-HX96HcQTUmE/WVNp5QtDWvI/AAAAAAAAQUM/R7rCcOCj30sGThDyGpj1MJhjUWtrUdy5gCEwYBhgL/s1600/6.png" alt="" /></p>
+<p>You can&nbsp;monitor the status&nbsp;of the Spider when&nbsp;<strong>running</strong>, via the Control tab. Any newly discovered content will be added to the&nbsp;<strong>Target&nbsp;</strong><strong>site map</strong>.</p>
+<p>When spidering a selected branch of the site map, Burp will carry out the following actions (depending on your&nbsp;settings):</p>
+<ul>
+<li>Request any unrequested URLs already present within the branch.</li>
+<li>Submit any discovered forms whose action URLs lay within the branch.</li>
+<li>Re-request any items in the branch that previously returned 304 status codes, to retrieve fresh (uncached) copies of the application&rsquo;s responses.</li>
+<li>Parse all content retrieved to identify new URLs and forms.</li>
+<li>Recursively repeat these steps as new content is discovered.</li>
+<li>Continue spidering all in-scope areas until no new content is discovered.</li>
+</ul>
+<p>Hence you can see the targeted website has been added inside the site map as a new scope for web crawling. Choose&nbsp;<strong>spider this host</strong>&nbsp;option by making right click on selected URL which automatically starts web crawling.</p>
+<p><img src="https://3.bp.blogspot.com/-UMxBDdGTYd0/WVNp5RrC05I/AAAAAAAAQUM/Wt9ATor38EIpDgYNS43Xc5lVMbPryucjQCEwYBhgL/s1600/7.png" alt="" /></p>
+<p>When you click on preferred target site map further content which has been discovering by the spider will get added inside it as shown in the given image below.</p>
+<p>Form screenshot you can see its dump all items of web site even by throwing request and response of the host.</p>
+<p><img src="https://3.bp.blogspot.com/-y9WlWGIgZCg/WVNp5xtI9SI/AAAAAAAAQUM/x2aAcimnwlku6QjbbqnBv-P8AWNd5bw_wCEwYBhgL/s1600/8.png" alt="" /></p>
+</div>
+</div>
+</body>
+</html>

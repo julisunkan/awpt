@@ -1,0 +1,906 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 230px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: scroll;
+  padding-top: 20px;
+}
+
+.main {
+        height: 100%;
+        width: 1010px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        overflow-x: scroll;
+        overflow-y: scroll;
+        padding-top: 0px;
+	float: center;
+    }
+
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 15px;
+  color: white;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: red;
+}
+
+.main {
+  margin-left: 240px; /* Same as the width of the sidenav */
+  font-size: 30px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+<div class="sidenav">
+<a href="1.html">🌐【WordPress Penetration Testing】🖧</a>
+  <a href="2.html">🌐【PenTesting Lab Setup: Squid Proxy &  Burpsuite Payloads】🖧</a>
+  <a href="3.html">🌐【Beginner Guide to Google Dorks】🖧</a>
+  <a href="4.html">🌐【Introduction to Command Injection】🖧</a>
+ <a href="5.html">🌐【WebServer Shell-ing through PhpMyAdmin】🖧</a>
+  <a href="6.html">🌐【Comprehensive Guide on FFUF & HTTPX】🖧</a>
+  <a href="7.html">🌐【Comprehensive Guide on HTML & XXE Injection】🖧</a>
+<a href="8.html">🌐【NetCat for PenTesting & Web Framework Reverse Shell】🖧</a>
+  <a href="9.html">🌐【Web Shells Penetration Testing】🖧</a>
+  <a href="10.html">🌐【Database Penetration Testing】🖧</a>
+ <p align="center"><img src="https://pwa-audio-player.digitalskeleton.com.ng/p.jpg" height="90" width="200"></p>
+</div>
+<div class="main">
+<div class="-heading" dir="auto">
+<h2 class="heading-element" dir="auto" tabindex="-1"><p align="left">🌐Comprehensive Guide on FFUF & HTTPX🖧</p></h2>
+<h3>Introduction</h3>
+<p>httpx is a fast web application reconnaissance tool coded in go by&nbsp;<strong>projectidscovery.io</strong>. With a plethora of multiple modules effective in manipulating HTTP requests and filtering out responses, it is proving to be an effective tool in Bug Bounty Hunter&rsquo;s arsenal. While tools like curl already exist that can perform almost all the features covered in this tool, httpx has its own place among the analysts because of its speed and ease of access. You can download the source code from&nbsp;<strong>here</strong>. -&nbsp;https://github.com/projectdiscovery/httpx</p>
+<h3>Contents</h3>
+<ul>
+<li><strong>Installation of go version 1.17</strong></li>
+<li><strong>Installation of httpx</strong></li>
+<li><strong>Basic usage</strong></li>
+<li><strong>Subdomain enum using subfinder and scanac</strong></li>
+<li><strong>Content probes</strong></li>
+<li><strong>Content comparers</strong></li>
+<li><strong>Content filters</strong></li>
+<li><strong>Rates and timeouts</strong></li>
+<li><strong>Show responses and requests</strong></li>
+<li><strong>Filtering for SQL injections</strong></li>
+<li><strong>Filtering for XSS reflections</strong></li>
+<li><strong>Web page fuzzing</strong></li>
+<li><strong>File output</strong></li>
+<li><strong>TCP/IP customizations</strong></li>
+<li><strong>Post login</strong></li>
+<li><strong>HTTP methods probe</strong></li>
+<li><strong>Routing through proxy</strong></li>
+<li><strong>Conclusion</strong></li>
+</ul>
+<h3>Installation of go version 1.17</h3>
+<p>Installation and proper running of httpx tool depends on go version 1.17. You can download, extract, add go in environment variables as follows. I am using Kali on amd64 architecture.</p>
+<p>Please feel free to download the appropriate package for your system on go.dev/dl</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">wget https:</span><span class="enlighter-c0">//go.dev/dl/go1.17.8.linux-amd64.tar.gz</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">tar -C /usr/local/ -xzf go1.</span><span class="enlighter-m3">17</span><span class="enlighter-text">.</span><span class="enlighter-m3">8</span><span class="enlighter-text">.</span><span class="enlighter-m3">linux</span><span class="enlighter-text">-amd64.</span><span class="enlighter-m3">tar</span><span class="enlighter-text">.</span><span class="enlighter-m3">gz</span></div>
+</div>
+</div>
+</div>
+</div>
+<p>Please make sure that you add the following lines in ~/.zshrc file:</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-c0">#go variables</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">export GOPATH=/root/go-workspace</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">export GOROOT=/usr/local/go</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">PATH=$PATH:$GOROOT/bin/:$GOPATH/bin</span></div>
+</div>
+</div>
+</div>
+</div>
+<p>After you have added the lines, zshrc file can be loaded with the source command and then we&rsquo;ll be ready to go. If all goes well, the &ldquo;go version&rdquo; command will give version 1.17.8 as output.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">source ~/.zshrc</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">go version</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEg9AlSPddp5OUP_eU8i-3YbkJlkZJQELrrftSGwMmXT5lYo3-YZMV3QCLPK8BG1PH6c3p6IKS-ra1HACHLrGFwdx56x2fCsJR6xbQzMQankB_t01kYJ7ZQLFGl5aBZWZ-dnDBQzF5Uw_2m37KQ62BmKRR8ZWVWOmq5nMQ0PiXeNjBUJ9BMrMiDMiblRfg=s16000" alt="" /></p>
+<h3>Installation of httpx</h3>
+<p>Installation of the tool is also possible by cloning the github repository and using a makefile to compile but we have an easier alternative. We can use go install to do the same like:</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">go install -v github.</span><span class="enlighter-m3">com</span><span class="enlighter-text">/projectdiscovery/httpx/cmd/httpx@latest</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEjxO12ZcCBpqMjShSZDpioqub4yeqXqeR6x1ecum7XOuXIsn4DX8DUM1PuFaOcO5DdM20TYt9I5LHkMAJqXbDyV3aDvj5d3wROMhdAYMjRlDtnT8VNQpaSznN7AFHdq-Q-rrRQi53ElM0B1xFL6Jap_wwA_H3Zmz_AZVCkHYT4AyWrhs3RYul_Y25CsHw=s16000" alt="" /></p>
+<p>Once done, you can now run the tool. Help menu can be popped up to check the installation success</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">httpx --help</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><strong><img src="https://blogger.googleusercontent.com/img/a/AVvXsEgQLt7Z5uf7fSqnkq2bX7Pp0sE8QNdVxj-uyi_ZHLji4PyrwM1LzY7c6aVhGQbH3C7ZZJo4hrJxKXr5C-lwlULWSsJ6dDZyjKFLhmyI5MEtZ8BmiGkIuwtp2F0-_JwJh6A6mJcGUlYPI85CNwPvfV4fGe9BFME4N2gTMS5oaRWNn6p1w-a1HdkPg6pWmA=s16000" alt="" /></strong></p>
+<h3>Basic Usage</h3>
+<p>Httpx tool accepts STDIN input for scanning. Here, we run a blank scan that only hits the server and does nothing and then the same scan with some basic options.</p>
+<p>-title: displays the title of the webpage</p>
+<p>-status-code: displays the response code. 200 being valid or OK status while 404 being the code for not found</p>
+<p>-tech-detect: detects technology running behind the webpage</p>
+<p>-follow-redirects: Enables following redirects and scans the following page too</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -title -status-code -tech-detect -follow-redirects</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEg75NMZ3dVd_eJ8SGIUvdw9JiHUZUm9IGz5xyH7owm4SDgMqiHocUXSqxL7Ph3fltfSYKxxb9Izqv_2m65W085tcXWZKrysSRJiDuBusKUKUzCQJABsBJSUEu54wnhneq0HHEQJLx2qZV_UEwgwlLd96Mj8DfRL16871RQwqeMkIiAxt3_sbL8xB-OqYw=s16000" alt="" /></p>
+<p>The same can be run on a list of websites that can be fed to the tool using &ldquo;-l&rdquo; option</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">httpx -l list -title -status-code -tech-detect -follow-redirects</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEh2PsDI6akzQXDF5CtJUaG8OSIRmlPsY3RjODmFEC5SEs-Yo-DWKCDpnPHZTDPFHoLf5iazUjPdquCR4FnL5NCkUtlm7WrLiHHjw5WvJf8qtD99Dx2XR4dQnQfesgj3h4RdzXMNki6XLiH15cZTu9x012t6EvDfhri5OzJtbKB432VaZoo3hFOWlaW58g=s16000" alt="" /></p>
+<h3>Subdomain enum using subfinder and scan</h3>
+<p>Subfinder is another tool developed by projectdiscovery.io that enumerates and outputs subdomains. We can feed the STDOUT of subfinder to httpx and scan all the subdomains like so:</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">subfinder -d vulnweb.</span><span class="enlighter-m3">com</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -title -status-code -tech-detect -follow-redirects</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhogbTv2cwBoMFX7WbSt8Jl4RpzIjPS4L92plBtV6RJo90N4qsFVHdMS3I5igzroL-UZv9yicPmggfl_deW9HbbX8t1ZMpQlj8EZs5DBipeiSbCnkrq1UKD0h3WoyfAymxdZWePYPUl-dIU5N0VcVHKrTd_n-HeOLBJGDevQsTwMaYuHEkhWRRoI4NNfQ=s16000" alt="" /></p>
+<h3>Content probe</h3>
+<p>There are various modules that can refine how a response is rendered which is called a &ldquo;probe.&rdquo; These help us refine scan results. For example,</p>
+<p>-sc: show HTTP response status code</p>
+<p>-path: a specified path to check if it exists or not &nbsp;</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">httpx -l list -path /robots.</span><span class="enlighter-m3">txt</span><span class="enlighter-text"> -sc</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhBz-txjviQHX-e11ncrjLMjXu_6wsHxWKnHcmp2IAV0QR3ug59B-_qaBzeOXGgqaVYFu9eVgSV8CzlRuZvSD7LyvGWs1Cr0WfaQHm5uVj4l094Z60oRFwAbUObKdIClePcYd8W3NICnU5nQ70cAycTC2LEbFd1gNK3pLlINKpi_Y8rlIZ3X7pGNOhp9A=s16000" alt="" /></p>
+<p>httpx could be run using docker as well. Here, we feed a list of all subdomains as STDIN to httpx:</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> docker run -i projectdiscovery/httpx -title -status-code -tech-detect -follow-redirects</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEh-XPURpyC8xXqFxGg6UNnCrbXqElwXFtX-HXOpZxI2UB6EVdnfHgn9US0hYrZm-5guT6palhNmVjBPdHrS1IhYCj944dU8sJtATPHGyRkmlbcNl9qzWZ1_A6Z2YELYe67jgsHnQLEgIhG8PEEfilgff5NtQ_zAZLddk-vnJFJZifl52Zig2U84_XPB6w=s16000" alt="" /></p>
+<p>There are various other probes that help us render better outputs</p>
+<p>-location: website where redirected. Here, observe how http becomes https</p>
+<p>-cl: displays the content length of the resulting web page</p>
+<p>-ct: content type of the resulting web page. Mostly HTML</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://google.co.in"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -sc -cl -ct -location</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEjX5m-5IIDpQnK4vh-zXDF45KHcr4IiYFHI2i76Ah3dRAfEv6Gb_0St-7D0Af4bZFXRyedM7hLMDQQKxKQmuHTCCJq-IqCQFEgA63WEStdYZjDE6dtWZrv08GQj4C8J3SL0iocbswolJsk29HueFFhPRGzQ6N2n_4hPohWMmwS5Dx31oKDAlQqaG6CvOQ=s16000" alt="" /></p>
+<p>Some probes that are helpful for analysts and in-depth analysis</p>
+<p>-favicon: fetches mmh3 hash of /favicon.ico file</p>
+<p>-rt: shows the response time</p>
+<p>-server: displays the server version and build</p>
+<p>-hash: shows the webpage&rsquo;s content&rsquo;s hash</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -favicon -rt -server -hash sha256</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEjZ4_gZGM2YiSWLLFpMnFBgEfInyjEY2zhP4IQD55ehgblIDr4ET8ESNpzkJO11T9YAgGE48kNl2kxWQ7timGaA78TfdTi0b5IdpaP7SVejfCeGLfUSIjuBBriMUGon-AdXArmd-lgZorhdMyocgJoeKjT3m4e6NS7rU6AQkwTlUZyE6PJ5Hor3qXytOQ=s16000" alt="" /></p>
+<p>-probe: displays the status of a single scan (success/failed)</p>
+<p>-ip: displays the IP of the webserver</p>
+<p>-cdn: displays the CDN/WAF if present</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"https://shodan.io"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -probe -ip -cdn</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEgiy_dzmg2AKJXJcHBU-Ekct5tgcJNK51hU_eFMGSS4ZBnKFN057ZH_OSRzzG33V3Ey9cD7c96PwT-RKxbxigPeZBUDIOfjQQs6T0jBIVw1LYRsVwUYTKp6RzedqW51iJghenxQ3f87B4AL0r_tSdH_s7swP7ybRGzbDJjnQhZ29NxUHbQhRcWm_UXc-A=s16000" alt="" /></p>
+<p>-lc: displays the line count of scanned web page</p>
+<p>-wc: displays the word count of scanned web page</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -lc -wc</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhoXJxtpYiFzctnrh8CeC9zXCVI-QeDlh7mFcnLVhH2Y0vyytWc1oM-pxr1zOThqxXDJGBhJ-pxCC72WdJBphE3wTaignfE0LPrrzMY-2SOAd1jjwBt7zYnq1V5nyxV_bzBzHy-NUW8jerWVOh45sbV5dJDN4I-Vn3xWeyW4dAuQJjGr5a4qhednPPx7Q=s16000" alt="" /></p>
+<h3>Content comparers</h3>
+<p>There are various comparers available in the tool that help us shortlist down an output. These are very helpful to trim down a list of unexpected output. For example,</p>
+<p>-mc: matches the HTTP response code with the codes supplied in the list</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -mc </span><span class="enlighter-n1">200</span><span class="enlighter-text">,</span><span class="enlighter-n1">301</span><span class="enlighter-text">,</span><span class="enlighter-n1">302</span><span class="enlighter-text"> -sc</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEiAEZYYStgLEMFENS2zsdDYkhkjksXUTef_8TtiasZDc5CSrBU9mFkmOPSfUqWWc2jzDGzWDpjc7hP8Vkp8fzLHFA7cxpmSOnvAUt2yYJa74ZMcXkRu-s7bFUJbB8JMd-zuZlUvd1sqtAAdFt8vQAu_nmCdDsXvF5rtfjQmMzdShc8XpGADuUArifd8RA=s16000" alt="" /></p>
+<p>-mlc: matches the line count with input provided</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -mlc </span><span class="enlighter-n1">110</span><span class="enlighter-text"> -lc</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhDFuXjn7TUOgMZrzkClN2bus5cveZxdHxq-D8bA3tBcqks7d7LUxCONWgf_iT3HPRla9nvGYtjwGPvqNk5y8F1VxfFPMAHDnJmBbjk9bwP1S0uAJczXWUJnyTkfSllBXzpCHvjySb36llAyyc1MvznQ4WYmikEmA26LKb8vf18TIp_l2fI3NJrmYLnWw=s16000" alt="" /></p>
+<p>-cl: displays the content length of a webpage</p>
+<p>-ml: matches the content length with the input provided and displays only the results matching the content length</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -ml </span><span class="enlighter-n1">3563</span><span class="enlighter-text"> -cl</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhSR_kOwZcqSWfOZ82H4VlEJ1G5-LixVZzOYtYEpC310ydx2bmVwrA3MCGTP-BN4UBbHG5X1A4-4bYu1E6rLML1i2H4zwNQl_NeIPxYMvFJHfjwhq-AOr6qfqYnqMVg1WDsgvF4_e9dUoUPPsesYV72gMnxaZLiZ3oMnNwOnLTEIFZxj1RNXhomckpeyw=s16000" alt="" /></p>
+<p>-mwc: matches the word count and displays only the results with the same word count</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -mwc </span><span class="enlighter-n1">580</span><span class="enlighter-text"> -wc</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEiUGGTLTtQTIcfsIANfEkAk7gN_DSbc7vUCQjg1wVsFAKzsJ_1D_1MBlrO48hNF1EtiaeBQb_PwHJjZf4nT78sf8DWSuFOyMhCJDmcuw76_H94XYbQehlFDAHtJDD5Pfn_UDdPMVtcBff7SjyLRNgvsE45GzjktYdVsFdX8iNuxTtxeuvYYrztNEtH4Hw=s16000" alt="" /></p>
+<p>-ms: displays only the results where text on a page matches the provided string. Here, pages with &ldquo;login&rdquo; in their text are loaded</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -ms </span><span class="enlighter-s0">"login"</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEj97pwpigLNnt3kDhKKp7nZnNdZ_Bd3-SCYMDgJmFcKeeUOmf7fZfe928WCCiCFhWDC_gY3S9oTzz6PMmza05PYCee5rX862gE0TyzaD3x3l3GQoMfGUzSP9HKtQs8ZoXQ4E9HufEzJsDMrQzcRk85SCkA7dZGOHEH29AmkctIRN2Hr-AhGapELgCKaWQ=s16000" alt="" /></p>
+<p>-er: extract regular expressions. Displays only the results where the resulting pages match the regex pattern provided. An example regex is \w which compares the provided string with the resulting page&rsquo;s output.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -er </span><span class="enlighter-s0">"\w test"</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEggV7SxthocXjWoEhSGAQ6VuUqA8D5WlSLQCq46MZ9zHiHjx1gtoN5AZpjTo-ak7sQ2DDQv4qWK11WDB93iqshrtLKb3zFY9nShvLVWhMV13CRHeKPkseSaKJUKvrks3gHRuhKs4Sewv6unu9Dm80o3-C5vwl9xf3eTeSP0nziOgSD_XMkV8p8yElnWQQ=s16000" alt="" /></p>
+<p>Here, you can see the output stands like u test, o test. The tool has filtered the following text and displayed it in output:</p>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEjgu0WAIPzvIZAw7-WoCQLGbEpUPglE4iMQPL6QslgEF2_6oGrOp_1fbCScQAc3ttylpWQriA8oL5gLpAlbDiXmJ-ZR0Pu_mIGQdDqU6TsKcqY693VEsm4G2Dl7gEMeOi5GMpdcoQrpUTkaGmhcwo3oidTjt-WRX34RCLEUp2QibQGjv8qbJ3hnOqZlag=s16000" alt="" /></p>
+<h3>Content filters</h3>
+<p>Various filters are available at disposal in the tool that eliminates the results upon matching the criteria/condition provided. For example,</p>
+<p>-fc: filters code. Tool only displays status codes not listed by fc (404 here so only 200 is visible)</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -sc</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -sc -fc </span><span class="enlighter-n1">404</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhuiFqokWVCnPiYTu3U0W29vl5t2s15ICqn8GCZERknvk5CPePhRV58vzot-2jTMD9Ybpt8c6O1Hej6aU5zVC6yclwQPCVtDLnbfvtVzx7lCRBQj_ADi8hsK2UUH_mXd-LvBxYgkQGxw4xkKbePMm5mrPsYedptqF6RckjclBi150IASOjqawriSEdeng=s16000" alt="" /></p>
+<p>-fl: filters content length. Here, 16 and 12401 is filtered so all the output except these two are visible</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -cl -fl </span><span class="enlighter-n1">16</span><span class="enlighter-text">,</span><span class="enlighter-n1">12401</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEih9BMUuXOhzJrCoFFa0MMWplbDHzpqt_84dy4W4aCVMlrWoGDczG6NLes1P1sBqpPfbsEpJHHeUMBWD_hR9l8Uk912FyKBnZoTV35eK4PH4-ryN3aijGshgxCxkDh3ZYSnPcLcA4kwxtO3AAzLkp_NJ5tFl2U0N3CIXMJwVMmo-7Wl8OMAf9tFnS8f-w=s16000" alt="" /></p>
+<p>-fwc: filters the word count. Here, 3 and 580 is filtered so all the output except these two are visible</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -wc -fwc </span><span class="enlighter-n1">3</span><span class="enlighter-text">,</span><span class="enlighter-n1">580</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEgy2FOoxte3XNKFtNiDFFU8NVtVx9iRwxFNFupJ_YeqcJon1LMaCsxmbNU9HE0c8A4pSxaOW8Ge7xxjoOoy66-taMX_IKn-S8BtoRfkw5BrBL3sZbYodPEH4durITeoVvt_UvRPLEYs3bhZx9DFVyhUF95qkbr_tJy9SA8JolkWnG1DAuW_74hlGyltAA=s16000" alt="" /></p>
+<p>-flc: filter line count. Here, 2 and 89 is filtered so all the output except these two are visible</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -lc -flc </span><span class="enlighter-n1">2</span><span class="enlighter-text">,</span><span class="enlighter-n1">89</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEiqDNezwvf_adtN4LyoVa6J2Z_jHDGFjhN4bswa6-P9VkGN6YlYkO4utdj9KahtPHwzcATHxorSZapOUmChDqe64nI0QMBUUN6HwmIePq-52NKjCCbbfNSD692e9tRrpy7DxO_KWDxTYv5BlaHqku4SW2Mn6XHr8C2LPp7yqZYgF8y-UGNJcgjirkWExg=s16000" alt="" /></p>
+<p>-fs: filter the output with the provided string. Here, &ldquo;test&rdquo; is provided, so webpages not containing the string &ldquo;test&rdquo; is displayed. This string must only be in the text on the web page.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -fs test</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhJqz_5zPOIFn6lygNP2lwBvI44t9QCMUGZ0B2vsrZ79Xlk--NhYQraGMFyiQ3If_9_q6wkTfv6DiYwbGZWoj37Fsk1EgDgQGqZbebaijF8grcoK8uJRUA-9otYN9uYHEYrpGeT23NDGAOjyBcwupOm9ICLpbvCqD_YfvqPBp1pcwzuMgOFe6IMuEP0zQ=s16000" alt="" /></p>
+<p>-ffc: favicon filter. Only the output with favicons that are not &ldquo;-215994923&rdquo; is displayed.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -favicon -ffc </span><span class="enlighter-n1">-215994923</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEgBonM7jOl_tDlKHTViJdsc8wr4tmitSIQVpyUFdrqLcWTES00NrrKuSQOFNHEj2RKZJd_km-obcTVr0o9Vx4JmwkmAfSRN65c2IQNuNdYjPbA1HuQqZDaaj9r6veyvZzjxFLy5pSHGazkhKibdYwz_N1BbDlrMOmWEcWx3fbbod2kvWIEsthLOsOJ-Hg=s16000" alt="" /></p>
+<h3>Rates and Timeouts</h3>
+<p>There are various modules that let a user play around with the rate of scan and throttle the speed of the same. Some of these options are:</p>
+<p>-t: specify the number of threads used for the scan. Can be as high as 150. Default 50.</p>
+<p>-rl: specifies the rate limit in requests per second</p>
+<p>-rlm: specifies the rate limit in requests per minute</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -sc -probe -t </span><span class="enlighter-n1">10</span><span class="enlighter-text"> -rl </span><span class="enlighter-n1">1</span><span class="enlighter-text"> -rlm </span><span class="enlighter-n1">600</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhjJQ68aqHALxLer1B3W19CHa5ZC7Y1q3_rMOJOv21T2ZyHytNzPGdRgARhzFqiC6nw9nqpfGgYbyUoc3KdVj7DWRVdg-vcCnAgwRlneXG69V9HOvmCG_ndaZmP7NkBkQzzCpkPS6MTkYAYBvGqXlqhBWoOXkhedPk9qiQHaif_oOz2XSONXqOjOGgsug=s16000" alt="" /></p>
+<p>-timeout: To abort the scan in specified seconds</p>
+<p>-retries: Number of retries before aborting the scan</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -sc -probe -threads </span><span class="enlighter-n1">50</span><span class="enlighter-text"> -timeout </span><span class="enlighter-n1">60</span><span class="enlighter-text"> -retries </span><span class="enlighter-n1">5</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhUM3UxpMU4hMxayxYKcnLrdyyUZASZsQU1gfqJyx5c1vQf46LHdcDxG8qv6yU316nR3yrQxA7whGOeyhKO5ONYcnT0ia-2i8hM61Y7A4gvw7FXXKhVTpDxHfe-GAytA7aZN8xY6JDpUkgbT3MaBhQI5g6nTPAFlOaEDoxg-C1riucyg8eFNw0Xe4AQMg=s16000" alt="" /></p>
+<h3>Show Responses and Requests</h3>
+<p>Httpx crafts and sends out http requests in real-time and then post-processes the results. These requests and corresponding responses can be viewed as well. For example,</p>
+<p>-debug: it shows requests and responses to a webpage in CLI</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -debug</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhCGEvpG_qThOHAnTf1Df2IqKC2Mxcc6mdCIpwpFt_99unLTXkQETb65Is786ADWIb6mj0delHprSvdsj6ppzgyG9lz_VaLj1dIcqC2JwzwBtxR6EhYNn0GOFwUtBHckN5XcxRb0NwLlBL8Jz5aDaMy_IN1YPUic9lfgBy7MfXoKBjgoF7rRk5eZsd_IQ=s16000" alt="" /></p>
+<p>-debug-req: Displays the outgoing HTTP request</p>
+<p>-debug-resp: Displays the corresponding HTTP response</p>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEgwFPwm2Cye9r3CwN-ijP8qjTYzPL4M-fISRnlTys9IxDXXrotJlRDWWhxzg7o9SwffHKciGHlI3iyIdFtRZu8-6BAKkFlRkHZEWdjBA4l3jZKBgGwIGbzie73nUUmjdXVYcYJ7JdSiHhsLpsSCDjkq_mmw388x3V_R9n0M6N37Zcj0TQlu8b0CvWrvUw=s16000" alt="" /></p>
+<p>-stats: displays the current scan stats including completion percentage</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -stats</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEiCmkBdmNuiXfKRO-3mW-5dP_MffgfcdP9hIsxqoX4cgJ7ocKrPvjt8MaypzIPE0-nh8TP844h-ftiOdV8yh1_OccYKntVJJF6qoHzMAyYCGSy_rDbyEXYu5iU1Ka8iZmFxPQ-fUGrKZML35NYCuaYGV05Wwam7vsi5Bh-vaVT-siCRb1bxjguBpLYW_Q=s16000" alt="" /></p>
+<h3>Filtering for SQL Injections</h3>
+<p>As we know that some types of SQL injections are reflected in the code output. We can detect such injections by filtering the output of a web page. In error-based SQLi, an error is thrown which is reflected in the output page. As you can see in the command below we have used -ms filter to compare and find such pages. Ideally, an attacker can give a list of input and find common SQLi vulnerabilities in a similar way. In the output below, where the vuln is found, httpx displays that website&rsquo;s name.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -path </span><span class="enlighter-s0">"/listproducts.php?cat=1&rsquo;"</span><span class="enlighter-text"> -ms </span><span class="enlighter-s0">"Error: You have an error in your SQL syntax;"</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhAu9RTErg8tosLtBEdTr_GazHPR2pQWI70rlwTCm-PHiUw4sUr5XZs8sZuhegnoxHLeXqjUC6AmMtkV1ZdcX6IsSjUjJTqFQov0m21tAsNrUlhF__PhMxTGFDgHGO_LUYKDc3vaQKGE57GHRPpPxkO-JhCyq_FnYJQgncOrAF0yyqYgTn7ZQBPqaqwYg=s16000" alt="" /></p>
+<h3>Filtering for XSS reflections</h3>
+<p>Reflected XSS by definition gets reflected in the web page&rsquo;s output.</p>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEjUSBjJcN33oq2ekAdJkMtRcMCUGBk_CRED_fIrLj7ka-g3dV0DyPdvKr9lW39sPdJ82NvIqwC94Es-BHnu0agzgYgbHegLy0o8DADavyo9matoST36ZTdTkQ7pmQxA4dCqJb40UCHIiyplngelIAtf0oSw-x_4PlafvFM9g5acGR3xdVw03B_APK__pg=s16000" alt="" /></p>
+<p>An attacker can input a list of websites and then a list of path to check for reflected XSS in bunches. In the example below, the &ldquo;-ms&rdquo; module is used which is supposed to match the output webpage&rsquo;s text content with the input provided. Since reflected XSS is shown in the output, the tool displays the name of the webpage where this vulnerability (payload output in the code) is observed.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -path </span><span class="enlighter-s0">"/listproducts.php?cat=&lt;script&gt;alert(1)&lt;/script&gt;"</span><span class="enlighter-text"> -ms </span><span class="enlighter-s0">"&lt;script&gt;alert(1)&lt;/script&gt;"</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEg0SATrZaFiM5GJXKVT7W6_cRC9cwlTFUlqLoiznGO587GPps-BmRLWdoryW8_wIIxd5Utqw61-ojOtRRiWex977abgeewSDnFby0xyctmnaRly6aS1OkKxCTvA_L8K94xVZODz0mIQgwjRIwf0L2Mn5009GXbBwgYXoQVMNpDErwhikPUBOGKstdkYHA=s16000" alt="" /></p>
+<h3>Web Page Fuzzing</h3>
+<p>Httpx is a great tool that can be used to fuzz web pages. &ldquo;-path&rdquo; module can be used to provide the name of the file to be fuzzed for existence on the server.</p>
+<p>-path: path/list of paths to probe</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -probe -sc -path </span><span class="enlighter-s0">"/login.php"</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEh46SKO1qFjbjumDukvGLqeQ_Uv2DYcig36OnG6ErQCDRNgyFNwdYudjn-9T8AD7jTjlsGH1mQameb8dgnaPDaU9uUFAc-eVP97fV9qyKs2QKuaWiaG0hr6qC2zdZ4iKokHzGW-H6ml_jYvZDevILYHG4WjORJs91bLPOMoPiJAVDkikXRcbis1QxkhOw=s16000" alt="" /></p>
+<h3>File output</h3>
+<p>The scan results provided by the tool can also be exported for convenience. The most basic output is a text file with just webpages in every line. This can be useful for a variety of occasions while pentesting. Such modules are:</p>
+<p>-o: Saves a result in a text output file</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -sc -o /root/results.</span><span class="enlighter-m3">txt</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">cat results.</span><span class="enlighter-m3">txt</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhYlMet5wQkj1NKhxsCoGoGKpEwo6UY7f5Sh1SrBFef_Pvuye8-rzLIHcyPCqnosZSFc-MmTRUUS7kmYvimsyjyETsUgOANDQ190b8jnHuBZ0QK3b1L7ddAxjsrqji_vinEnBrXXm2_Zu9w2kga_peO4CfDOymiu3DaEFQhSscSdsjqOgCbHXSb5Qy4iA=s16000" alt="" /></p>
+<p>The same results can be saved in other formats too. Like,</p>
+<p>-csv: Stores the scan results in CSV format. Default scan includes almost all of the content probes.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -sc -csv -o /root/results.</span><span class="enlighter-m3">csv</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">cat results.</span><span class="enlighter-m3">csv</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhRhIkcza7HMa4gOb5lQlmNplkIvp53BX2yHx5BBGgat8zXSf-bDKl5J7UWeptJXv5anfwgHZmwmFEH3BOIsWxeXddtjaLLUaw2ityaYmU2NPZQF3AfNEykLv9jHkV7zKGmW38P1J7FyCQbX7h0z0LbASN300FFoSaZo_HXHhMfpv4D8Yt2eIBGT5FoFQ=s16000" alt="" /></p>
+<p>-json: Stores the scan results in json format. Default scan includes almost all the content probes</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -sc -json -o /root/results.</span><span class="enlighter-m3">json</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhMoED5fGV0xKP9VQUi5K5eUWrQZ2JKGsZd3YZ1tqjr4RmGT4ogcepIZ3cx0YH-ZGOvKcjZ4BcuRp6pq4YtLJMzA00H0h0-egVcZpvwphsqfI2X5nlkvmB7vRUD2xliL38cMkuIpQwnj7974A3lnHl4u3VNtaZrCHLvKHyj9nDTqKLHHM9drcJcoAhirg=s16000" alt="" /></p>
+<p>-srd: stores corresponding HTTP responses in custom directory with naming: &ldquo;URL.txt&rdquo;</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">cat list </span><span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -sc -o /root/results.</span><span class="enlighter-m3">txt</span><span class="enlighter-text"> -srd /root/responses</span></div>
+</div>
+<div class="">
+<div><span class="enlighter-text">cat /root/responses/rest.</span><span class="enlighter-m3">vulnweb</span><span class="enlighter-text">.</span><span class="enlighter-m3">com</span><span class="enlighter-text">.</span><span class="enlighter-m3">txt</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEjC5DI04Er_J5Ie4ouhW0YGJRzvGVzMCqGSDE5xM3iR9-jNWcIUSoJlImg823gTiTWjT5ih8NJpSGPN9svTQXQA2_IqvVDwFs-FzVRl54r_ZBg326lpi3f14i6vpTb0m-ipDw3ia-SCDXCQ37TzhKb8DIz8VZviHSy1F-6JfcY6-5b0xQJXHAcYR3eUig=s16000" alt="" /></p>
+<h3>TCP/IP customizations</h3>
+<p>Some filters are available to conduct an in-depth reconnaissance. These filters are extremely helpful in cases where an attacker needs to conduct basic network-level reconnaissance too.</p>
+<p>-pa: probes all IPs associated with the same host provided. Often the same website is utilizing multiple IP addresses for different purposes.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://hackerone.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -pa -probe</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhB0xiJhzUfUbMGxUXwPOP320YUW-Od1LPGOIHtQ403Fm2zG8WWiP5M4_HTIBmxQ0iwHaFzJB2h96Qorswq4X8WFDIUweAVLVNsbe3tw0WmPL4XNKubFNbe1mOcXYPbENJm7uhFZ19AgKSWeTqR0axUpqYjMicJ6fWJwhTdfH0Ur9RSAaxHggbwlZD7Ng=s16000" alt="" /></p>
+<p>-p: scans the specified ports either as a list (in the format 80,443) or by providing absolute range (format 1-1023)</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://hackerone.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -p </span><span class="enlighter-n1">22</span><span class="enlighter-text">,</span><span class="enlighter-n1">25</span><span class="enlighter-text">,</span><span class="enlighter-n1">80</span><span class="enlighter-text">,</span><span class="enlighter-n1">443</span><span class="enlighter-text">,</span><span class="enlighter-n1">3306</span><span class="enlighter-text"> -probe</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEhOyFXdlocLJBO2tH74-UXFvf6K9y4yEm9gi74t9Tr2XYdBWKLzzWjfDvnW4mZuorvl9s4rROmZ62FhJZGqNp8aOxPOvVpJZ6TQx91kAD7bjaVyyv_4jB3PahMFZl3BZX3xKivYX0j1tLJkz8nIW5i5nxNsb--jDM2KC9V3Nh-f7hL8S8J_iGgtC8A9xg=s16000" alt="" /></p>
+<h3>POST Login</h3>
+<p>Httpx can also be used to send POST requests. It can also be used to log into a page and read responses. For example, the page /userinfo.php is alogin portal and can be logged in with credentials test:test. The corresponding request in the burp suite looks like</p>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEh5v5fov0RtLAof6b-hnFKVi--FdH3b6_LcJCK0F6WFAXNIB9T2nj_Tj0G0Zj8eA40-yy7uoQjXkH6_rejTweydG93MNwx_R60uQKDmOB8A2UAtzgxgVU_Pk5cuj3K7IA4nyY1hle14YjRlOAVZl6I_ZLCl1bkH4116pZ3Dbe55XJCqs1t-QhSkvkQtZg=s16000" alt="" /></p>
+<p>To replicate the same request, httpx provides various modules</p>
+<p>-x: specify the HTTP request options. GET, POST, PUT etc.</p>
+<p>-H: provides custom headers to be sent</p>
+<p>-body: specifies the additional data in the body to be sent along with the request</p>
+<p>As you can see in the screenshot below, the tool has logged in (200 OK) and displayed the output of the profile page.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -debug-resp -x post -path </span><span class="enlighter-s0">"/userinfo.php"</span><span class="enlighter-text"> -H </span><span class="enlighter-s0">"Cookie: login=test%2Ftest"</span><span class="enlighter-text"> -body </span><span class="enlighter-s0">"uname=test&amp;pass=test"</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEihPeBA5Hrk07516xhJi5ZHF-4V2CIWCNojeDo0MvTsMD9--4sGxWBEGRzQhk-UgnhxKv3EI-3z_aQqRSbO0OMqx-48w4sTOCb_UIdGNV82V2WbIJbGOuO9VSoT8lN-dENwcYqYxo8Z8kdxUOKnnomvAnT8kBAGFLeoUHSvqT6XrnuCfGEKLCR8LjSiAg=s16000" alt="" /></p>
+<h3>HTTP Methods Probe</h3>
+<p>The &ldquo;-x all&rdquo; option probes all the HTTP OPTIONS (request methods) and displays which options are permitted on the webpage. It is a nifty tool for pentesting. As it is visible, all the options are permitted on the webserver.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -x all -probe</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEiaNBWCRdHnhL4Indipc0G1EvbNpiOq6sOj-ZzMqYUrRAmV4vE156VpIc6jDEyHe8tQtLY8jjeAXESe698uUvEnqjwEpJC1lZzUS5BZIzXKvUSgwnNIO3MiliI7Ddn4C3V1AuBcZGqvr0kyigYkDedl1Cm7hRG43-3-APM3D_jPQSMBsKEBoJxdOx_Zmw=s16000" alt="" /></p>
+<h3>Routing through proxy</h3>
+<p>HTTP requests can also be routed through custom proxies. For example, if we were to send requests through burp suite, we can use the &ldquo;-http-proxy&rdquo; module and specify the destination. Same can be done with socks proxy in the format, &ldquo;socks5:127.0.0.1:9500&rdquo;</p>
+<p>And as you are able to see, a request is now being captured in the proxy.</p>
+<div class="enlighter-default enlighter-v-standard enlighter-t-enlighter enlighter-l-generic enlighter-hover enlighter-linenumbers ">
+<div class="enlighter-code">
+<div class="enlighter">
+<div class="">
+<div><span class="enlighter-text">echo </span><span class="enlighter-s0">"http://testphp.vulnweb.com"</span> <span class="enlighter-g0">|</span><span class="enlighter-text"> httpx -x all -probe -http-proxy http:</span><span class="enlighter-c0">//127.0.0.1:8080</span></div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://blogger.googleusercontent.com/img/a/AVvXsEiOEWGbk4J4UnXg95YRewR53XsHrzsRTR2CnzYh30lExBKTt1a7xAftrnCeeocRrvddtdc4ug9t2e0uKS2g8b7Ep2vTWVZC-6sSmKVn5r2iOfwCk2kPaSz_PYIOVrW1wg7xZZelCwdmn0V8EO7kdfPv4q6kJuS9ZEJFd8FiLbCsz5onp5VfYaiVrnjuMw=s16000" alt="" /></p>
+<p>In this guide, we will learn how we can use ffuf, which states for &ldquo;Fuzz Faster U Fool&rdquo;, which is an interesting open-source web fuzzing tool. Since its release, many people have gravitated towards ffuf, particularly in the bug bounty scenario. So, let&rsquo;s dive into this learning process.</p>
+<h3><strong>Table of Content</strong></h3>
+<ul>
+<li><strong>Introduction to ffuf</strong></li>
+<li><strong>Setup</strong></li>
+<li><strong>Input Option</strong>:
+<ul>
+<li>Simple Attack</li>
+<li>Multiple wordlists</li>
+<li>Ignore Wordlist Comment and Silent</li>
+<li>Extensions</li>
+<li>Request | Request-Proto | Mode</li>
+</ul>
+</li>
+<li><strong>Match Options</strong>:
+<ul>
+<li>Match HTTP Code</li>
+<li>Match Lines</li>
+<li>Match Words</li>
+<li>Match Size</li>
+<li>Match Regular Expression</li>
+</ul>
+</li>
+<li><strong>Filter Options</strong>:
+<ul>
+<li>Filter Code</li>
+<li>Filter Lines</li>
+<li>Filter Size</li>
+<li>Filter Words</li>
+<li>Filter Regular Expression</li>
+</ul>
+</li>
+<li><strong>General Options</strong>
+<ul>
+<li>Custom Auto Calibration</li>
+<li>Color</li>
+<li>Maxtime For Task</li>
+<li>Maxtime For Job</li>
+<li>Delay</li>
+<li>Request Rate</li>
+<li>Error Functions</li>
+<li>Verbose Mode</li>
+</ul>
+</li>
+<li><strong>Output Options</strong>:
+<ul>
+<li>Output Format in HTML</li>
+<li>Output Format in CSV</li>
+<li>All Output Format</li>
+</ul>
+</li>
+<li><strong>HTTP Options</strong>
+<ul>
+<li>Timeout</li>
+<li>Host Header</li>
+<li>Recursion</li>
+<li>Attack with Cookie</li>
+<li>Proxy with Burp suite</li>
+</ul>
+</li>
+<li>Conclusion</li>
+</ul>
+<h3><strong>Introduction to ffuf</strong></h3>
+<p>It is a professional command-line method for web fuzzing on a web server and the credit goes to the author&nbsp;&nbsp;(<strong>@joohoi</strong><strong>)</strong>. Many people have gravitated towards ffuf since its release, especially in the bug bounty scene. While the bulk of this shift is possibly attributable to the herd mentality, a significant portion of the group has made the switch due to FFUF&rsquo;s tempo, versatility, and capacity to easily merge with external tooling.</p>
+<h3><strong>Setup</strong></h3>
+<p>It is a command-line program that runs in the Linux Terminal or the Windows Command Prompt. Upgrading from the source is not any more difficult than compiling from the source, with the exception of the inclusion of the&nbsp;<strong>-u flag</strong>.&nbsp;</p>
+<pre class="lang:default decode:true">go get -u github.com/ffuf/ffuf</pre>
+<p>Due to the fact we are using Kali Linux, we&rsquo;ll find ffuf in the apt repositories, allowing us to install by running the simple command.</p>
+<pre class="lang:default decode:true">apt install ffuf</pre>
+<p><img src="https://1.bp.blogspot.com/-uLJVjFrFu34/YFyqN-oZFfI/AAAAAAAAu_k/RuIGahkBoMQXvcr1vho_JJclu72mOV-mACLcBGAsYHQ/s16000/1.png" alt="" /></p>
+<p>After installing this tool, to get its working parameters and options all we need is just to use&nbsp;<strong>[-h]</strong>&nbsp;parameter for the help option.</p>
+<pre class="lang:default decode:true">ffuf -h</pre>
+<p><img src="https://1.bp.blogspot.com/-O3EShCVijKY/YFyqUI2MM5I/AAAAAAAAu_o/FMvJaxiTUkUmHMWmtEhDvZ58rNLfm7-CwCLcBGAsYHQ/s16000/2.png" alt="" /></p>
+<h3><strong>Input Options</strong></h3>
+<p>These are parameters that help us to provide the required data for web fuzzing over a URL with the help of a world list.</p>
+<h4><strong><u>1. Simple Attack</u></strong></h4>
+<p>For the default attack, we need to use&nbsp;parameters&nbsp;<strong>[-u]</strong>&nbsp;for the target URL and&nbsp;<strong>[-w]</strong>&nbsp;to load a wordlist as shown in the image.</p>
+<p><strong>ffuf -u http://testphp.vulnweb.com/FUZZ/ -w dict.txt</strong></p>
+<p>After running the command, let&rsquo;s focus on the results.</p>
+<ul>
+<li>Firstly we noticed that it is by default running on&nbsp;<strong>HTTP method</strong>&nbsp;GET.</li>
+<li>The next things are&nbsp;<strong>response code status</strong>&nbsp;[200, 204, 301, 302, 307, 401, 403, 405}; it also shows the progression of our attack. At the end of the progress, we got our results.</li>
+</ul>
+<p><img src="https://1.bp.blogspot.com/-RSb3YNzM9uM/YFyqZS5Up3I/AAAAAAAAu_s/5md0BZRg6hE4gbyffkyfYoInZ5bFD5t7ACLcBGAsYHQ/s16000/3.png" alt="" /></p>
+<h4><strong><u>2. Multiple Wordlists:</u></strong></h4>
+<p>Sometimes one wordlist isn&rsquo;t sufficient to show us our desired results. In that case, we case put multiple wordlists at once to get better results.&nbsp;Only ffuf has the ability to run as many wordlists as per our need for attack.</p>
+<p>Here I provided two dictionaries dict.txt as W1 &amp; W2 as Dns.txt and fuff will read both dictionary simultaneously.</p>
+<p><strong>ffuf -u https://ignitetechnologies.in/W2/W1/ -w dict.txt:W1 -w dns_dict.txt:W2</strong></p>
+<p><img src="https://1.bp.blogspot.com/-tV5X1e6yjhk/YFyqdUou44I/AAAAAAAAu_0/7aHyQeZ1XP4lt1O1mbPb0wv6h1Bm5Bw6QCLcBGAsYHQ/s16000/4.png" alt="" /></p>
+<h4><strong><u>3. Ignore Wordlist Comment and Silent:</u></strong></h4>
+<p>Generally, the default wordlist might have some comments that can affect our result accuracy. In this case, we can use&nbsp;<strong>[-ic]</strong>&nbsp;parameter that can help us to get rid of that comment. Sometimes we need to be more focused on attack rather than tools banners for this kind of accuracy we need&nbsp;<strong>[-s]</strong>&nbsp;parameter which has the power to remove the banner of the tool.</p>
+<pre class="lang:default decode:true">ffuf -u http://testphp.vulnweb.com/FUZZ/ -w dict.txt</pre>
+<p>we can clearly see some comments are listed in the result when we have run above the command and after using&nbsp;<strong>[-s]</strong>&nbsp;&amp;&nbsp;<strong>[-ic]</strong>&nbsp;parameters in the next command the comments and banner are removed.</p>
+<pre class="lang:default decode:true">ffuf -u http://testphp.vulnweb.com/FUZZ/ -w dict.txt -ic -s</pre>
+<p><img src="https://1.bp.blogspot.com/-0RRQBdTUBXg/YFyqjtkRXnI/AAAAAAAAu_8/k3mkQ6az-dkLT0qamVmb03OQFLcz6_miwCLcBGAsYHQ/s16000/5.png" alt="" /></p>
+<p><strong><u>4. Extensions:</u></strong></p>
+<p>We can search for a specific extension file on a web server with the help of&nbsp;<strong>[-e]</strong>&nbsp;parameter, all we need to just to specify the extension file along with&nbsp;<strong>[-e]</strong>&nbsp;parameter. To get these results we just need to follow the command.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -e .php</pre>
+<p><img src="https://1.bp.blogspot.com/-0-s1uv46ugw/YFyqn9ZTuKI/AAAAAAAAvAA/tSHfQdb3kUkyV99XaRw6Pdm7K5CvmkNAACLcBGAsYHQ/s16000/6.png" alt="" /></p>
+<p><strong><u>5. Request | Request-Proto | Mode:</u></strong></p>
+<p>Burp Suite is an advanced framework for conducting web application security monitoring. Its different instruments act in agreement to help the testing process as a whole. A cluster bomb is a feature that uses several payload sets. For each given location, there is a different payload package. the attack goes through each payload package one by one, checking all potential payload variations.</p>
+<p>There is a various parameter of this tool, which help to use this our scenario. Like&nbsp;<strong>[-request]</strong>&nbsp;parameter which can use our request in the attack,&nbsp;<strong>[-request-proto]</strong>&nbsp;parameter through which we can define our parameter,&nbsp;<strong>[-mode]</strong>&nbsp;parameter help us to define the mode of attack.</p>
+<p>First of all, we use random credentials on our targeted URL page and set proxy up to capture its request in intercept mode on Burpsuite.</p>
+<p><img src="https://1.bp.blogspot.com/-TMJ4d173KQs/YFyucRnuUdI/AAAAAAAAvDU/DxFxOJ69XVMmOArHCWu_RzheG6JHDDUaACLcBGAsYHQ/s16000/36.png" alt="" /></p>
+<p>Now in the intercept tab of the Burpsuite, change our provided credential with&nbsp;<strong>HFUZZ</strong>&nbsp;and&nbsp;<strong>WFUZZ</strong>. Put HFUZZ in front of&nbsp;<strong>uname&nbsp;</strong>and WFUZZ in front of the&nbsp;<strong>pass</strong>. Then copy-paste this request in a text and name as per your desire. In our case, we named that brute.txt.&nbsp;</p>
+<p><img src="https://1.bp.blogspot.com/-sVKkHpOForo/YFyufwuh7OI/AAAAAAAAvDY/wfKXXuEvQjctZyM94rSvMYsWX9xOqkVQQCLcBGAsYHQ/s16000/37.png" alt="" /></p>
+<p>Now proceed towards the main attack, where<strong>&nbsp;[-request]</strong>&nbsp;parameter hold our request text file.<strong>&nbsp;[-request-proto</strong>] help us derive the http prototype<strong>&nbsp;[-mode]</strong>&nbsp;help us to derive us cluster bomb attack. The wordlists we use in these (users.txt and pass.txt) consist of SQL injections. Follow this command start attacking using these parameters.</p>
+<pre class="lang:default decode:true">ffuf -request brute.txt -request-proto http -mode clusterbomb -w users.txt:HFUZZ -w pass.txt:WFUZZ -mc 200</pre>
+<p>as we can see in our attack results, we have successfully found out SQL injections working on that particular target.</p>
+<p><img src="https://1.bp.blogspot.com/-Q7bHLTS2s4c/YFyujCZVCwI/AAAAAAAAvDc/a9ns8PIvR5YkH4P3UblCLwe2yXQFr9JaACLcBGAsYHQ/s16000/38.png" alt="" /></p>
+<h3><strong>Match Options</strong></h3>
+<p>If we want ffuf to show only that data which is important in our web fuzzing data. Then it will help us to showcase only matched according to the parameter. Example: HTTP code, Lines, Words, Size and Regular Expressions.</p>
+<p><strong><u>1. Match HTTP Code:</u></strong></p>
+<p>To get an understanding of this parameter we need to consider a simple attack where we can see which HTTP codes are appearing in our results.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt</pre>
+<p>we can clearly see that it showing some 302 HTTP code along with 200 HTTP code.</p>
+<p><img src="https://1.bp.blogspot.com/-52ZR9Jj2Ofg/YFyqrjXk37I/AAAAAAAAvAI/we8SDR20ZPUJ4vstmPpaGQxDR5RYG2pfwCLcBGAsYHQ/s16000/7.png" alt="" /></p>
+<p>If only need successful results like 200 HTTP code we just need to use&nbsp;<strong>[-mc]</strong>&nbsp;parameter along with our specific HTTP code. To use this parameter just follow the command.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -mc 200</pre>
+<p><img src="https://1.bp.blogspot.com/-YHodiPhWQqk/YFyq6XK-Y1I/AAAAAAAAvAQ/PALo3h3MiD8tvVij9gmn0BgFy1hR9v0VQCLcBGAsYHQ/s16000/8.png" alt="" /></p>
+<p><strong><u>2. Match Lines:</u></strong></p>
+<p>Like the match code which we discussed earlier, it gives us the result for a specific-lines in a file with the help of&nbsp;<strong>[-ml]</strong>&nbsp;parameter. We can use this&nbsp;<strong>[-ml]</strong>&nbsp;parameter by specifying the lines we need in a file.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -ml 15</pre>
+<p><img src="https://1.bp.blogspot.com/-e579c8J6CIU/YFyq-g7h7wI/AAAAAAAAvAY/vQYxQc5KJUUN4PO-PDVebWI_Jhf1J0G4QCLcBGAsYHQ/s16000/9.png" alt="" /></p>
+<p><strong><u>3. Match Words:</u></strong></p>
+<p>Similarly, as the above functionalities match function it can provide us with a result with a specific word count. To get this result we need to use<strong>&nbsp;[-mw]&nbsp;</strong>parameter along specific words count we want in our results.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -mw 53</pre>
+<p><img src="https://1.bp.blogspot.com/-eDamIIa2_tY/YFyrBkibgoI/AAAAAAAAvAc/IDwxG0z1nPgo_p3isF6CkBerVRlxlwwQQCLcBGAsYHQ/s16000/10.png" alt="" /></p>
+<p><strong><u>4. Match Size:</u></strong></p>
+<p>Similarly, as the above functionalities match function it can provide us with a result with the size of the file. We can use&nbsp;<strong>[-ms]</strong>&nbsp;parameter along with the specific size count we want in our result.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -ms 2929</pre>
+<p><img src="https://1.bp.blogspot.com/-lNhr62uvfFg/YFyrG1Mmi5I/AAAAAAAAvAg/R1tNV9EzoVk8djIX9MXW3q8jDdvzJ4AyQCLcBGAsYHQ/s16000/11.png" alt="" /></p>
+<p><strong><u>Match Regular Expression:</u></strong></p>
+<p>It is the last of all match functions available in this tool. We are going to fuzz for LFI by matching the string with followed pattern &ldquo;<strong>root:x</strong>&rdquo; for the given dictionary.</p>
+<p>We are using a URL that can achieve this functionality and by using&nbsp;<strong>[-mr]</strong>&nbsp;parameter we define the matching string &ldquo;<strong>root:x</strong>&rdquo;.&nbsp;</p>
+<p>This our special wordlist looks like.</p>
+<p><img src="https://1.bp.blogspot.com/-9hqyluRCTk0/YFyrKBZ6pWI/AAAAAAAAvAo/ej7PLhZ9-QYkLaa82bZCTqKARt4QgrI4gCLcBGAsYHQ/s16000/12.png" alt="" /></p>
+<p>By using this wordlist, follow the below command to use&nbsp;<strong>[-mr]</strong>&nbsp;parameter in an attack scenario.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://testphp.vulnweb.com/showimage.php?file=FUZZ -w dict2.txt -mr "root:x"</pre>
+<p>Here we got HTTP to respond 200 for /etc/passwd for the given wordlist.</p>
+<p><img src="https://1.bp.blogspot.com/-la4sZaFWj0U/YFyrO7Ta4UI/AAAAAAAAvAw/Krqjxvet6-o5XyGmmTJpcVeF4SC7YkBTACLcBGAsYHQ/s16000/13.png" alt="" /></p>
+<h3><strong>Filter Options</strong></h3>
+<p>The Filter options are absolutely opposite to Match options. We can use these options to remove the unwanted from our web fuzzing. Example: HTTP Code, Lines, Words, Size, Regular Expressions.&nbsp;</p>
+<p><strong><u>1. Filter Code:</u></strong></p>
+<p>The&nbsp;<strong>[-fc]</strong>&nbsp;parameter need the specific HTTP status code we want to remove from the result.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -fc 302</pre>
+<p><img src="https://1.bp.blogspot.com/-YnX9_l2myR4/YFyrUGErxhI/AAAAAAAAvA0/bL4Z-yiNnEoqgur7ctWNTi38Adxcci6WgCLcBGAsYHQ/s16000/14.png" alt="" /></p>
+<p><strong><u>2. Filter Lines:</u></strong></p>
+<p>The&nbsp;<strong>[-fl]</strong>&nbsp;parameter has the ability to remove a specific length from our result or we can filter it out from our attack.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -fl 26</pre>
+<p><img src="https://1.bp.blogspot.com/-RMXbsvCPHic/YFyrYuOtjzI/AAAAAAAAvA8/sudxjrOz6XEEWh1Zu8Q6nWjD4DXH94qUwCLcBGAsYHQ/s16000/15.png" alt="" /></p>
+<p><strong><u>3. Filter Size:</u></strong></p>
+<p>The&nbsp;<strong>[-fs]</strong>&nbsp;parameter has the ability to filter out the specified size is described by us during the command of the attack.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -fs 2929</pre>
+<p><img src="https://1.bp.blogspot.com/-StN6EkOK-EE/YFyrplpoBiI/AAAAAAAAvBU/34g6bpqN2ugEFHnF6avhiOMkcI2SrZSlQCLcBGAsYHQ/s16000/16.png" alt="" /></p>
+<p><strong><u>4. Filter Words</u></strong></p>
+<p>The&nbsp;<strong>[-fw]</strong>&nbsp;parameter has the ability to filter out the words count from results that we want to remove.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -fw 83</pre>
+<p><img src="https://1.bp.blogspot.com/-K9hbh2OQg_0/YFytFikkroI/AAAAAAAAvBg/loeJdB0DIOktMhyUTK-6TVObgHQEppz0ACLcBGAsYHQ/s16000/17.png" alt="" /></p>
+<p><strong><u>5. Filter Regular Expression:</u></strong></p>
+<p>The&nbsp;parameter&nbsp;<strong>[-fr]&nbsp;</strong>we can remove a specific regular expression, here we try to exclude the log file from the output result.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -fr "log"</pre>
+<p><img src="https://1.bp.blogspot.com/-4mbrrU4g2yk/YFytK9xTDTI/AAAAAAAAvBk/lwE5xvO5GA4OBv7drmtL3N1F-4b0ey38gCLcBGAsYHQ/s16000/18.png" alt="" /></p>
+<h3><strong>General Options</strong></h3>
+<p>These are the general parameters of this tool, which revolves around its general working on web fuzzing.</p>
+<p><strong><u>1. Custom Auto Calibration:</u></strong></p>
+<p>We know that the power of a computer or machine to automatically calibrate itself is known as auto-calibration. Calibration is the process of providing a measuring instrument with the information it requires to understand the context in which it will be used. When gathering data, calibrating a computer ensures its accuracy.</p>
+<p>We can customize this feature according to our need with the help of&nbsp;<strong>[-acc]</strong>&nbsp;parameter. Which can&rsquo;t be used without&nbsp;<strong>[-ac]</strong>&nbsp;parameter for its customization.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -acc -ac -fl 26 -ac -fs 2929 -ac -fw 54</pre>
+<p><img src="https://1.bp.blogspot.com/-UUYsYIm_NUc/YFytPgrWBYI/AAAAAAAAvBo/rpYuKfJZeJ0xEm_r4Q57jx8QYPRlaCirACLcBGAsYHQ/s16000/19.png" alt="" /></p>
+<p><strong><u>2. Color:</u></strong></p>
+<p>Sometimes separation of colour creates extra attention to all details having in results. This&nbsp;<strong>[-c]</strong>&nbsp;parameter helps to create colour separation.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -c</pre>
+<p><img src="https://1.bp.blogspot.com/-mzA546BjhCw/YFytV3V23II/AAAAAAAAvBs/XmD8gwdkQzkXd4zTH-AY1yA_hXOVUGmXwCLcBGAsYHQ/s16000/20.png" alt="" /></p>
+<h4><strong><u>3. Maxtime For Task:</u></strong></h4>
+<p>If you want to fuzz for a limited amount of time then you can choose&nbsp;<strong>[-maxtime]</strong>&nbsp;parameter. Follow the command to provide a timeslot.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -maxtime 5</pre>
+<p><img src="https://1.bp.blogspot.com/-JL4UBtysJy8/YFytaKhnzJI/AAAAAAAAvBw/j1Rpir16fAkJ40DTxxarobcJdFtoOBDPQCLcBGAsYHQ/s16000/21.png" alt="" /></p>
+<h4><strong><u>4, Maxtime For Job:</u></strong></h4>
+<p>With the help of&nbsp;<strong>[-maxtime-job]</strong>&nbsp;parameter, we can put a time limit for a particular job. By using this command, we are trying to limit the time per job or request execution.</p>
+<p><strong>ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -maxtime-job 2</strong></p>
+<p><img src="https://1.bp.blogspot.com/-Dbi9cblDu0c/YFyte1n9BII/AAAAAAAAvB4/l5JeMdWaj4IYf3V_JpQECDBGFZUHJxoRwCLcBGAsYHQ/s16000/22.png" alt="" /></p>
+<h4><strong><u>5. Delay:</u></strong></h4>
+<p>If we create a particular delay in each request offered by the attack. Through this feature, a request has a better opportunity to get better results. The&nbsp;<strong>[-p]</strong>&nbsp;parameter help us to achieve delay in those requests.</p>
+<p><strong>ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -p 1</strong></p>
+<p><img src="https://1.bp.blogspot.com/-MHYQr-8ZED8/YFyti63-IlI/AAAAAAAAvCA/OnyXEQ6_Cqw7uQyLYtq73xcCMQMLIdEOQCLcBGAsYHQ/s16000/23.png" alt="" /></p>
+<h4><strong><u>6. Request Rate:</u></strong></h4>
+<p>We can create a separate request rate for each of our attack with the help of the&nbsp;<strong>[-rate]</strong>&nbsp;parameter. Through this parameter, we create our request per second as per our attack desired.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -rate 500</pre>
+<p><img src="https://1.bp.blogspot.com/-EDqTjxXP5NQ/YFytmpeCKvI/AAAAAAAAvCI/4IAMHq7VYaYt6WfVDbMq_0Gf4pwDjBTOwCLcBGAsYHQ/s16000/24.png" alt="" /></p>
+<p><strong><u>7. Error Functions:</u></strong></p>
+<p>There are three parameters that support the Error function. The first parameter is&nbsp;<strong>[-se]</strong>, which is a spurious error. It states that the following request is genuine or not. The second parameter is&nbsp;<strong>[-sf]</strong>, it will stop our attack when more than 95% of requests occurred as an error. The third and final parameter is&nbsp;<strong>[-sa]</strong>, which is a combination of both the error parameter.</p>
+<p>In our scenario, we are using&nbsp;<strong>[-se]</strong>&nbsp;parameter where it will stop our attack when our request is not real.</p>
+<pre class="lang:default decode:true">ffuf -u http://ignitetechnologies.in/W2/W1/ -w dict.txt:W1 -w dns_dict.txt:W2 -se</pre>
+<p><img src="https://1.bp.blogspot.com/-ctcc0NDjH_U/YFytqOJiaZI/AAAAAAAAvCM/6oHA1TjZ9CkzHfbFVZBGztPZJkx_4HQFACLcBGAsYHQ/s16000/25.png" alt="" /></p>
+<p><strong><u>8. Verbose Mode:</u></strong></p>
+<p>As we all know, the verbose mode is a feature used in many computers operating systems and programming languages that provide extra information on what the computer is doing and what drivers and applications it is loading at initialization. In programming, it produces accurate output for debugging purposes, making it easy to debug a program. There is a parameter called&nbsp;<strong>[-v]</strong>&nbsp;parameter.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -v</pre>
+<p><img src="https://1.bp.blogspot.com/-ct94G8xeI9U/YFytuKXARUI/AAAAAAAAvCQ/LPtsRq7TvLMFMVSY7kCBM1cjUWfncywWQCLcBGAsYHQ/s16000/26.png" alt="" /></p>
+<p><strong><u>9. Threads:</u></strong></p>
+<p>The&nbsp;<strong>[-t]</strong>&nbsp;parameter is used to speed up or slow down a process. By default, it is set on 40. if we want to pace up the process, we need to increase its number, vice versa to slow down process.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -t 1000</pre>
+<p><img src="https://1.bp.blogspot.com/-ZR2wgvfdVPs/YFytx62npDI/AAAAAAAAvCY/dq-zNaxMTmQl9pCfhoWxRX8JtFT5yViJwCLcBGAsYHQ/s16000/27.png" alt="" /></p>
+<h3><strong>Output Options</strong></h3>
+<p>We save the performance of our attacks for the purposes of record-keeping, improved readability, and potential references. We use&nbsp;<strong>[-o]</strong>&nbsp;parameter to save our output, but we need to specify its format with&nbsp;<strong>[-of]&nbsp;</strong>parameter together.</p>
+<p><strong><u>1. Output Format in HTML:</u></strong></p>
+<p>We use&nbsp;<strong>[-of]</strong>&nbsp;parameter and this defining with an HTML format. By using the command, we can create our report in html.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -o file.html -of html</pre>
+<p><img src="https://1.bp.blogspot.com/-FyYvJFFbQfc/YFyt1q2kJ1I/AAAAAAAAvCc/CqpmNaN7ak86itm1NoRY1z2K7dOt1BL3wCLcBGAsYHQ/s16000/28.png" alt="" /></p>
+<p>Now after completion of this attack, we need to check our output file is up to that mark or not. As we can see that our file is successfully created.</p>
+<p><img src="https://1.bp.blogspot.com/-SEnC1jeqqqE/YFyt43AF0kI/AAAAAAAAvCk/Pgq9a7n8ddAsy6vGpusoKnsF4Rkb4-_HwCLcBGAsYHQ/s16000/29.png" alt="" /></p>
+<p><strong><u>2. Output Format in CSV:</u></strong></p>
+<p>Similarly, we just need to csv format along with&nbsp;<strong>[-of]</strong>&nbsp;parameter. Where csv is a comma-separated values, which file allows you to store data in a tabular format.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -o file.csv -of csv</pre>
+<p><img src="https://1.bp.blogspot.com/-QKtvzaJfvzc/YFyt8h3zrbI/AAAAAAAAvCs/u9H49gV5SPIcyseAkBwAXRK5xazQLR8aQCLcBGAsYHQ/s16000/30.png" alt="" /></p>
+<p>Now after completion of this attack, we need to check our output file is up to that mark or not. As we can see that our file is successfully created.</p>
+<p><img src="https://1.bp.blogspot.com/-Kq_ChhhMYdU/YFyuBGJu3WI/AAAAAAAAvCw/gBRhr730aQgdcV4Ww-viSjXifxZpVVRyACLcBGAsYHQ/s16000/31.png" alt="" /></p>
+<p><strong><u>3. All Output Format:</u></strong></p>
+<p>Similarly, if we want all output format at once just use&nbsp;<strong>[-of all]</strong>&nbsp;parameter. Like json, ejson, html, md, csv, ecsv. Follow this command to generate all reports at once.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -o output/file -of all</pre>
+<p>Now after completion of this attack, we need to check our output files is up to that mark or not. As we can see that our all files are successfully created.</p>
+<p><img src="https://1.bp.blogspot.com/-aoIMU6EY6Ys/YFyuF_y1utI/AAAAAAAAvC4/Nu9qSIQB2L8uDGV8TcVZ6Ob2ojGmEaDHQCLcBGAsYHQ/s16000/32.png" alt="" /></p>
+<h3><strong>HTTP Options</strong></h3>
+<p>The options move around HTTP options, sometimes it required the details to run web fuzzing Like HTTP request, Cookie, HTTP header, etc.</p>
+<p><strong><u>1. Timeout:</u></strong></p>
+<p>Timeout act as a deadline for the event. The&nbsp;<strong>[-timeout]</strong>&nbsp;parameter help of established this feature with ease, follow this command to run this parameter.</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -timeout 5</pre>
+<p><img src="https://1.bp.blogspot.com/-graoDgOSFhw/YFyuQQw6GhI/AAAAAAAAvDE/M-s0J4J2G6AvmhEfvnY6wmUPP5JZoQF9ACLcBGAsYHQ/s16000/33.png" alt="" /></p>
+<p><strong><u>2. Host Header:</u></strong></p>
+<p>If we want to perform fuzzing on subdomain, we can use&nbsp;<strong>[-H]</strong>&nbsp;parameter along with a domain name wordlist as given below in the command.</p>
+<pre class="lang:default decode:true">ffuf -u https://google.com -w dns_dict.txt -mc 200 -H "HOST: FUZZ.google.com"</pre>
+<p><img src="https://1.bp.blogspot.com/-A433IdyTbNI/YFyuVNhHlgI/AAAAAAAAvDM/mHGE_QYN8xEo-P7YNiq6EuNOoWEoyfhpACLcBGAsYHQ/s16000/34.png" alt="" /></p>
+<p><strong><u>3. Recursion:</u></strong></p>
+<p>Recursion is the mechanism of repeating objects in a self-similar manner, as we all know. If a program requires you to access a function within another function, this is referred to as a recursive call of the function. By using&nbsp;<strong>[-recursion]</strong>&nbsp;parameter, we can achieve this functionality in our attacks.</p>
+<pre class="lang:default decode:true ">ffuf -u "http://testphp.vulnweb.com/FUZZ/" -w dict.txt -recursion</pre>
+<p><img src="https://1.bp.blogspot.com/-1SNLC-k_YrY/YFyuY8e3W2I/AAAAAAAAvDQ/viU656iVfR4zPZDevZcnz_HpLIe0qg4bACLcBGAsYHQ/s16000/35.png" alt="" /></p>
+<p><strong><u>3. Attack with Cookie:</u></strong></p>
+<p>Sometimes web fuzzing does not show the result on authenticated site without authentication. There is a&nbsp;<strong>[-b]</strong>&nbsp;parameter through which we can achieve your goal by providing a session cookie.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -b "PHPSESSID:"7aaaa6d88edcf7cd2ea4e3853ebb8bde""</pre>
+<p><img src="https://1.bp.blogspot.com/-DhJ8kLO2AD8/YFyumUVUxmI/AAAAAAAAvDg/lqN29m5cWpIOIU1XeHXEEqmItn6bfunmACLcBGAsYHQ/s16000/39.png" alt="" /></p>
+<p><strong><u>3. Replay-Proxy:</u></strong></p>
+<p>As you might be aware, there are speed restrictions when using the Intruder function in the free version of the Burp suite (Community Edition). The Intruder attack has been severely slowed, with each order slowing the attack even further.</p>
+<p>In our case we are using Burp suite proxy to get results for evaluation in it. First, we have to establish a localhost proxy on port 8080.</p>
+<p><img src="https://1.bp.blogspot.com/-jHJdi-1tjJ4/YFyuppzoxKI/AAAAAAAAvDk/yUUmWF1xbfYXsI-mJ5Ywe0eXHdqw8vvawCLcBGAsYHQ/s16000/40.png" alt="" /></p>
+<p>Now use&nbsp;<strong>[-replay-proxy]</strong>&nbsp;parameter, which helps us to derive our local host proxy which we established in the previous step on port 8080 along with our attack.&nbsp;</p>
+<pre class="lang:default decode:true">ffuf -u http://192.168.1.12/dvwa/FUZZ/ -w dict.txt -replay-proxy http://127.0.0.1:8080 -v -mc 200</pre>
+<p><img src="https://1.bp.blogspot.com/-U6OdUJCwiLo/YFyutcIAOOI/AAAAAAAAvDo/8eKWTKN1ZhcaNeMGmdQjNKEH0bohoFdOACLcBGAsYHQ/s16000/41.png" alt="" /></p>
+<p>This attack will show our results on two platforms. The first platform on the kali terminal and the second on the Burp suite HTTP history tab. Through these various techniques, we can better understand our target and our attack results.</p>
+<p><img src="https://1.bp.blogspot.com/-BK6oGBk0JBA/YFyuwtrMILI/AAAAAAAAvDs/IVP7FTlpTUI90rZ6moamICD4npYfdU_cwCLcBGAsYHQ/s16000/42.png" alt="" /></p>
+<p><strong>Conclusion</strong></p>
+<p>The ffuf is often compared to tools like dirb or dirbuster, which, although accurate to certain extents, isn&rsquo;t a reasonable analogy. Although FFUF can be used to brute force files, its true strength lies in its simplicity, and a better comparative tool for FFUF would be anything like Burp Suite Intruder or Turbo Intruder.</p>
+</div>
+</div>
+</body>
+</html>
